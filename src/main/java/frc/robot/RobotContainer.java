@@ -23,6 +23,7 @@ import frc.robot.commands.LED;
 
 public class RobotContainer {
 
+  public static Object m_blinkin;
   public final SwerveChassis m_chassis;
   private final XboxController m_driveController;
   private final LED m_leds;
