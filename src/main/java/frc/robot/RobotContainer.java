@@ -19,18 +19,20 @@ import frc.robot.classes.Odometry;
 import frc.robot.classes.PathFunctions;
 import frc.robot.commands.SwerveDrive;
 import frc.robot.subsystems.SwerveChassis;
+import frc.robot.commands.LED;
 
 public class RobotContainer {
 
   public final SwerveChassis m_chassis;
   private final XboxController m_driveController;
+  private final LED m_leds;
 
   private final HashMap<String, Command> m_eventMap;
   private final SwerveAutoBuilder autoBuilder;
 
   public RobotContainer() {
     m_chassis = new SwerveChassis();
-
+    m_leds = new LED();
     m_driveController = new XboxController(Constants.driverController);
 
     m_chassis.setDefaultCommand(new SwerveDrive(
@@ -74,6 +76,7 @@ public class RobotContainer {
     };
     new Trigger(m_driveController::getXButton).onTrue(new InstantCommand(() -> m_chassis.setStates(emptyStates, true)));
     new Trigger(m_driveController::getBButton).onTrue(new InstantCommand(() -> m_chassis.resetAllToAbsolute()));
+    new Trigger(m_driveController::getAButton).onTrue(new InstantCommand(() -> m_leds.setFullStrip(0,255,255)));
     new Trigger(m_driveController::getRightBumper)
         .onTrue(new InstantCommand(() -> m_chassis.setCenter(new Translation2d(1, 0))));
     new Trigger(m_driveController::getRightBumper)
@@ -86,7 +89,7 @@ public class RobotContainer {
     Odometry.resetOdometry(trajectory1.getInitialHolonomicPose(), m_chassis.getGyroRot(), m_chassis, m_chassis.odometry);
     return autoBuilder.followPath(trajectory1).andThen(() -> m_chassis.setSpeeds());
   }
-
+  
   /**
    * Applies a deadband to the given joystick axis value
    * 
