@@ -24,8 +24,8 @@ import edu.wpi.first.math.system.plant.DCMotor;
 public class ArmFunctions {
   private static final double g = 9.80665;
 
-  public static record JointConfig(
-      double mass, double length, double moi, double cgRadius, DCMotor motor) {}
+//   public static JointConfig(
+//       double mass, double length, double moi, double cgRadius, DCMotor motor) {}
 
   private final JointConfig joint_1;
   private final JointConfig joint_2;
@@ -47,79 +47,79 @@ public class ArmFunctions {
     M.set(
         0,
         0,
-        joint_1.mass() * Math.pow(joint_1.cgRadius(), 2.0)
-            + joint_2.mass() * (Math.pow(joint_1.length(), 2.0) + Math.pow(joint_2.cgRadius(), 2.0))
-            + joint_1.moi()
-            + joint_2.moi()
+        joint_1.mass * Math.pow(joint_1.cgRadius, 2.0)
+            + joint_2.mass * (Math.pow(joint_1.length, 2.0) + Math.pow(joint_2.cgRadius, 2.0))
+            + joint_1.moi
+            + joint_2.moi
             + 2
-                * joint_2.mass()
-                * joint_1.length()
-                * joint_2.cgRadius()
+                * joint_2.mass
+                * joint_1.length
+                * joint_2.cgRadius
                 * Math.cos(position.get(1, 0)));
     M.set(
         1,
         0,
-        joint_2.mass() * Math.pow(joint_2.cgRadius(), 2.0)
-            + joint_2.moi()
-            + joint_2.mass()
-                * joint_1.length()
-                * joint_2.cgRadius()
+        joint_2.mass * Math.pow(joint_2.cgRadius, 2.0)
+            + joint_2.moi
+            + joint_2.mass
+                * joint_1.length
+                * joint_2.cgRadius
                 * Math.cos(position.get(1, 0)));
     M.set(
         0,
         1,
-        joint_2.mass() * Math.pow(joint_2.cgRadius(), 2.0)
-            + joint_2.moi()
-            + joint_2.mass()
-                * joint_1.length()
-                * joint_2.cgRadius()
+        joint_2.mass * Math.pow(joint_2.cgRadius, 2.0)
+            + joint_2.moi
+            + joint_2.mass
+                * joint_1.length
+                * joint_2.cgRadius
                 * Math.cos(position.get(1, 0)));
-    M.set(1, 1, joint_2.mass() * Math.pow(joint_2.cgRadius(), 2.0) + joint_2.moi());
+    M.set(1, 1, joint_2.mass * Math.pow(joint_2.cgRadius, 2.0) + joint_2.moi);
     C.set(
         0,
         0,
-        -joint_2.mass()
-            * joint_1.length()
-            * joint_2.cgRadius()
+        -joint_2.mass
+            * joint_1.length
+            * joint_2.cgRadius
             * Math.sin(position.get(1, 0))
             * velocity.get(1, 0));
     C.set(
         1,
         0,
-        joint_2.mass()
-            * joint_1.length()
-            * joint_2.cgRadius()
+        joint_2.mass
+            * joint_1.length
+            * joint_2.cgRadius
             * Math.sin(position.get(1, 0))
             * velocity.get(0, 0));
     C.set(
         0,
         1,
-        -joint_2.mass()
-            * joint_1.length()
-            * joint_2.cgRadius()
+        -joint_2.mass
+            * joint_1.length
+            * joint_2.cgRadius
             * Math.sin(position.get(1, 0))
             * (velocity.get(0, 0) + velocity.get(1, 0)));
     Tg.set(
         0,
         0,
-        (joint_1.mass() * joint_1.cgRadius() + joint_2.mass() * joint_1.length())
+        (joint_1.mass * joint_1.cgRadius + joint_2.mass * joint_1.length)
                 * g
                 * Math.cos(position.get(0, 0))
-            + joint_2.mass()
-                * joint_2.cgRadius()
+            + joint_2.mass
+                * joint_2.cgRadius
                 * g
                 * Math.cos(position.get(0, 0) + position.get(1, 0)));
     Tg.set(
         1,
         0,
-        joint_2.mass()
-            * joint_2.cgRadius()
+        joint_2.mass
+            * joint_2.cgRadius
             * g
             * Math.cos(position.get(0, 0) + position.get(1, 0)));
 
     var torque = M.times(acceleration).plus(C.times(velocity)).plus(Tg);
     return VecBuilder.fill(
-        joint_1.motor().getVoltage(torque.get(0, 0), velocity.get(0, 0)),
-        joint_2.motor().getVoltage(torque.get(1, 0), velocity.get(1, 0)));
+        joint_1.motor.getVoltage(torque.get(0, 0), velocity.get(0, 0)),
+        joint_2.motor.getVoltage(torque.get(1, 0), velocity.get(1, 0)));
   }
 }

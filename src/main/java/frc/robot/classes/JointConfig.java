@@ -4,5 +4,17 @@
 
 package frc.robot.classes;
 
+import edu.wpi.first.math.system.plant.DCMotor;
+
 /** Add your docs here. */
-public class JointConfig {}
+public class JointConfig {
+    public JointConfig(
+      double mass,
+      double length,
+      double moi,
+      double cgRadius,
+      double minAngle,
+      double maxAngle,
+      double reduction,
+      DCMotor motor) {}
+}
