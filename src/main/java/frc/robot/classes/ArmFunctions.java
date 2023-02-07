@@ -8,8 +8,6 @@
 // package org.littletonrobotics.frc2023.util;
 package frc.robot.classes;
 
-import frc.robot.classes.ArmConfig.*;
-
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
