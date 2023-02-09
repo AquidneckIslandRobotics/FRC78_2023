@@ -42,7 +42,7 @@ public class Arm extends SubsystemBase {
     shoulderPIDcontroller = shoulderNeo.getPIDController();
     target = 0;
     neoDC = new DCMotor(12, 2.6, 105, 1.8, (5676 / 60) * 6.28319, 1);
-    shoulder = new JointConfig(target, target, target, target, target, target, target, null);
+    shoulder = new JointConfig(2, 0.584, 0.4, target, target, target, target, neoDC);
     armFunctions = new ArmFunctions(shoulder, elbow);
   }
 
