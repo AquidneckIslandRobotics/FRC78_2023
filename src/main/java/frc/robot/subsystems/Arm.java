@@ -13,18 +13,24 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.classes.ArmFunctions;
+import frc.robot.classes.JointConfig;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
 
 public class Arm extends SubsystemBase {
 
-  private DutyCycleEncoder shoulderEncoder;
-  private DutyCycleEncoder elbowEncoder;
-  private CANSparkMax shoulderNeo;
-  private CANSparkMax elbowNeo;
-  private SparkMaxPIDController elbowPIDcontroller;
-  private SparkMaxPIDController shoulderPIDcontroller;
-  private double target;
+  protected DutyCycleEncoder shoulderEncoder;
+  protected DutyCycleEncoder elbowEncoder;
+  protected CANSparkMax shoulderNeo;
+  protected CANSparkMax elbowNeo;
+  protected SparkMaxPIDController elbowPIDcontroller;
+  protected SparkMaxPIDController shoulderPIDcontroller;
+  protected double target;
+  protected ArmFunctions armFunctions;
+  protected JointConfig elbow, shoulder;
+  protected DCMotor neoDC;
 
   /** Creates a new Arm. */
   public Arm() {
@@ -35,6 +41,9 @@ public class Arm extends SubsystemBase {
     elbowPIDcontroller = elbowNeo.getPIDController();
     shoulderPIDcontroller = shoulderNeo.getPIDController();
     target = 0;
+    neoDC = new DCMotor(12, 2.6, 105, 1.8, (5676 / 60) * 6.28319, 1);
+    shoulder = new JointConfig(target, target, target, target, target, target, target, null);
+    armFunctions = new ArmFunctions(shoulder, elbow);
   }
 
   /**
