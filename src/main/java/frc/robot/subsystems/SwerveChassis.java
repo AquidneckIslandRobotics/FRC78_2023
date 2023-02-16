@@ -1,6 +1,10 @@
 package frc.robot.subsystems;
 
+import java.util.HashMap;
+
 import com.ctre.phoenix.sensors.Pigeon2;
+import com.pathplanner.lib.auto.PIDConstants;
+import com.pathplanner.lib.auto.SwerveAutoBuilder;
 import com.pathplanner.lib.server.PathPlannerServer;
 
 import edu.wpi.first.math.MatBuilder;
@@ -16,6 +20,8 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.classes.LimeLight;
@@ -32,6 +38,8 @@ public class SwerveChassis extends SubsystemBase {
   public SwerveDrivePoseEstimator poseEstimator;
   protected Pigeon2 pidgeon;
   protected LimeLight limelight;
+  private final HashMap<String, Command> m_eventMap;
+  public SwerveAutoBuilder autoBuilder;
 
   // KINEMATICS
   protected Translation2d centerOfRot;
@@ -67,6 +75,19 @@ public class SwerveChassis extends SubsystemBase {
     resetAllToAbsolute();
 
     resetPose(new Pose2d());
+
+    m_eventMap = new HashMap<>();
+    m_eventMap.put("Waypoint1Reached", new PrintCommand("Waypoint 1 reached!"));
+
+    autoBuilder = new SwerveAutoBuilder(
+        this::getFusedPose,
+        this::resetPose,
+        new PIDConstants(5.0, 0.0, 0.0),
+        new PIDConstants(0.5, 0.0, 0.0),
+        this::setSpeeds,
+        m_eventMap,
+        true, // BE AWARE OF AUTOMATIC MIRRORING, MAY CAUSE TRACKING PROBLEMS
+        this);
   }
 
   @Override

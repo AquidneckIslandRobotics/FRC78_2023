@@ -42,6 +42,7 @@ import frc.robot.commands.*;
 import frc.robot.subsystems.SwerveChassis;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import frc.robot.commands.AutoScore;
 
 
 public class RobotContainer {
@@ -55,7 +56,7 @@ public class RobotContainer {
   //private final IntakeV1_Lentz m_IntakeV1_Lentz;
   private final Dave_Intake m_Dave_Intake;
   private final HashMap<String, Command> m_eventMap;
-  private final SwerveAutoBuilder autoBuilder;
+  private SwerveAutoBuilder autoBuilder;
 
   static enum AUTOS {EMPTY, SIXTAXI, SIXCHARGE};
   public SendableChooser<AUTOS> firstAutoCmd = new SendableChooser<>();
@@ -107,6 +108,7 @@ public class RobotContainer {
     m_eventMap.put("Park", new Park(m_chassis));
 
     // An object used to do much of the creating path following commands
+    
     autoBuilder = new SwerveAutoBuilder(
         m_chassis::getFusedPose,
         m_chassis::resetPose,
@@ -127,6 +129,11 @@ public class RobotContainer {
     // #endregion
     
     configureButtonBindings();
+  }
+  private void AutoPaths(){
+    ArrayList<PathPoint> pathLists = new ArrayList<PathPoint>();
+    pathLists.add(new PathPoint(new Translation2d(0, 0), new Rotation2d(), new Rotation2d(), 0));
+    pathLists.add(new PathPoint(new Translation2d(1.5, 0), new Rotation2d(), new Rotation2d(), 0));
   }
 
   private void configureButtonBindings() {
