@@ -1,14 +1,9 @@
-  package frc.robot;
+package frc.robot;
 
-import java.time.Instant;
 import java.util.HashMap;
 import java.util.function.BooleanSupplier;
 import java.util.ArrayList;
 import java.util.List;
-
-
-import org.ejml.simple.AutomaticSimpleMatrixConvert;
-
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
@@ -29,21 +24,13 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.subsystems.Arm;
-import frc.robot.subsystems.SwerveChassis;
-import frc.robot.subsystems.Dave_Intake;
-import frc.robot.subsystems.IntakeV1_Lentz;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.classes.*;
 import frc.robot.commands.*;
+import frc.robot.subsystems.*;
 import frc.robot.subsystems.SwerveChassis;
-import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import frc.robot.commands.AutoScore;
-
 
 public class RobotContainer {
 
@@ -56,7 +43,7 @@ public class RobotContainer {
   //private final IntakeV1_Lentz m_IntakeV1_Lentz;
   private final Dave_Intake m_Dave_Intake;
   private final HashMap<String, Command> m_eventMap;
-  private SwerveAutoBuilder autoBuilder;
+  private final SwerveAutoBuilder autoBuilder;
 
   static enum AUTOS {EMPTY, SIXTAXI, SIXCHARGE};
   public SendableChooser<AUTOS> firstAutoCmd = new SendableChooser<>();
@@ -129,11 +116,6 @@ public class RobotContainer {
     // #endregion
     
     configureButtonBindings();
-  }
-  private void AutoPaths(){
-    ArrayList<PathPoint> pathLists = new ArrayList<PathPoint>();
-    pathLists.add(new PathPoint(new Translation2d(0, 0), new Rotation2d(), new Rotation2d(), 0));
-    pathLists.add(new PathPoint(new Translation2d(1.5, 0), new Rotation2d(), new Rotation2d(), 0));
   }
 
   private void configureButtonBindings() {
