@@ -11,7 +11,7 @@ import frc.robot.subsystems.Arm;
  * implement the PID control loop for arm
  */
 public class SetArmPID extends CommandBase {
-  private Arm m_arm;
+  private Arm arm;
   private double shoulderPosition;
   private double elbowPosition;
 
@@ -20,40 +20,32 @@ public class SetArmPID extends CommandBase {
    * @param arm arm subsystem that this command requires
    */
   public SetArmPID(Arm arm) {
-    // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(arm);
-    m_arm = arm;
+    this.arm = arm;
     shoulderPosition = arm.shoulderTarget;
     elbowPosition = arm.elbowTarget;
-    }
-
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {
-    
+    addRequirements(arm);
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double shoulderSpeed = m_arm.shoulderPIDcontroller.calculate(m_arm.getShoulderAbsolutePosition(), m_arm.shoulderTarget);
+    double shoulderSpeed = arm.shoulderPIDcontroller.calculate(arm.getShoulderAbsolutePosition(), arm.shoulderTarget);
     if (shoulderSpeed < 0){
       shoulderSpeed = shoulderSpeed * 0.15;
     }
-    m_arm.setShoulderSpeed(shoulderSpeed);
+    arm.setShoulderSpeed(shoulderSpeed);
     
-    double elbowSpeed = m_arm.elbowPIDcontroller.calculate(m_arm.getElbowAbsolutePosition(), m_arm.elbowTarget);
+    double elbowSpeed = arm.elbowPIDcontroller.calculate(arm.getElbowAbsolutePosition(), arm.elbowTarget);
     if (elbowSpeed > 0){
       elbowSpeed = elbowSpeed * 0.5;
     }
-    m_arm.setElbowSpeed(elbowSpeed * -1);
+    arm.setElbowSpeed(elbowSpeed * -1);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_arm.setShoulderSpeed(0);
-    m_arm.setElbowSpeed(0);
+    arm.setShoulderSpeed(0);
+    arm.setElbowSpeed(0);
   }
 
   // Returns true when the command should end.

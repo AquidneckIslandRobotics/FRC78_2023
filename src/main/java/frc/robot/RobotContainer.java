@@ -13,10 +13,9 @@ import com.pathplanner.lib.auto.SwerveAutoBuilder;
 import com.pathplanner.lib.server.PathPlannerServer;
 
 import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.cscore.CvSink;
-import edu.wpi.first.cscore.CvSource;
 import edu.wpi.first.cscore.MjpegServer;
 import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -34,6 +33,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.classes.LimeLight;
 import frc.robot.classes.PathFunctions;
 import frc.robot.commands.ArmControl;
+import frc.robot.commands.AutoCenter;
 import frc.robot.commands.AutoChargeStation;
 import frc.robot.commands.Park;
 import frc.robot.commands.RunIntake;
@@ -148,30 +148,24 @@ public class RobotContainer {
     pathList.add(new PathPoint(new Translation2d(1.5, 0), new Rotation2d(), new Rotation2d(), 0));
 
     new Trigger(m_driveController::getStartButton).onTrue(new InstantCommand(m_chassis::zeroGyro));
-    // new Trigger(m_driveController::getYButton).whileTrue(new AutoCenter(m_limeLight, new Pose2d(1.5, 0, new Rotation2d(0)), m_chassis));
-    // new Trigger(m_driveController::getXButton).whileTrue(new AutoCenter(m_limeLight, new Pose2d(1.5, -0.8, new Rotation2d(0)), m_chassis));
-    // new Trigger(m_driveController::getBButton).whileTrue(new AutoCenter(m_limeLight, new Pose2d(1.5, 0.8, new Rotation2d(0)), m_chassis));
-    // new Trigger(m_driveController::getAButton).onTrue(new InstantCommand(() -> m_chassis.resetPose(new Pose2d())));
+
+    new Trigger(m_driveController::getYButton).whileTrue(new AutoCenter(m_limeLight, new Pose2d(1.5, 0, new Rotation2d(0)), m_chassis));
+    new Trigger(m_driveController::getXButton).whileTrue(new AutoCenter(m_limeLight, new Pose2d(1.5, -0.8, new Rotation2d(0)), m_chassis));
+    new Trigger(m_driveController::getBButton).whileTrue(new AutoCenter(m_limeLight, new Pose2d(1.5, 0.8, new Rotation2d(0)), m_chassis));
+
+    new Trigger(m_driveController::getAButton).whileTrue(new Park(m_chassis));
+
+    new Trigger(m_driveController::getLeftBumper).whileTrue(new AutoChargeStation(m_chassis, 1, -0.7).andThen(new Park(m_chassis)));
     new Trigger(m_driveController::getRightBumper)
         .onTrue(new InstantCommand(() -> m_chassis.setCenter(new Translation2d(0.5, 0))));
     new Trigger(m_driveController::getRightBumper)
         .onFalse(new InstantCommand(() -> m_chassis.setCenter(new Translation2d(0, 0))));
 
-    new Trigger(m_driveController::getBackButton).whileTrue(new Park(m_chassis));
-
     //Intake Buttons for V1 
-    // new Trigger(m_manipController::getXButton).onTrue(m_IntakeV1_Lentz.runTopNeo(0.5)).onFalse((m_IntakeV1_Lentz.runTopNeo(0)));
-    // new Trigger(m_manipController::getYButton).onTrue(m_IntakeV1_Lentz.runTopNeo(-0.5)).onFalse((m_IntakeV1_Lentz.runTopNeo(0)));
-    // new Trigger(m_manipController::getAButton).onTrue(m_IntakeV1_Lentz.runBottomNeo(0.5)).onFalse((m_IntakeV1_Lentz.runTopNeo(0)));
-    // new Trigger(m_manipController::getXButton).onTrue(m_IntakeV1_Lentz.runBottomNeo(-0.50)).onFalse((m_IntakeV1_Lentz.runTopNeo(0)));
-    //new Trigger(m_manipController::getAButton).onTrue(new InstantCommand(() -> m_IntakeV1_Lentz.testNeo())).onFalse(new InstantCommand(() -> m_IntakeV1_Lentz.stopNeo()));
-    //new Trigger(m_manipController::getAButton).whileTrue(new RunTopBottomTemp(m_IntakeV1_Lentz));
     //new Trigger(m_manipController::getAButton).whileTrue(new RunTopNeos(m_IntakeV1_Lentz, -0.6));
     //new Trigger(m_manipController::getBButton).whileTrue(new RunBottomNeos(m_IntakeV1_Lentz, -0.3));
     //new Trigger(m_manipController::getXButton).whileTrue(new RunTopNeos(m_IntakeV1_Lentz, 0.6));
     //new Trigger(m_manipController::getYButton).whileTrue(new RunBottomNeos(m_IntakeV1_Lentz, 0.3));
-
-    //subStation Pick up
 
     //mid cone score
    // new Trigger(m_manipController::getAButton).whileTrue(new SetArm(m_arm, 213.211, 123.627));
@@ -184,46 +178,48 @@ public class RobotContainer {
 
     //Button Map for Wasp Controls 
     //TOP LEFT TRIGGER --> ARM MID GRID PRESET
-    new Trigger(m_manipController::getLeftBumper).whileTrue(new SetArm(m_arm, Constants.ELBOWMID, Constants.SHOULDERMID)).onFalse((new SetArm(m_arm, Constants.ELBOWSTOW, Constants.SHOULDERSTOW)).alongWith(new RunIntake(m_Dave_Intake, m_Dave_Intake.getSolenoid(), Constants.HOLDSPEED)));
+    new Trigger(m_manipController::getLeftBumper).whileTrue(new SetArm(m_arm, Constants.ELBOW_MID, Constants.SHOULDER_MID)).onFalse((new SetArm(m_arm, Constants.ELBOW_STOW, Constants.SHOULDER_STOW)).alongWith(new RunIntake(m_Dave_Intake, m_Dave_Intake.getSolenoid(), Constants.HOLDSPEED)));
     //LOWER LEFT TRIGGER --> ARM LOW GRID
-    BooleanSupplier leftSupplier = new BooleanSupplier() {
-      @Override
-      public boolean getAsBoolean() {
-        return m_manipController.getLeftTriggerAxis() > .5;
-      }};
-    new Trigger(leftSupplier).whileTrue(new SetArm(m_arm, Constants.ELBOWFLOOR, Constants.SHOULDERFLOOR));
+
+    // THIS HAS BEEN REPLACED WITH WHAT IS BELOW, BUT NEEDS TO BE REVIEWED
+    // BooleanSupplier leftSupplier = new BooleanSupplier() {
+    //   public boolean getAsBoolean() {
+    //     return m_manipController.getLeftTriggerAxis() > .5;
+    //   }};
+    //   new Trigger(leftSupplier).whileTrue(new SetArm(m_arm, Constants.ELBOW_FLOOR, Constants.SHOULDER_FLOOR));
+    // BooleanSupplier rightSupplier = new BooleanSupplier() {
+    //   @Override
+    //   public boolean getAsBoolean(){
+    //     return m_manipController.getRightTriggerAxis() > 0.5;
+    //   }
+    // };
+    // new Trigger(rightSupplier).whileTrue(new RunIntake(m_Dave_Intake, m_Dave_Intake.getSolenoid(), -0.1));
+
+
+    // AXIS TYPE NEEDS TO BE REVIEWED. NULL MIGHT ALSO NOT WORK
+    new Trigger(m_manipController.axisGreaterThan(0, 0.5, null)).whileTrue(new SetArm(m_arm, Constants.ELBOW_FLOOR, Constants.SHOULDER_FLOOR));
+    new Trigger(m_manipController.axisGreaterThan(1, 0.5, null)).whileTrue(new RunIntake(m_Dave_Intake, m_Dave_Intake.getSolenoid(), -0.1));
+
+
     //ALL INTAKE BUTTONS WILL RETURN TO STOW POSITION AFTER COMPLETING INTAKE. iT IS THE LAST COMMAND IN SEQUENCE AFTER THE onFalse. 
     //Y BUTTON --> Shelf intake CONE
-    new Trigger(m_manipController::getYButton).whileTrue((new SetArm(m_arm, Constants.ELBOWSHELF, Constants.SHOULDERSHELF)).alongWith(new RunIntake(m_Dave_Intake, DoubleSolenoid.Value.kForward, 0.35))).onFalse((new SetArm(m_arm, Constants.ELBOWSTOW, Constants.SHOULDERSTOW)).alongWith(new RunIntake(m_Dave_Intake, m_Dave_Intake.getSolenoid(), 0)));
+    new Trigger(m_manipController::getYButton).whileTrue((new SetArm(m_arm, Constants.ELBOW_SHELF, Constants.SHOULDER_SHELF)).alongWith(new RunIntake(m_Dave_Intake, DoubleSolenoid.Value.kForward, 0.35))).onFalse((new SetArm(m_arm, Constants.ELBOW_STOW, Constants.SHOULDER_STOW)).alongWith(new RunIntake(m_Dave_Intake, m_Dave_Intake.getSolenoid(), 0)));
     //X BUTTON --> Floor Cube intake 
-    new Trigger(m_manipController::getXButton).whileTrue((new SetArm(m_arm, Constants.ELBOWFLOOR, Constants.SHOULDERFLOOR)).alongWith(new RunIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, 0.3))).onFalse((new SetArm(m_arm, Constants.ELBOWSTOW, Constants.SHOULDERSTOW)).alongWith(new RunIntake(m_Dave_Intake, m_Dave_Intake.getSolenoid(), Constants.HOLDSPEED)));
+    new Trigger(m_manipController::getXButton).whileTrue((new SetArm(m_arm, Constants.ELBOW_FLOOR, Constants.SHOULDER_FLOOR)).alongWith(new RunIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, 0.3))).onFalse((new SetArm(m_arm, Constants.ELBOW_STOW, Constants.SHOULDER_STOW)).alongWith(new RunIntake(m_Dave_Intake, m_Dave_Intake.getSolenoid(), Constants.HOLDSPEED)));
     //A BUTTON --> Floor Cone Intake
-    new Trigger(m_manipController::getAButton).whileTrue((new SetArm(m_arm, Constants.ELBOWFLOOR, Constants.SHOULDERFLOOR)).alongWith(new RunIntake(m_Dave_Intake, DoubleSolenoid.Value.kForward, 0.35))).onFalse((new SetArm(m_arm, Constants.ELBOWSTOW, Constants.SHOULDERSTOW)).alongWith(new RunIntake(m_Dave_Intake, m_Dave_Intake.getSolenoid(), 0)));
+    new Trigger(m_manipController::getAButton).whileTrue((new SetArm(m_arm, Constants.ELBOW_FLOOR, Constants.SHOULDER_FLOOR)).alongWith(new RunIntake(m_Dave_Intake, DoubleSolenoid.Value.kForward, 0.35))).onFalse((new SetArm(m_arm, Constants.ELBOW_STOW, Constants.SHOULDER_STOW)).alongWith(new RunIntake(m_Dave_Intake, m_Dave_Intake.getSolenoid(), 0)));
     //B BUTTON --> shelf Cube intake
-    new Trigger(m_manipController::getBButton).whileTrue((new SetArm(m_arm, Constants.ELBOWSHELF, Constants.SHOULDERSHELF)).alongWith(new RunIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, 0.3))).onFalse((new SetArm(m_arm, Constants.ELBOWSTOW, Constants.SHOULDERSTOW)).alongWith(new RunIntake(m_Dave_Intake, m_Dave_Intake.getSolenoid(), Constants.HOLDSPEED)));
-    
-    BooleanSupplier rightSupplier = new BooleanSupplier() {
-      @Override
-      public boolean getAsBoolean(){
-        return m_manipController.getRightTriggerAxis() > 0.5;
-      }
-    };
-    new Trigger(rightSupplier).whileTrue(new RunIntake(m_Dave_Intake, m_Dave_Intake.getSolenoid(), -0.1));
+    new Trigger(m_manipController::getBButton).whileTrue((new SetArm(m_arm, Constants.ELBOW_SHELF, Constants.SHOULDER_SHELF)).alongWith(new RunIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, 0.3))).onFalse((new SetArm(m_arm, Constants.ELBOW_STOW, Constants.SHOULDER_STOW)).alongWith(new RunIntake(m_Dave_Intake, m_Dave_Intake.getSolenoid(), Constants.HOLDSPEED)));
 
     new Trigger(m_manipController::getRightBumper).toggleOnTrue(new RunIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, Constants.HOLDSPEED));
 
     //End of Intake buttons for V1
+
     // Intake buttons for Dave's intake (X = intake)
 
    //new Trigger(m_manipController::getXButton).whileTrue(new SetIntake(m_Dave_Intake, 0.6, DoubleSolenoid.Value.kForward)); 
    //new Trigger(m_manipController::getYButton).whileTrue(new SetIntake(m_Dave_Intake, 0.6, DoubleSolenoid.Value.kReverse)); 
    //new Trigger(m_manipController::getAButton).whileTrue(new SetIntake(m_Dave_Intake, -1 , DoubleSolenoid.Value.kReverse));
-    new Trigger(m_driveController::getAButton).whileTrue(new Park(m_chassis));
-    new Trigger(m_driveController::getLeftBumper).whileTrue(new AutoChargeStation(m_chassis, 1, -0.7).andThen(new Park(m_chassis)));
-    new Trigger(() -> m_driveController.getRawButton(3)).whileTrue( //BUTTON NEEDS TO BE SET TO THE PROPER ID
-        autoBuilder.followPath(PathPlanner.generatePath(
-            new PathConstraints(1, 1), pathList)));
-
   }
 
   public Command getAutonomousCommand() {
@@ -242,56 +238,45 @@ public class RobotContainer {
       case EMPTY:
         autoCommand = new InstantCommand();
       break;
+
       case SIX_TAXI:
         autoCommand = new SequentialCommandGroup(
           new InstantCommand(() -> m_chassis.resetPose(sixTaxi.getInitialHolonomicPose())),
           autoBuilder.followPathWithEvents(sixTaxi)
           );
       break;
+
       case SEVEN_CHARGE:
         autoCommand = new SequentialCommandGroup(
           new AutoChargeStation(m_chassis, -1, 0.7),
           new Park(m_chassis)
         );
       break;
+
       case SIX_CONE_TAXI:
         autoCommand = new SequentialCommandGroup(
-          new SetArm(m_arm, Constants.ELBOWFLOOR, Constants.SHOULDERFLOOR),
+          new SetArm(m_arm, Constants.ELBOW_FLOOR, Constants.SHOULDER_FLOOR),
           new SetIntake(m_Dave_Intake, -0.25, DoubleSolenoid.Value.kForward),
           new WaitCommand(1),
           new SetIntake(m_Dave_Intake, Constants.HOLDSPEED, DoubleSolenoid.Value.kForward),
-          new SetArm(m_arm, Constants.ELBOWSTOW, Constants.SHOULDERSTOW),
+          new SetArm(m_arm, Constants.ELBOW_STOW, Constants.SHOULDER_STOW),
           new InstantCommand(() -> m_chassis.resetPose(sixTaxi.getInitialHolonomicPose())),
           autoBuilder.followPathWithEvents(sixTaxi)
         );
+      break;
+
         case SEVEN_CONE_CHARGE:
         autoCommand = new SequentialCommandGroup(
-          new SetArm(m_arm, Constants.ELBOWFLOOR, Constants.SHOULDERFLOOR),
+          new SetArm(m_arm, Constants.ELBOW_FLOOR, Constants.SHOULDER_FLOOR),
           new SetIntake(m_Dave_Intake, -0.25, DoubleSolenoid.Value.kForward),
           new WaitCommand(1),
           new SetIntake(m_Dave_Intake, Constants.HOLDSPEED, DoubleSolenoid.Value.kForward),
-          new SetArm(m_arm, Constants.ELBOWSTOW, Constants.SHOULDERSTOW),
+          new SetArm(m_arm, Constants.ELBOW_STOW, Constants.SHOULDER_STOW),
           new InstantCommand(() -> m_chassis.resetPose(sixTaxi.getInitialHolonomicPose())),
           autoBuilder.followPathWithEvents(sixTaxi)
         );
-        // autoCommand = new InstantCommand();
       break;
     }
-
-    // return new SequentialCommandGroup(
-    //     new InstantCommand(() -> m_chassis.resetPose(oneMeterStraight.getInitialHolonomicPose())),
-    //     autoBuilder.followPath(oneMeterStraight).andThen(() -> m_chassis.setSpeeds()),
-    //     new InstantCommand(() -> m_chassis.resetPose(oneMeterStraight.getInitialHolonomicPose())),
-    //     autoBuilder.followPath(oneMeterStraight).andThen(() -> m_chassis.setSpeeds()));
-    // return new SequentialCommandGroup(
-    //     new InstantCommand(() -> m_chassis.resetPose(eightEcho.getInitialHolonomicPose())),
-    //     autoBuilder.followPath(eightEcho).andThen(() -> m_chassis.setSpeeds()),
-    //     new InstantCommand(() -> m_chassis.resetPose(echoEight.getInitialHolonomicPose())),
-    //     autoBuilder.followPath(echoEight).andThen(() -> m_chassis.setSpeeds()),
-    //     new InstantCommand(() -> m_chassis.resetPose(eightCharge.getInitialHolonomicPose())),
-    //     autoBuilder.followPath(eightCharge).andThen(() -> m_chassis.setSpeeds()),
-    //     new AutoChargeStation(m_chassis)
-    //     );
     return autoCommand;
   }
   /**

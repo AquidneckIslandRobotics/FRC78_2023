@@ -15,11 +15,11 @@ public class ArmControl extends CommandBase {
   private DoubleSupplier elbowJoyVal;
   private DoubleSupplier shoulderJoyVal;
   /** Creates a new ArmControl. */
-  public ArmControl(Arm m_arm, DoubleSupplier elbowJoyVal, DoubleSupplier shoulderJoyVal) {
-    arm = m_arm;
+  public ArmControl(Arm arm, DoubleSupplier elbowJoyVal, DoubleSupplier shoulderJoyVal) {
+    this.arm = arm;
     this.elbowJoyVal = elbowJoyVal;
     this.shoulderJoyVal = shoulderJoyVal;
-    addRequirements(m_arm);
+    addRequirements(this.arm);
     
     // Use addRequirements() here to declare subsystem dependencies.
   }

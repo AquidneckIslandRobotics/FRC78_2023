@@ -6,7 +6,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DutyCycle;
 import frc.robot.classes.COTSFalconSwerveConstants;
 import frc.robot.classes.SwerveModuleConstants;
 
@@ -193,22 +192,22 @@ public final class Constants {
     public static int ELBOW_ENCODER = 1;
 
     //Constants for Arm Presets and such
-    public static double ELBOWSHELF = 228.293;
-    public static double SHOULDERSHELF = 132.394;
+    public static double ELBOW_SHELF = 228.293;
+    public static double SHOULDER_SHELF = 132.394;
 
-    public static double ELBOWFLOOR = 110.625;
-    public static double SHOULDERFLOOR = 13.336;
+    public static double ELBOW_FLOOR = 110.625;
+    public static double SHOULDER_FLOOR = 13.336;
 
-    public static double ELBOWMID = 198.26;
-    public static double SHOULDERMID = 114.089;
+    public static double ELBOW_MID = 198.26;
+    public static double SHOULDER_MID = 114.089;
 
-    public static double ELBOWSTOW = 23.89;
-    public static double SHOULDERSTOW = 15.81;
+    public static double ELBOW_STOW = 23.89;
+    public static double SHOULDER_STOW = 15.81;
 
     public static double HOLDSPEED = 0.15;
 
-    public static double elbowDefault = 23.89;
-    public static double shoulderDefault = 15.81;
+    public static double ELBOW_DEFAULT = 23.89;
+    public static double SHOULDER_DEFAULT = 15.81;
     // TODO - change to proper default positions
 
     //  ARM

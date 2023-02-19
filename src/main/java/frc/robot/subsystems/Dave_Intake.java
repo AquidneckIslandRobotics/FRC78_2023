@@ -8,7 +8,6 @@ import com.revrobotics.CANSparkMax;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.Relay.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -23,19 +22,13 @@ public class Dave_Intake extends SubsystemBase {
   /** Creates a new IntakeV1_Lentz. */
   public Dave_Intake() {
     Neo = new CANSparkMax(Constants.DAVE_NEO, MotorType.kBrushless);
-    //rightNeo = new CANSparkMax(15, MotorType.kBrushless);
-
     solenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, 0, 1);
-    
     compressor = new Compressor(PneumaticsModuleType.REVPH);
   }
- 
-
 
   public void setSpeed(double speed) {
     Neo.set(speed);
   }
-
   
   public void setCompressor(boolean isOn){
     if(isOn){
@@ -45,19 +38,12 @@ public class Dave_Intake extends SubsystemBase {
       compressor.disable();}
     }
 
-
-
   public void setSolenoid(DoubleSolenoid.Value value) {
     solenoid.set(value);
   }
   public DoubleSolenoid.Value getSolenoid(){
     return solenoid.get();
   }
-
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-  }  
 }
 
 

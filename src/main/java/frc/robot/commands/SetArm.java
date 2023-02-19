@@ -4,9 +4,7 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.subsystems.Arm;
 
 public class SetArm extends CommandBase {
@@ -14,19 +12,16 @@ public class SetArm extends CommandBase {
   private double shoulderTarget;
   private Arm arm;
   
-  
+  /*
+  *
+  * THIS COULD BE REPLACED WITH JUST A FUNCTION IN ARM, DO LATER
+  *
+  */
   /** Creates a new RunArmToTarget. */
   public SetArm(Arm arm, double elbowTarget, double shoulderTarget) {
     this.arm = arm;
     this.elbowTarget = elbowTarget;
     this.shoulderTarget = shoulderTarget;
-
-    // Use addRequirements() here to declare subsystem dependencies.
-  }
-
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {
   }
 
   // Called every time the scheduler runs while the command is scheduled.

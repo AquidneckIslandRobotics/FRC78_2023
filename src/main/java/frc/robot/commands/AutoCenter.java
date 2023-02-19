@@ -35,6 +35,11 @@ public class AutoCenter extends CommandBase {
   LimeLight limeLight;
   SwerveChassis chassis;
 
+  /*
+  *
+  * NEED TO IMPLEMENT FIELD MIRRORING, DIFFERENT OFFSETS FOR PICKUP STATION
+  *
+  */
   /** Creates a new AutoCenter. */
   public AutoCenter(LimeLight limeLight, Pose2d setPoint, SwerveChassis chassis) {
     xController = new PIDController(1, 0, 0);
