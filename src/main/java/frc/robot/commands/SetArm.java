@@ -40,6 +40,7 @@ public class SetArm extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return arm.shoulderPIDcontroller.atSetpoint() && arm.elbowPIDcontroller.atSetpoint();
+    // return arm.shoulderPIDcontroller.atSetpoint() && arm.elbowPIDcontroller.atSetpoint();
+    return false;
   }
 }
