@@ -3,10 +3,13 @@ package frc.robot.commands;
 import java.util.function.DoubleSupplier;
 import java.util.function.IntSupplier;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.PIDCommand;
+import edu.wpi.first.wpilibj2.command.TrapezoidProfileCommand;
 import frc.robot.Constants;
 import frc.robot.subsystems.SwerveChassis;
 
@@ -19,6 +22,7 @@ public class SwerveDrive extends CommandBase {
   private final IntSupplier dPadSupplier;
   private final DoubleSupplier lTriggerSupplier;
   private final DoubleSupplier rTriggerSupplier;
+  private final PIDController thetaPID;
 
   private final SlewRateLimiter xLimiter;
   private final SlewRateLimiter yLimiter;
@@ -40,6 +44,9 @@ public class SwerveDrive extends CommandBase {
     xLimiter = new SlewRateLimiter(11, -11, 0);
     yLimiter = new SlewRateLimiter(11, -11, 0);
     thetaLimiter = new SlewRateLimiter(30, -30, 0);
+    thetaPID = new PIDController(1, 0, 0);
+    thetaPID.enableContinuousInput(-180, 180);
+    
     addRequirements(chassis);
   }
 
@@ -50,16 +57,17 @@ public class SwerveDrive extends CommandBase {
   // NEEDS TO BE REVISED, SOMETHING AINT RIGHT
   @Override
   public void execute() {
-    double dPadX = (dPadSupplier.getAsInt() == 0 ? 1 : 0) - (dPadSupplier.getAsInt() == 180 ? 1 : 0);
-    double dPadY = (dPadSupplier.getAsInt() == 270 ? 1 : 0) - (dPadSupplier.getAsInt() == 90 ? 1 : 0);
+    // double dPadX = (dPadSupplier.getAsInt() == 0 ? 1 : 0) - (dPadSupplier.getAsInt() == 180 ? 1 : 0);
+    // double dPadY = (dPadSupplier.getAsInt() == 270 ? 1 : 0) - (dPadSupplier.getAsInt() == 90 ? 1 : 0);
     // int invertRelative = Math.abs(chassis.getFusedPose().getRotation().getDegrees()) > 90 ? -1 : 1;
-    int invertRelative = 1;
-    dPadX = triggerAdjust(dPadX) * Constants.DPAD_VEL * invertRelative;
-    dPadY = triggerAdjust(dPadY) * Constants.DPAD_VEL * invertRelative;
+    // int invertRelative = 1;
+    // dPadX = triggerAdjust(dPadX) * Constants.DPAD_VEL * invertRelative;
+    // dPadY = triggerAdjust(dPadY) * Constants.DPAD_VEL * invertRelative;
 
     SmartDashboard.putNumber("JoystickX", triggerAdjust(xSupplier.getAsDouble()));
     SmartDashboard.putNumber("JoystickY", triggerAdjust(ySupplier.getAsDouble()));
     SmartDashboard.putNumber("JoystickRot", triggerAdjust(rotSupplier.getAsDouble()));
+    thetaPID.setSetpoint(dPadSupplier.getAsInt());
 
     ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
         triggerAdjust(xSupplier.getAsDouble()) * Constants.Swerve.MAX_SPEED,
@@ -67,9 +75,14 @@ public class SwerveDrive extends CommandBase {
         triggerAdjust(rotSupplier.getAsDouble()) * Constants.Swerve.MAX_ANGULAR_VELOCITY,
         chassis.getGyroRot());
 
-    speeds = new ChassisSpeeds(xLimiter.calculate(speeds.vxMetersPerSecond + dPadX),
-        yLimiter.calculate(speeds.vyMetersPerSecond + dPadY),
-        thetaLimiter.calculate(speeds.omegaRadiansPerSecond));
+    speeds = new ChassisSpeeds(xLimiter.calculate(speeds.vxMetersPerSecond),
+        yLimiter.calculate(speeds.vyMetersPerSecond),
+        thetaLimiter.calculate(speeds.omegaRadiansPerSecond + 
+        dPadSupplier.getAsInt() != -1 ? thetaPID.calculate((chassis.getFusedPose().getRotation().getRadians() % (Math.PI * 2)) - Math.PI) : 0));
+    //with dpad robot relative driving
+    // speeds = new ChassisSpeeds(xLimiter.calculate(speeds.vxMetersPerSecond + dPadX),
+    //     yLimiter.calculate(speeds.vyMetersPerSecond + dPadY),
+    //     thetaLimiter.calculate(speeds.omegaRadiansPerSecond));
 
     chassis.setSpeeds(speeds, true);
   }

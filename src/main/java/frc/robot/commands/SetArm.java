@@ -27,8 +27,6 @@ public class SetArm extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-  //  arm.elbowGoToPosition(elbowTarget);
-    //arm.shoulderGoToPosition(shoulderTarget);
     arm.elbowTarget = elbowTarget;
     arm.shoulderTarget = shoulderTarget;
   }

@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.function.BooleanSupplier;
 
-import com.pathplanner.lib.PathConstraints;
-import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.PathPoint;
 import com.pathplanner.lib.auto.PIDConstants;
@@ -177,31 +175,27 @@ public class RobotContainer {
    // new Trigger(m_manipController::getXButton).whileTrue(new SetArm(m_arm, 30.92, 37.581));
 
     //Button Map for Wasp Controls 
-    //TOP LEFT TRIGGER --> ARM MID GRID PRESET
+    
     new Trigger(m_manipController::getLeftBumper).whileTrue(new SetArm(m_arm, Constants.ELBOW_MID, Constants.SHOULDER_MID)).onFalse((new SetArm(m_arm, Constants.ELBOW_STOW, Constants.SHOULDER_STOW)).alongWith(new RunIntake(m_Dave_Intake, m_Dave_Intake.getSolenoid(), Constants.HOLDSPEED)));
+    new Trigger(m_manipController::getRightBumper).toggleOnTrue(new RunIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, Constants.HOLDSPEED));
+        
+    // Probably can be simplified
+    BooleanSupplier leftSupplier = new BooleanSupplier() {
+      public boolean getAsBoolean() {
+        return m_manipController.getLeftTriggerAxis() > .5;
+      }
+    };
+    BooleanSupplier rightSupplier = new BooleanSupplier() {
+      @Override
+      public boolean getAsBoolean(){
+        return m_manipController.getRightTriggerAxis() > 0.5;
+      }
+    };
+    //TOP LEFT TRIGGER --> ARM MID GRID PRESET
     //LOWER LEFT TRIGGER --> ARM LOW GRID
-
-    // THIS HAS BEEN REPLACED WITH WHAT IS BELOW, BUT NEEDS TO BE REVIEWED
-    // BooleanSupplier leftSupplier = new BooleanSupplier() {
-    //   public boolean getAsBoolean() {
-    //     return m_manipController.getLeftTriggerAxis() > .5;
-    //   }};
-    //   new Trigger(leftSupplier).whileTrue(new SetArm(m_arm, Constants.ELBOW_FLOOR, Constants.SHOULDER_FLOOR));
-    // BooleanSupplier rightSupplier = new BooleanSupplier() {
-    //   @Override
-    //   public boolean getAsBoolean(){
-    //     return m_manipController.getRightTriggerAxis() > 0.5;
-    //   }
-    // };
-    // new Trigger(rightSupplier).whileTrue(new RunIntake(m_Dave_Intake, m_Dave_Intake.getSolenoid(), -0.1));
-
-
-    // AXIS TYPE NEEDS TO BE REVIEWED. NULL MIGHT ALSO NOT WORK
-    new Trigger(m_manipController.axisGreaterThan(0, 0.5, null)).whileTrue(new SetArm(m_arm, Constants.ELBOW_FLOOR, Constants.SHOULDER_FLOOR));
-    new Trigger(m_manipController.axisGreaterThan(1, 0.5, null)).whileTrue(new RunIntake(m_Dave_Intake, m_Dave_Intake.getSolenoid(), -0.1));
-
-
-    //ALL INTAKE BUTTONS WILL RETURN TO STOW POSITION AFTER COMPLETING INTAKE. iT IS THE LAST COMMAND IN SEQUENCE AFTER THE onFalse. 
+    new Trigger(leftSupplier).whileTrue(new SetArm(m_arm, Constants.ELBOW_FLOOR, Constants.SHOULDER_FLOOR));
+    new Trigger(rightSupplier).whileTrue(new RunIntake(m_Dave_Intake, m_Dave_Intake.getSolenoid(), -0.1));
+    // ALL INTAKE BUTTONS WILL RETURN TO STOW POSITION AFTER COMPLETING INTAKE. iT IS THE LAST COMMAND IN SEQUENCE AFTER THE onFalse. 
     //Y BUTTON --> Shelf intake CONE
     new Trigger(m_manipController::getYButton).whileTrue((new SetArm(m_arm, Constants.ELBOW_SHELF, Constants.SHOULDER_SHELF)).alongWith(new RunIntake(m_Dave_Intake, DoubleSolenoid.Value.kForward, 0.35))).onFalse((new SetArm(m_arm, Constants.ELBOW_STOW, Constants.SHOULDER_STOW)).alongWith(new RunIntake(m_Dave_Intake, m_Dave_Intake.getSolenoid(), 0)));
     //X BUTTON --> Floor Cube intake 
@@ -211,12 +205,7 @@ public class RobotContainer {
     //B BUTTON --> shelf Cube intake
     new Trigger(m_manipController::getBButton).whileTrue((new SetArm(m_arm, Constants.ELBOW_SHELF, Constants.SHOULDER_SHELF)).alongWith(new RunIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, 0.3))).onFalse((new SetArm(m_arm, Constants.ELBOW_STOW, Constants.SHOULDER_STOW)).alongWith(new RunIntake(m_Dave_Intake, m_Dave_Intake.getSolenoid(), Constants.HOLDSPEED)));
 
-    new Trigger(m_manipController::getRightBumper).toggleOnTrue(new RunIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, Constants.HOLDSPEED));
-
-    //End of Intake buttons for V1
-
-    // Intake buttons for Dave's intake (X = intake)
-
+   //Intake buttons for Dave's intake (X = intake)
    //new Trigger(m_manipController::getXButton).whileTrue(new SetIntake(m_Dave_Intake, 0.6, DoubleSolenoid.Value.kForward)); 
    //new Trigger(m_manipController::getYButton).whileTrue(new SetIntake(m_Dave_Intake, 0.6, DoubleSolenoid.Value.kReverse)); 
    //new Trigger(m_manipController::getAButton).whileTrue(new SetIntake(m_Dave_Intake, -1 , DoubleSolenoid.Value.kReverse));
