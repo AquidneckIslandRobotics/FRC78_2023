@@ -52,6 +52,7 @@ public class Arm extends SubsystemBase {
    */
 public void setShoulderSpeed(double motorPercentage){
   shoulderNeo.set(motorPercentage);
+  SmartDashboard.putNumber("ShoulderError", shoulderPIDcontroller.getPositionError());
 }
 
 /**
@@ -60,6 +61,7 @@ public void setShoulderSpeed(double motorPercentage){
  */
 public void setElbowSpeed(double motorPercentage){
   elbowNeo.set(motorPercentage);
+  SmartDashboard.putNumber("ElbowError", elbowPIDcontroller.getPositionError());
 }
 
 /**

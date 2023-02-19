@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.classes.LimeLight;
@@ -56,7 +57,7 @@ public class RobotContainer {
   private final HashMap<String, Command> m_eventMap;
   private final SwerveAutoBuilder autoBuilder;
 
-  static enum AUTOS {EMPTY, SIX_TAXI, SEVEN_CHARGE, SIX_CONE_TAXI};
+  static enum AUTOS {EMPTY, SIX_TAXI, SEVEN_CHARGE, SIX_CONE_TAXI, TEST};
   public SendableChooser<AUTOS> firstAutoCmd = new SendableChooser<>();
   // private SendableChooser<Command> secondAutoCmd = new SendableChooser();
   // private SendableChooser<Command> thirdAutoCmd = new SendableChooser();
@@ -124,6 +125,7 @@ public class RobotContainer {
     firstAutoCmd.addOption("6Taxi", AUTOS.SIX_TAXI);
     firstAutoCmd.addOption("7Charge", AUTOS.SEVEN_CHARGE);
     firstAutoCmd.addOption("6ConeTaxi", AUTOS.SIX_CONE_TAXI);
+    firstAutoCmd.addOption("TEST", AUTOS.TEST);
 
     SmartDashboard.putData("Auto Selector", firstAutoCmd);
     // #endregion
@@ -249,6 +251,15 @@ public class RobotContainer {
           // autoBuilder.followPathWithEvents(sixTaxi)
         );
         autoCommand = new InstantCommand();
+      break;
+      case TEST:
+        autoCommand = new SequentialCommandGroup(
+          new SetArm(m_arm, Constants.ELBOWSHELF, Constants.SHOULDERMID),
+          new SetIntake(m_Dave_Intake, -0.1, DoubleSolenoid.Value.kForward),
+          new WaitCommand(1),
+          new SetIntake(m_Dave_Intake, Constants.HOLDSPEED, DoubleSolenoid.Value.kForward),
+          new SetArm(m_arm, Constants.ELBOWSTOW, Constants.SHOULDERSTOW)
+        );
       break;
     }
 

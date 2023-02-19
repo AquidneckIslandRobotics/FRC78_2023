@@ -4,9 +4,7 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.subsystems.Arm;
 
 public class SetArm extends CommandBase {
@@ -20,13 +18,13 @@ public class SetArm extends CommandBase {
     this.arm = arm;
     this.elbowTarget = elbowTarget;
     this.shoulderTarget = shoulderTarget;
-
-    // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    arm.elbowPIDcontroller.setSetpoint(elbowTarget);
+    arm.shoulderPIDcontroller.setSetpoint(shoulderTarget);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -41,12 +39,15 @@ public class SetArm extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    System.out.print("SetArm command ended!");
+    arm.shoulderPIDcontroller.reset();
+    arm.elbowPIDcontroller.reset();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return arm.shoulderPIDcontroller.atSetpoint() && arm.elbowPIDcontroller.atSetpoint();
+    System.out.print("Shoulder at pos? :" + arm.shoulderPIDcontroller.atSetpoint() + " elbow: " + arm.elbowPIDcontroller.atSetpoint());
+    // return arm.shoulderPIDcontroller.atSetpoint() && arm.elbowPIDcontroller.atSetpoint();
+    return Math.abs(arm.shoulderPIDcontroller.getPositionError()) < 2 && Math.abs(arm.elbowPIDcontroller.getPositionError()) < 2;
   }
 }

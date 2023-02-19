@@ -36,6 +36,6 @@ public class SetIntake extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return true; // MIGHT HAVE TO BE CHANGED
   }
 }

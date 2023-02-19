@@ -12,8 +12,6 @@ import frc.robot.subsystems.Arm;
  */
 public class SetArmPID extends CommandBase {
   private Arm m_arm;
-  private double shoulderPosition;
-  private double elbowPosition;
 
   /**
    * creates a command that takes in arm subsystem and sets shoulder and elbow to specific position
@@ -23,8 +21,6 @@ public class SetArmPID extends CommandBase {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(arm);
     m_arm = arm;
-    shoulderPosition = arm.shoulderTarget;
-    elbowPosition = arm.elbowTarget;
     }
 
   // Called when the command is initially scheduled.
