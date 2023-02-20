@@ -40,6 +40,7 @@ import frc.robot.commands.SetIntake;
 import frc.robot.commands.SwerveDrive;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Dave_Intake;
+import frc.robot.subsystems.RevBlinkin;
 import frc.robot.subsystems.SwerveChassis;
 
 
@@ -48,7 +49,7 @@ public class RobotContainer {
   public final SwerveChassis m_chassis;
   public final Arm m_arm;
   private final LimeLight m_limeLight;
-  
+  public final RevBlinkin m_blinkin;
   private final XboxController m_driveController;
   private final XboxController m_manipController;
   //private final IntakeV1_Lentz m_IntakeV1_Lentz;
@@ -62,6 +63,8 @@ public class RobotContainer {
   // private SendableChooser<Command> thirdAutoCmd = new SendableChooser();
 
   public RobotContainer() {
+    m_blinkin = new RevBlinkin();
+    m_blinkin.set(0.79);
     m_chassis = new SwerveChassis();
     m_arm = new Arm();
     m_limeLight = new LimeLight();
