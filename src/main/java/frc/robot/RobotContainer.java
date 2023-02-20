@@ -37,6 +37,7 @@ import frc.robot.commands.Park;
 import frc.robot.commands.RunIntake;
 import frc.robot.commands.SetArm;
 import frc.robot.commands.SetArmPID;
+import frc.robot.commands.SetFullArm;
 import frc.robot.commands.SetIntake;
 import frc.robot.commands.SwerveDrive;
 import frc.robot.subsystems.Arm;
@@ -204,6 +205,14 @@ public class RobotContainer {
     new Trigger(m_manipController::getAButton).whileTrue((new SetArm(m_arm, Constants.ELBOW_FLOOR, Constants.SHOULDER_FLOOR)).alongWith(new RunIntake(m_Dave_Intake, DoubleSolenoid.Value.kForward, 0.35))).onFalse((new SetArm(m_arm, Constants.ELBOW_STOW, Constants.SHOULDER_STOW)).alongWith(new RunIntake(m_Dave_Intake, m_Dave_Intake.getSolenoid(), 0)));
     //B BUTTON --> shelf Cube intake
     new Trigger(m_manipController::getBButton).whileTrue((new SetArm(m_arm, Constants.ELBOW_SHELF, Constants.SHOULDER_SHELF)).alongWith(new RunIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, 0.3))).onFalse((new SetArm(m_arm, Constants.ELBOW_STOW, Constants.SHOULDER_STOW)).alongWith(new RunIntake(m_Dave_Intake, m_Dave_Intake.getSolenoid(), Constants.HOLDSPEED)));
+
+    // new Trigger(m_manipController::getYButton).whileTrue((new SetFullArm(m_arm, m_Dave_Intake, Constants.ELBOW_SHELF, Constants.SHOULDER_SHELF, 0.35, DoubleSolenoid.Value.kForward))).onFalse((new SetArm(m_arm, Constants.ELBOW_STOW, Constants.SHOULDER_STOW)).alongWith(new RunIntake(m_Dave_Intake, m_Dave_Intake.getSolenoid(), 0)));
+    // //X BUTTON --> Floor Cube intake 
+    // new Trigger(m_manipController::getXButton).whileTrue((new SetFullArm(m_arm, m_Dave_Intake, 0, 0, 0, null)).onFalse((new SetArm(m_arm, Constants.ELBOW_STOW, Constants.SHOULDER_STOW)).alongWith(new RunIntake(m_Dave_Intake, m_Dave_Intake.getSolenoid(), Constants.HOLDSPEED)));
+    // //A BUTTON --> Floor Cone Intake
+    // new Trigger(m_manipController::getAButton).whileTrue((new SetFullArm(m_arm, m_Dave_Intake, 0, 0, 0, null))).onFalse((new SetArm(m_arm, Constants.ELBOW_STOW, Constants.SHOULDER_STOW)).alongWith(new RunIntake(m_Dave_Intake, m_Dave_Intake.getSolenoid(), 0)));
+    // //B BUTTON --> shelf Cube intake
+    // new Trigger(m_manipController::getBButton).whileTrue((new SetFullArm(m_arm, m_Dave_Intake, 0, 0, 0, null)).onFalse((new SetArm(m_arm, Constants.ELBOW_STOW, Constants.SHOULDER_STOW)).alongWith(new RunIntake(m_Dave_Intake, m_Dave_Intake.getSolenoid(), Constants.HOLDSPEED)));
 
    //Intake buttons for Dave's intake (X = intake)
    //new Trigger(m_manipController::getXButton).whileTrue(new SetIntake(m_Dave_Intake, 0.6, DoubleSolenoid.Value.kForward)); 
