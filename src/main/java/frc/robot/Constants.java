@@ -210,16 +210,14 @@ public final class Constants {
     public static double ELBOWMID = 198.26;
     public static double SHOULDERMID = 114.089;
 
-    public static double ELBOWSTOW = 23.89;
+    // public static double ELBOWSTOW = 23.89;
+    public static double ELBOWSTOW = 25.89;
     public static double SHOULDERSTOW = 15.81;
 
     public static double ELBOW_HIGH = 55;
     public static double SHOULDER_HIGH = 15.81;
 
     public static double HOLDSPEED = 0.03;
-
-    public static double elbowDefault = 23.89;
-    public static double shoulderDefault = 15.81;
     // TODO - change to proper default positions
 
     //  ARM
