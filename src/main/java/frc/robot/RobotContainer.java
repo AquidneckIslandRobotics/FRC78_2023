@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.classes.LimeLight;
 import frc.robot.classes.PathFunctions;
@@ -150,6 +151,7 @@ public class RobotContainer {
         .onFalse(new InstantCommand(() -> m_chassis.setCenter(new Translation2d(0, 0))));
 
     new Trigger(m_driveController::getBackButton).whileTrue(new Park(m_chassis));
+    
 
     //Intake Buttons for V1 
     // new Trigger(m_manipController::getXButton).onTrue(m_IntakeV1_Lentz.runTopNeo(0.5)).onFalse((m_IntakeV1_Lentz.runTopNeo(0)));
@@ -178,11 +180,22 @@ public class RobotContainer {
     //TOP LEFT TRIGGER --> ARM MID GRID PRESET
     new Trigger(m_manipController::getLeftBumper).whileTrue(new SetArm(m_arm, Constants.ELBOWMID, Constants.SHOULDERMID)).onFalse((new SetArm(m_arm, Constants.ELBOWSTOW, Constants.SHOULDERSTOW)).alongWith(new RunIntake(m_Dave_Intake, m_Dave_Intake.getSolenoid(), Constants.HOLDSPEED)));
     //LOWER LEFT TRIGGER --> ARM LOW GRID
+
+    //
+
+  
+
+
     BooleanSupplier leftSupplier = new BooleanSupplier() {
       @Override
       public boolean getAsBoolean() {
         return m_manipController.getLeftTriggerAxis() > .5;
+       
       }};
+      POVButton dPadUp = new POVButton(m_manipController, 0);
+      POVButton dPadRight = new POVButton(m_manipController, 90);
+      POVButton dPadDown = new POVButton(m_manipController, 180);
+      POVButton dPadLeft = new POVButton(m_manipController, 270);
     new Trigger(leftSupplier).whileTrue(new SetArm(m_arm, Constants.ELBOWFLOOR, Constants.SHOULDERFLOOR));
     //ALL INTAKE BUTTONS WILL RETURN TO STOW POSITION AFTER COMPLETING INTAKE. iT IS THE LAST COMMAND IN SEQUENCE AFTER THE onFalse. 
     //Y BUTTON --> Shelf intake CONE
@@ -193,7 +206,8 @@ public class RobotContainer {
     new Trigger(m_manipController::getAButton).whileTrue((new SetArm(m_arm, Constants.ELBOWFLOOR, Constants.SHOULDERFLOOR)).alongWith(new RunIntake(m_Dave_Intake, DoubleSolenoid.Value.kForward, 0.25))).onFalse((new SetArm(m_arm, Constants.ELBOWSTOW, Constants.SHOULDERSTOW)).alongWith(new RunIntake(m_Dave_Intake, m_Dave_Intake.getSolenoid(), 0)));
     //B BUTTON --> shelf Cube intake
     new Trigger(m_manipController::getBButton).whileTrue((new SetArm(m_arm, Constants.ELBOWSHELF, Constants.SHOULDERSHELF)).alongWith(new RunIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, 0.25))).onFalse((new SetArm(m_arm, Constants.ELBOWSTOW, Constants.SHOULDERSTOW)).alongWith(new RunIntake(m_Dave_Intake, m_Dave_Intake.getSolenoid(), Constants.HOLDSPEED)));
-    
+    new Trigger(dPadLeft).onTrue(new InstantCommand(() -> m_blinkin.set(0.91)));
+    new Trigger(dPadRight).onTrue(new InstantCommand(() -> m_blinkin.set(0.69)));
     BooleanSupplier rightSupplier = new BooleanSupplier() {
       @Override
       public boolean getAsBoolean(){
