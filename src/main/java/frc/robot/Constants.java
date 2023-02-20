@@ -163,27 +163,35 @@ public final class Constants {
     public static final double DPAD_VEL = 1; // max meters per second (with RT down)
 
     // #region KINEMATICS
-
     // keep in mind that the locations for the modules must be relative to the
     // center of the robot. Positive x values represent moving toward the front of
-    // the robot whereas positive y values represent moving toward the left of the
-    // robot.
-    // order for swerve modules is always left upper, right upper, left lower, right
-    // lower
-
+    // the robot whereas positive y values represent moving toward the left of the robot.
+    // order for swerve modules is always left upper, right upper, left lower, right lower
     // 6380 is falcon FX max rpm, / 60 (to get revolutions per second), * gear ratio
     // (to wheel rps), * wheel circumference
     public static final double MAX_SPEED = 6380.0 / 60.0 * Swerve.DRIVE_GEAR_RATIO * Units.inchesToMeters(Swerve.WHEEL_CIRCUMFERENCE) * Math.PI;
     // #endregion
 
-    // #region PATH FOLLOWING
+    // #region AUTONOMOUS
     public static final double PATH_MAX_VEL = 1; // in meters per second
     public static final double PATH_MAX_ACC = 1; // in meters per second squared
     public static final double PATH_ROT_MAX_VEL = 6.28; // 6.28 is 1 rotation (it is 2xPI but I don't know why exactly)
     public static final double PATH_ROT_MAX_ACC = 3.14; // 3.14 is half a rotation
     public static final double X_ERROR_VEL = 1; // I don't know what "additional meter per second in the x direction for
                                                 // every meter of error in the x direction" means in the docs
+    // AutoChargeStation and TraverseChargeStation constants
     public static final double Y_ERROR_VEL = 1;
+    public static final double CHARGE_SPEED = 1;
+    public static final double MAX_TIME = 10;
+    public static final double EXTRA_TIME = 0.5;
+    // wooden values
+    public static final double REVERSE_SPEED = 0.7;
+    public static final double REVERSE_TIME = 0.8;
+    public static final double THRESHOLD = 9;
+    // competition values
+    // public static final double REVERSE_SPEED = 0.7;
+    // public static final double REVERSE_TIME = 0.8;
+    // public static final double THRESHOLD = 10;
 
     public static final double TRAJECTORY_KI = 0;
     public static final double TRAJECTORY_KD = 0;
@@ -204,6 +212,9 @@ public final class Constants {
 
     public static double ELBOWSTOW = 23.89;
     public static double SHOULDERSTOW = 15.81;
+
+    public static double ELBOW_HIGH = 55;
+    public static double SHOULDER_HIGH = 15.81;
 
     public static double HOLDSPEED = 0.03;
 

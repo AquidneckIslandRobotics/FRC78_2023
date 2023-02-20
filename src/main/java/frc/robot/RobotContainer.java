@@ -39,6 +39,7 @@ import frc.robot.commands.SetArm;
 import frc.robot.commands.SetArmPID;
 import frc.robot.commands.SetIntake;
 import frc.robot.commands.SwerveDrive;
+import frc.robot.commands.TraverseChargeStation;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Dave_Intake;
 import frc.robot.subsystems.SwerveChassis;
@@ -57,7 +58,7 @@ public class RobotContainer {
   private final HashMap<String, Command> m_eventMap;
   private final SwerveAutoBuilder autoBuilder;
 
-  static enum AUTOS {EMPTY, SIX_TAXI, SEVEN_CHARGE, SIX_CONE_TAXI, TEST};
+  static enum AUTOS {EMPTY, SIX_TAXI, SEVEN_CHARGE, SIX_CONE_TAXI, CONE_TAXI_CHARGE};
   public SendableChooser<AUTOS> firstAutoCmd = new SendableChooser<>();
   // private SendableChooser<Command> secondAutoCmd = new SendableChooser();
   // private SendableChooser<Command> thirdAutoCmd = new SendableChooser();
@@ -125,7 +126,7 @@ public class RobotContainer {
     firstAutoCmd.addOption("6Taxi", AUTOS.SIX_TAXI);
     firstAutoCmd.addOption("7Charge", AUTOS.SEVEN_CHARGE);
     firstAutoCmd.addOption("6ConeTaxi", AUTOS.SIX_CONE_TAXI);
-    firstAutoCmd.addOption("TEST", AUTOS.TEST);
+    firstAutoCmd.addOption("ConeTaxiCharge", AUTOS.CONE_TAXI_CHARGE);
 
     SmartDashboard.putData("Auto Selector", firstAutoCmd);
     // #endregion
@@ -192,6 +193,9 @@ public class RobotContainer {
     new Trigger(m_manipController::getAButton).whileTrue((new SetArm(m_arm, Constants.ELBOWFLOOR, Constants.SHOULDERFLOOR)).alongWith(new RunIntake(m_Dave_Intake, DoubleSolenoid.Value.kForward, 0.25))).onFalse((new SetArm(m_arm, Constants.ELBOWSTOW, Constants.SHOULDERSTOW)).alongWith(new RunIntake(m_Dave_Intake, m_Dave_Intake.getSolenoid(), 0)));
     //B BUTTON --> shelf Cube intake
     new Trigger(m_manipController::getBButton).whileTrue((new SetArm(m_arm, Constants.ELBOWSHELF, Constants.SHOULDERSHELF)).alongWith(new RunIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, 0.25))).onFalse((new SetArm(m_arm, Constants.ELBOWSTOW, Constants.SHOULDERSTOW)).alongWith(new RunIntake(m_Dave_Intake, m_Dave_Intake.getSolenoid(), Constants.HOLDSPEED)));
+
+    // new Trigger(m_manipController::getStartButton).whileTrue((new SetArm(m_arm, Constants.ELBOW_HIGH, Constants.SHOULDER_HIGH)).alongWith(new RunIntake(m_Dave_Intake, DoubleSolenoid.Value.kForward, 0.25))).onFalse((new SetArm(m_arm, Constants.ELBOWSTOW, Constants.SHOULDERSTOW)).alongWith(new RunIntake(m_Dave_Intake, m_Dave_Intake.getSolenoid(), Constants.HOLDSPEED)));
+    // new Trigger(() -> m_manipController.getRawButton(7)).whileTrue(new RunIntake(m_Dave_Intake, DoubleSolenoid.Value.kForward, -0.8));
     
     BooleanSupplier rightSupplier = new BooleanSupplier() {
       @Override
@@ -210,7 +214,7 @@ public class RobotContainer {
    //new Trigger(m_manipController::getYButton).whileTrue(new SetIntake(m_Dave_Intake, 0.6, DoubleSolenoid.Value.kReverse)); 
    //new Trigger(m_manipController::getAButton).whileTrue(new SetIntake(m_Dave_Intake, -1 , DoubleSolenoid.Value.kReverse));
     new Trigger(m_driveController::getAButton).whileTrue(new Park(m_chassis));
-    new Trigger(m_driveController::getLeftBumper).whileTrue(new AutoChargeStation(m_chassis, 1, -0.7).andThen(new Park(m_chassis)));
+    new Trigger(m_driveController::getLeftBumper).whileTrue(new AutoChargeStation(m_chassis, 1).andThen(new Park(m_chassis)));
     new Trigger(() -> m_driveController.getRawButton(3)).whileTrue( //BUTTON NEEDS TO BE SET TO THE PROPER ID
         autoBuilder.followPath(PathPlanner.generatePath(
             new PathConstraints(1, 1), pathList)));
@@ -241,7 +245,8 @@ public class RobotContainer {
       break;
       case SEVEN_CHARGE:
         autoCommand = new SequentialCommandGroup(
-          new AutoChargeStation(m_chassis, -1, 0.7)
+          new InstantCommand(() -> m_chassis.resetPose(new Pose2d(0, 0, Rotation2d.fromDegrees(0)))),
+          new AutoChargeStation(m_chassis, -1)
         );
       break;
       case SIX_CONE_TAXI:
@@ -252,13 +257,17 @@ public class RobotContainer {
         );
         autoCommand = new InstantCommand();
       break;
-      case TEST:
+      case CONE_TAXI_CHARGE:
         autoCommand = new SequentialCommandGroup(
-          new SetArm(m_arm, Constants.ELBOWSHELF, Constants.SHOULDERMID),
-          new SetIntake(m_Dave_Intake, -0.1, DoubleSolenoid.Value.kForward),
-          new WaitCommand(1),
+          new InstantCommand(() -> m_chassis.resetPose(new Pose2d(0, 0, Rotation2d.fromDegrees(0)))),
+          new SetArm(m_arm, Constants.ELBOWMID, Constants.SHOULDERMID),
+          new SetIntake(m_Dave_Intake, -0.1, DoubleSolenoid.Value.kReverse),
+          new WaitCommand(0.5),
           new SetIntake(m_Dave_Intake, Constants.HOLDSPEED, DoubleSolenoid.Value.kForward),
-          new SetArm(m_arm, Constants.ELBOWSTOW, Constants.SHOULDERSTOW)
+          new SetArm(m_arm, Constants.ELBOWSTOW, Constants.SHOULDERSTOW),
+          new TraverseChargeStation(m_chassis, -Constants.CHARGE_SPEED),
+          new WaitCommand(1),
+          new AutoChargeStation(m_chassis, Constants.CHARGE_SPEED)
         );
       break;
     }

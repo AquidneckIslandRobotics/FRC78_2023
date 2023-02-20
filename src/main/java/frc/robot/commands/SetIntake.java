@@ -29,8 +29,8 @@ public class SetIntake extends CommandBase {
 
   @Override
   public void end(boolean interrupted) {
-    intake.setSpeed(0);
-    intake.setSolenoid(DoubleSolenoid.Value.kReverse);
+    // intake.setSpeed(0);
+    // intake.setSolenoid(DoubleSolenoid.Value.kReverse);
   }
 
   // Returns true when the command should end.
