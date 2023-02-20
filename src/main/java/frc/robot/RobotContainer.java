@@ -65,7 +65,7 @@ public class RobotContainer {
 
   public RobotContainer() {
     m_blinkin = new RevBlinkin();
-    m_blinkin.set(0.79);
+    // m_blinkin.set(0.79);
     m_chassis = new SwerveChassis();
     m_arm = new Arm();
     m_limeLight = new LimeLight();

@@ -202,8 +202,8 @@ public final class Constants {
     public static double ELBOWMID = 198.26;
     public static double SHOULDERMID = 114.089;
 
-    public static double ELBOWSTOW = 23.89;
-    public static double SHOULDERSTOW = 15.81;
+    public static double ELBOWSTOW = 25.89;
+    public static double SHOULDERSTOW = 19.81;
 
     public static double HOLDSPEED = 0.03;
 

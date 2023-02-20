@@ -12,7 +12,7 @@ public class RevBlinkin extends SubsystemBase {
 
   public void set(double val) {
     if ((val >= -1.0) && (val <= 1.0)) {
-      m_blinkin.set(0.79);}
+      m_blinkin.set(val);}
   }
  // public void solid_orange() {
  // set(0.65);
