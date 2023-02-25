@@ -44,7 +44,8 @@ public class SwerveDrive extends CommandBase {
     xLimiter = new SlewRateLimiter(11, -11, 0);
     yLimiter = new SlewRateLimiter(11, -11, 0);
     thetaLimiter = new SlewRateLimiter(30, -30, 0);
-    thetaPID = new PIDController(1, 0, 0);
+    // thetaPID = new PIDController(5, 0, 0.1);
+    thetaPID = new PIDController(5, 0, 0);
     thetaPID.enableContinuousInput(-Math.PI, Math.PI);
     
     addRequirements(chassis);
@@ -54,7 +55,6 @@ public class SwerveDrive extends CommandBase {
   public void initialize() {
   }
 
-  // NEEDS TO BE REVISED, SOMETHING AINT RIGHT
   @Override
   public void execute() {
     // double dPadX = (dPadSupplier.getAsInt() == 0 ? 1 : 0) - (dPadSupplier.getAsInt() == 180 ? 1 : 0);
@@ -67,18 +67,23 @@ public class SwerveDrive extends CommandBase {
     SmartDashboard.putNumber("JoystickX", triggerAdjust(xSupplier.getAsDouble()));
     SmartDashboard.putNumber("JoystickY", triggerAdjust(ySupplier.getAsDouble()));
     SmartDashboard.putNumber("JoystickRot", triggerAdjust(rotSupplier.getAsDouble()));
-    thetaPID.setSetpoint(Math.toRadians(dPadSupplier.getAsInt()));
+    thetaPID.setSetpoint(Math.toRadians(dPadSupplier.getAsInt() * -1));
+    SmartDashboard.putNumber("DPAD setpoint", thetaPID.getSetpoint());
 
     ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
         triggerAdjust(xSupplier.getAsDouble()) * Constants.Swerve.MAX_SPEED,
         triggerAdjust(ySupplier.getAsDouble()) * Constants.Swerve.MAX_SPEED,
         triggerAdjust(rotSupplier.getAsDouble()) * Constants.Swerve.MAX_ANGULAR_VELOCITY,
-        chassis.getGyroRot());
+        chassis.getFusedPose().getRotation());
 
-    speeds = new ChassisSpeeds(xLimiter.calculate(speeds.vxMetersPerSecond),
-        yLimiter.calculate(speeds.vyMetersPerSecond),
-        thetaLimiter.calculate(speeds.omegaRadiansPerSecond + 
-        dPadSupplier.getAsInt() != -1 ? thetaPID.calculate((chassis.getFusedPose().getRotation().getRadians() % (Math.PI * 2)) - Math.PI) : 0));
+    double currentRot = chassis.getFusedPose().getRotation().getRadians() % (Math.PI * 2);
+    double dpadSpeed = dPadSupplier.getAsInt() != -1 ? thetaPID.calculate(currentRot) : 0;
+    SmartDashboard.putNumber("DPAD speed", dpadSpeed);
+    SmartDashboard.putNumber("DPAD measuredRot", currentRot);
+    speeds = new ChassisSpeeds(
+      xLimiter.calculate(speeds.vxMetersPerSecond),
+      yLimiter.calculate(speeds.vyMetersPerSecond),
+      thetaLimiter.calculate(speeds.omegaRadiansPerSecond) + dpadSpeed);
     //with dpad robot relative driving
     // speeds = new ChassisSpeeds(xLimiter.calculate(speeds.vxMetersPerSecond + dPadX),
     //     yLimiter.calculate(speeds.vyMetersPerSecond + dPadY),
