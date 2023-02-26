@@ -81,9 +81,9 @@ public class RobotContainer {
 
     m_chassis.setDefaultCommand(new SwerveDrive(
         m_chassis,
-        -m_driveController::getLeftY,
-        -m_driveController::getLeftX,
-        -m_driveController::getRightX,
+        m_driveController::getLeftY,
+        m_driveController::getLeftX,
+        m_driveController::getRightX,
         m_driveController::getLeftTriggerAxis,
         m_driveController::getRightTriggerAxis,
         m_driveController::getYButton,
