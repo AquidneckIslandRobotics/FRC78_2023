@@ -38,6 +38,8 @@ public class Arm extends SubsystemBase {
     elbowPIDcontroller = new PIDController(0.03, 0, 0);
     shoulderPIDcontroller = new PIDController(0.05, 0, 0);
     target = 0;
+    elbowEncoder.setPositionConversionFactor(1);
+    shoulderEncoder.setPositionConversionFactor(1);
 
     shoulderPIDcontroller.disableContinuousInput();
     shoulderPIDcontroller.setTolerance(2);
@@ -86,8 +88,8 @@ public double getElbowAbsolutePosition(){
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Shoulder Encoder", getShoulderAbsolutePosition());
-    SmartDashboard.putNumber("Elbow Encoder", getElbowAbsolutePosition());
+    SmartDashboard.putNumber("Shoulder Encoder", shoulderEncoder.getPosition());
+    SmartDashboard.putNumber("Elbow Encoder", elbowEncoder.getPosition());
     SmartDashboard.putNumber("targetShoulder", shoulderTarget);
     SmartDashboard.putNumber("targetElbow", elbowTarget);
   }
