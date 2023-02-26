@@ -38,6 +38,7 @@ import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.classes.*;
 import frc.robot.commands.*;
+import frc.robot.commands.auto.*;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.RevBlinkin.BlinkinLEDMode;
 
@@ -81,9 +82,9 @@ public class RobotContainer {
 
     m_chassis.setDefaultCommand(new SwerveDrive(
         m_chassis,
-        -m_driveController::getLeftY,
-        -m_driveController::getLeftX,
-        -m_driveController::getRightX,
+        m_driveController::getLeftY,
+        m_driveController::getLeftX,
+        m_driveController::getRightX,
         m_driveController::getLeftTriggerAxis,
         m_driveController::getRightTriggerAxis,
         m_driveController::getYButton,
@@ -214,7 +215,7 @@ public class RobotContainer {
     BooleanSupplier leftSupplier = new BooleanSupplier() {
       @Override
       public boolean getAsBoolean() {
-        return m_manipController.getLeftTriggerAxis() > .5;
+        return m_manipController.getLeftTriggerAxis() > 0.5;
       }};
     BooleanSupplier rightSupplier = new BooleanSupplier() {
       @Override

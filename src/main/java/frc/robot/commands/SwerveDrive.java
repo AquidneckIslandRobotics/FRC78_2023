@@ -74,9 +74,9 @@ public class SwerveDrive extends CommandBase {
     SmartDashboard.putNumber("DPAD setpoint", thetaPID.getSetpoint());
 
     ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-      triggerAdjust(modifyAxis(xSupplier.getAsDouble())) * Constants.Swerve.MAX_SPEED,
-      triggerAdjust(modifyAxis(ySupplier.getAsDouble())) * Constants.Swerve.MAX_SPEED,
-      triggerAdjust(modifyAxis(rotSupplier.getAsDouble())) * Constants.Swerve.MAX_ANGULAR_VELOCITY,
+      triggerAdjust(modifyAxis(-xSupplier.getAsDouble())) * Constants.Swerve.MAX_SPEED,
+      triggerAdjust(modifyAxis(-ySupplier.getAsDouble())) * Constants.Swerve.MAX_SPEED,
+      triggerAdjust(modifyAxis(-rotSupplier.getAsDouble())) * Constants.Swerve.MAX_ANGULAR_VELOCITY,
       chassis.getFusedPose().getRotation());
 
     double currentRot = chassis.getFusedPose().getRotation().getRadians() % (Math.PI * 2);
