@@ -240,7 +240,7 @@ public final class Constants {
     public static final double SHOULDER_ENCODER_OFFSET = 0;
 
     //Arm Targets--> Subject to change (Delete when changed)
-    public static final double SHOULDER_LOW_TARGET = 200;
+    public static final double SHOULDER_LOW_TARGET = 200; // TODO why is this like this?
     public static final double ELBOW_LOW_TARGET = 100;
     public static final double SHOULDER_MID_TARGET = 200;
     public static final double ELBOW_MID_TARGET = 100;
