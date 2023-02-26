@@ -38,6 +38,9 @@ public class AutoChargeStation extends CommandBase {
 
   @Override
   public void execute() {
+    // Source: https://math.stackexchange.com/questions/948803/calculation-of-nutation-and-rotation-from-pitch-and-roll-yaw-is-fixed-to-0
+    double inclination = Math.atan(Math.sin(chassis.getGyroRot(1).getDegrees()) / Math.tan(chassis.getGyroRot(0).getDegrees()));
+
     if (Math.abs(chassis.getGyroRot(1).getDegrees()) - initialRot > Constants.THRESHOLD) {
       hasRotated = true;
     }
