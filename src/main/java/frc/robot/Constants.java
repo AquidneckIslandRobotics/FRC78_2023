@@ -161,7 +161,6 @@ public final class Constants {
 
     public static final int DRIVE_CONTROLLER = 0;
     public static final int MANIP_CONTROLLER = 1;
-    public static final double DPAD_VEL = 2; // max meters per second (with RT down)
 
     // #region KINEMATICS
 
@@ -188,14 +187,15 @@ public final class Constants {
     public static final double CHARGE_SPEED = 1;
     public static final double MAX_TIME = 10;
     public static final double EXTRA_TIME = 0.5;
+    // TODO change back to comptition values
     // wooden values
-    public static final double REVERSE_SPEED = 0.7;
-    public static final double REVERSE_TIME = 0.8;
-    public static final double THRESHOLD = 9;
-    // competition values
     // public static final double REVERSE_SPEED = 0.7;
     // public static final double REVERSE_TIME = 0.8;
-    // public static final double THRESHOLD = 10;
+    // public static final double THRESHOLD = 9;
+    // competition values
+    public static final double REVERSE_SPEED = 0.7;
+    public static final double REVERSE_TIME = 0.8;
+    public static final double THRESHOLD = 10;
 
     public static final double TRAJECTORY_KI = 0;
     public static final double TRAJECTORY_KD = 0;
