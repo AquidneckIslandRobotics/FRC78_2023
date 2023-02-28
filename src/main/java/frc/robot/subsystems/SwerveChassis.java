@@ -47,7 +47,7 @@ public class SwerveChassis extends SubsystemBase {
     moduleLD = new SwerveModule(2, Constants.Swerve.Mod2.constants);
     moduleRD = new SwerveModule(3, Constants.Swerve.Mod3.constants);
 
-    pidgeon = new Pigeon2(Constants.PIGEON_IMU);
+    pidgeon = new Pigeon2(Constants.PIGEON_IMU, "rio");
 
     centerOfRot = new Translation2d();
     kinematics = Constants.Swerve.SWERVE_KINEMATICS;
