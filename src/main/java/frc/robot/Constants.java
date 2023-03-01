@@ -108,8 +108,8 @@ public final class Constants {
             public static final int driveMotorID = 1;
             public static final int angleMotorID = 2;
             public static final int canCoderID = 9;
-           //  public static final Rotation2d angleOffset = Rotation2d.fromDegrees(269.29); //MK4
-             public static final Rotation2d angleOffset = Rotation2d.fromDegrees(10.10); // ant man
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(349.89); //Wasp
+            //  public static final Rotation2d angleOffset = Rotation2d.fromDegrees(10.10); // ant man
             public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
                     canCoderID, angleOffset);
         }
@@ -119,8 +119,8 @@ public final class Constants {
             public static final int driveMotorID = 3;
             public static final int angleMotorID = 4;
             public static final int canCoderID = 10;
-           // public static final Rotation2d angleOffset = Rotation2d.fromDegrees(292.93); //MK4
-             public static final Rotation2d angleOffset = Rotation2d.fromDegrees(160.75); // ant man
+           public static final Rotation2d angleOffset = Rotation2d.fromDegrees(313.59); //Wasp
+            //  public static final Rotation2d angleOffset = Rotation2d.fromDegrees(160.75); // ant man
             public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
                     canCoderID, angleOffset);
         }
@@ -130,8 +130,8 @@ public final class Constants {
             public static final int driveMotorID = 5;
             public static final int angleMotorID = 6;
             public static final int canCoderID = 11;
-            // public static final Rotation2d angleOffset = Rotation2d.fromDegrees(17.31); //MK4
-             public static final Rotation2d angleOffset = Rotation2d.fromDegrees(178.68); // ant man
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(277.99); //Wasp
+            //  public static final Rotation2d angleOffset = Rotation2d.fromDegrees(178.68); // ant man
 
             public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
                     canCoderID, angleOffset);
@@ -143,8 +143,8 @@ public final class Constants {
             public static final int angleMotorID = 8;
             public static final int canCoderID = 12;
 
-           // public static final Rotation2d angleOffset = Rotation2d.fromDegrees(344.70); //MK4
-             public static final Rotation2d angleOffset = Rotation2d.fromDegrees(166.64); // ant man
+           public static final Rotation2d angleOffset = Rotation2d.fromDegrees(232.03); //Wasp
+            //  public static final Rotation2d angleOffset = Rotation2d.fromDegrees(0); // ant man
              
             public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
                     canCoderID, angleOffset);
@@ -205,20 +205,21 @@ public final class Constants {
     public static int ELBOW_ENCODER = 1;
 
     //Constants for Arm Presets and such
-    public static double ELBOW_SHELF = 228.293;
-    public static double SHOULDER_SHELF = 132.394;
+    public static double ELBOW_SHELF = 226.84;
+    public static double SHOULDER_SHELF = 225.12;
 
-    public static double ELBOW_FLOOR = 110.625;
-    public static double SHOULDER_FLOOR = 13.336;
-    
-    public static double ELBOW_MID = 198.26;
-    public static double SHOULDER_MID = 114.089;
+    public static double ELBOW_FLOOR = 125.71;
+    public static double SHOULDER_FLOOR = 333.38;
 
-    public static double ELBOW_STOW = 28.4;//26.89;
-    public static double SHOULDER_STOW = 335.0;//15.81;
+    public static double ELBOW_MID = 212.10;
+    public static double SHOULDER_MID = 230.41;
 
-    public static double ELBOW_HIGH_CUBE = 50.000;
-    public static double SHOULDER_HIGH_CUBE = 13.336;
+
+    public static double ELBOW_STOW = 33.3;//26.89;
+    public static double SHOULDER_STOW = 329.8;//15.81;
+
+    public static double ELBOW_HIGH_CUBE = 212.1;
+    public static double SHOULDER_HIGH_CUBE = 230.41;
 
     public static double HOLD_SPEED = 0.15;
 
