@@ -210,7 +210,7 @@ public final class Constants {
 
     public static double ELBOW_FLOOR = 110.625;
     public static double SHOULDER_FLOOR = 13.336;
-
+    
     public static double ELBOW_MID = 198.26;
     public static double SHOULDER_MID = 114.089;
 
