@@ -17,7 +17,9 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 public class Dave_Intake extends SubsystemBase {
   protected final CANSparkMax Neo;
   
-  protected final DoubleSolenoid solenoid;
+  protected final DoubleSolenoid dropSolenoid;
+  protected final DoubleSolenoid pieceSolenoid;
+
   protected final Compressor compressor;
 
   /** Creates a new IntakeV1_Lentz. */
@@ -25,7 +27,8 @@ public class Dave_Intake extends SubsystemBase {
     Neo = new CANSparkMax(Constants.DAVE_NEO, MotorType.kBrushless);
     //rightNeo = new CANSparkMax(15, MotorType.kBrushless);
 
-    solenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, 15, 14);
+    dropSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, 15, 14);
+    pieceSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, 13, 12);//subject to change 
     
     compressor = new Compressor(PneumaticsModuleType.REVPH);
   }
@@ -43,12 +46,22 @@ public class Dave_Intake extends SubsystemBase {
       compressor.disable();}
     }
 
-  public void setSolenoid(DoubleSolenoid.Value value) {
-    solenoid.set(value);
+  public void setSolenoidDrop(DoubleSolenoid.Value value) {
+    dropSolenoid.set(value);
   }
-  public DoubleSolenoid.Value getSolenoid(){
-    return solenoid.get();
+
+  public void setSolenoidPiece(DoubleSolenoid.Value value) {
+    pieceSolenoid.set(value);
+
+}
+  public DoubleSolenoid.Value getDropSolenoid(){
+    return dropSolenoid.get();
   }
+
+  public DoubleSolenoid.Value getPieceSolenoid() {
+    return pieceSolenoid.get();
+  }
+
   public boolean hasItem(){
     return Neo.getOutputCurrent()>30;
   }

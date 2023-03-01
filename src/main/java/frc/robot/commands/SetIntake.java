@@ -12,19 +12,22 @@ import frc.robot.subsystems.Dave_Intake;
 public class SetIntake extends CommandBase {
   Dave_Intake intake;
   double speed;
-  DoubleSolenoid.Value solenoidValue;
+  DoubleSolenoid.Value pieceSolenoidValue;
+  DoubleSolenoid.Value dropSolenoidValue;
 
-  public SetIntake(Dave_Intake intake, DoubleSolenoid.Value solenoidValue, double speed) {
+  public SetIntake(Dave_Intake intake, DoubleSolenoid.Value dropSolenoidValue, DoubleSolenoid.Value pieceSolenoidValue, double speed) {
     this.intake = intake;
     this.speed = speed;
-    this.solenoidValue = solenoidValue;
+    this.pieceSolenoidValue = pieceSolenoidValue;
+    this.dropSolenoidValue = dropSolenoidValue;
     addRequirements(intake);
   }
 
   @Override
   public void initialize() {
     intake.setSpeed(speed);
-    intake.setSolenoid(solenoidValue);
+    intake.setSolenoidPiece(pieceSolenoidValue);
+    intake.setSolenoidDrop(dropSolenoidValue);
   }
 
   @Override
