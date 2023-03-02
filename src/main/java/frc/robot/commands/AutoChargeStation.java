@@ -39,12 +39,12 @@ public class AutoChargeStation extends CommandBase {
   @Override
   public void execute() {
     // Source: https://math.stackexchange.com/questions/948803/calculation-of-nutation-and-rotation-from-pitch-and-roll-yaw-is-fixed-to-0
-    double inclination = Math.atan(Math.sin(chassis.getGyroRot(1).getDegrees()) / Math.tan(chassis.getGyroRot(0).getDegrees()));
+    double inclination = Math.sqrt(Math.pow(chassis.getGyroRot(0).getDegrees(), 2) + Math.pow(chassis.getGyroRot(1).getDegrees(), 2));
 
-    if (Math.abs(chassis.getGyroRot(1).getDegrees()) - initialRot > Constants.THRESHOLD) {
+    if (Math.abs(inclination) - initialRot > Constants.THRESHOLD) {
       hasRotated = true;
     }
-    if ((Math.abs(chassis.getGyroRot(1).getDegrees()) - initialRot < Constants.THRESHOLD) && hasRotated) {
+    if ((Math.abs(inclination) - initialRot < Constants.THRESHOLD) && hasRotated) {
       hasFlattened = true;
     }
     if (hasRotated && hasFlattened && !isReversing) {
@@ -56,7 +56,7 @@ public class AutoChargeStation extends CommandBase {
     } else {
       chassis.setSpeeds(ChassisSpeeds.fromFieldRelativeSpeeds(new ChassisSpeeds(-Math.signum(speed) * Constants.REVERSE_SPEED, 0, 0), chassis.getFusedPose().getRotation()));
     }
-    SmartDashboard.putNumber("GyroPitch", Math.abs(chassis.getGyroRot(1).getDegrees()) - initialRot);
+    SmartDashboard.putNumber("GyroPitch", Math.abs(inclination) - initialRot);
   }
 
   @Override
