@@ -20,6 +20,9 @@ public class AutoChargeStation extends CommandBase {
   private boolean isReversing;
   private double startTime;
   private double startReverseTime;
+  private stage currentStage;
+
+  private enum stage {BELOW, ABOVE, AFTER, REVERSE, CORRECT}
 
   public AutoChargeStation(SwerveChassis chassis, double speed) {
     this.chassis = chassis;
@@ -31,6 +34,7 @@ public class AutoChargeStation extends CommandBase {
   public void initialize() {
     startTime = Timer.getFPGATimestamp();
     initialRot = Math.abs(chassis.getGyroRot(1).getDegrees());
+    currentStage = stage.BELOW;
     hasRotated = false;
     hasFlattened = false;
     isReversing = false;
@@ -38,15 +42,24 @@ public class AutoChargeStation extends CommandBase {
 
   @Override
   public void execute() {
-    if (Math.abs(chassis.getGyroRot(1).getDegrees()) - initialRot > Constants.THRESHOLD) {
-      hasRotated = true;
+    switch (currentStage) {
+      case BELOW: {
+        if (Math.abs(chassis.getGyroRot(1).getDegrees()) - initialRot > Constants.THRESHOLD) {
+          currentStage = stage.ABOVE;
+        }
+      }
+      case ABOVE: {
+        if (Math.abs(chassis.getGyroRot(1).getDegrees()) - initialRot < Constants.THRESHOLD) {
+          currentStage = stage.AFTER;
+        }
+      }
+      case AFTER: {
+        startReverseTime = Timer.getFPGATimestamp();
+      }
     }
-    if ((Math.abs(chassis.getGyroRot(1).getDegrees()) - initialRot < Constants.THRESHOLD) && hasRotated) {
-      hasFlattened = true;
-    }
+    
     if (hasRotated && hasFlattened && !isReversing) {
       isReversing = true;
-      startReverseTime = Timer.getFPGATimestamp();
     }
     if (!isReversing) {
       chassis.setSpeeds(ChassisSpeeds.fromFieldRelativeSpeeds(new ChassisSpeeds(speed, 0, 0), chassis.getFusedPose().getRotation()));
