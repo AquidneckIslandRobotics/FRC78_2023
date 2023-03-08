@@ -222,8 +222,6 @@ public final class Constants {
 
     public static double HOLD_SPEED = 0.15;
 
-    // TODO - change to proper default positions
-
     //  ARM
     //All encoder constants are offsets from a HOME position
     public static final double SHOULDER_MAX = 7800; // all max and mins subject to change after testing
@@ -238,11 +236,4 @@ public final class Constants {
     // NEED TO BE SET
     public static final double ELBOW_ENCODER_OFFSET = 0;
     public static final double SHOULDER_ENCODER_OFFSET = 0;
-
-    //Arm Targets--> Subject to change (Delete when changed)
-    public static final double SHOULDER_LOW_TARGET = 200;
-    public static final double ELBOW_LOW_TARGET = 100;
-    public static final double SHOULDER_MID_TARGET = 200;
-    public static final double ELBOW_MID_TARGET = 100;
-
 }

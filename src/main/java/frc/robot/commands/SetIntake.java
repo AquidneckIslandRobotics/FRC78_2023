@@ -5,30 +5,61 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Dave_Intake;
+import frc.robot.Constants;
+import frc.robot.subsystems.DaveIntake;
 
 public class SetIntake extends CommandBase {
-  Dave_Intake intake;
-  double speed;
-  DoubleSolenoid.Value solenoidValue;
+  private DaveIntake intake;
+  private intakeMode intakeMode;
 
-  public SetIntake(Dave_Intake intake, DoubleSolenoid.Value solenoidValue, double speed) {
+  public enum intakeMode {CUBE_HOLD, CONE_HOLD, CUBE_INTAKE, CONE_INTAKE, OUTTAKE, CUBE_HIGH_OUTTAKE};
+
+  public SetIntake(DaveIntake intake, intakeMode intakeMode) {
     this.intake = intake;
-    this.speed = speed;
-    this.solenoidValue = solenoidValue;
+    this.intakeMode = intakeMode;
     addRequirements(intake);
   }
 
   @Override
   public void initialize() {
-    intake.setSpeed(speed);
-    intake.setSolenoid(solenoidValue);
+    switch (intakeMode) {
+      case CUBE_HOLD: {
+        intake.setSpeed(Constants.HOLD_SPEED);
+        intake.setSolenoid(DoubleSolenoid.Value.kReverse);
+        break;
+      }
+      case CONE_HOLD: {
+        intake.setSpeed(0);
+        intake.setSolenoid(DoubleSolenoid.Value.kForward);
+        break;
+      }
+      case CUBE_INTAKE: {
+        intake.setSpeed(0.3);
+        intake.setSolenoid(DoubleSolenoid.Value.kReverse);
+        break;
+      }
+      case CONE_INTAKE: {
+        intake.setSpeed(0.35);
+        intake.setSolenoid(DoubleSolenoid.Value.kForward);
+        break;
+      }
+      case OUTTAKE: {
+        if (intake.getSolenoid() == DoubleSolenoid.Value.kReverse) {
+          intake.setSpeed(-0.1);
+        } else {
+          intake.setSpeed(0);
+          intake.setSolenoid(DoubleSolenoid.Value.kReverse);
+        }
+        break;
+      }
+      case CUBE_HIGH_OUTTAKE: {
+        intake.setSpeed(-0.5);
+        intake.setSolenoid(DoubleSolenoid.Value.kReverse);
+        break;
+      }
+    }
   }
-
-  @Override
-  public void end(boolean interrupted) { }
 
   @Override
   public boolean isFinished() {
