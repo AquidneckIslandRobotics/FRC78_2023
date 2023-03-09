@@ -15,14 +15,18 @@ public class AutoChargeStation extends CommandBase {
   private double speed;
   
   private double initialRot;
-  private boolean hasRotated;
-  private boolean hasFlattened;
-  private boolean isReversing;
   private double startTime;
   private double startReverseTime;
+  private double startWaitTime;
   private stage currentStage;
-
-  private enum stage {BELOW, ABOVE, AFTER, REVERSE, CORRECT}
+  //BELOW: below threshold, hasn't started climbing yet
+  //ABOVE: when above the threshold; started climbing
+  //AFTER: after passing back below the threshold
+  //REVERSE: when reversing, waiting for reverse timer to end
+  //WAIT: when waiting after reveresing before knowing if it has to correct
+  //CORRECT: final correction using logic
+  //DONE: when set to done, command stops
+  private enum stage {BELOW, ABOVE, AFTER, REVERSE, WAIT, CORRECT, DONE}
 
   public AutoChargeStation(SwerveChassis chassis, double speed) {
     this.chassis = chassis;
@@ -35,36 +39,56 @@ public class AutoChargeStation extends CommandBase {
     startTime = Timer.getFPGATimestamp();
     initialRot = Math.abs(chassis.getGyroRot(1).getDegrees());
     currentStage = stage.BELOW;
-    hasRotated = false;
-    hasFlattened = false;
-    isReversing = false;
   }
 
   @Override
   public void execute() {
+    double inclination = chassis.getGyroRot(1).getDegrees();
+
     switch (currentStage) {
       case BELOW: {
-        if (Math.abs(chassis.getGyroRot(1).getDegrees()) - initialRot > Constants.THRESHOLD) {
+        if (Math.abs(inclination) - initialRot > Constants.THRESHOLD) {
           currentStage = stage.ABOVE;
         }
       }
       case ABOVE: {
-        if (Math.abs(chassis.getGyroRot(1).getDegrees()) - initialRot < Constants.THRESHOLD) {
+        if (Math.abs(inclination) - initialRot < Constants.THRESHOLD) {
           currentStage = stage.AFTER;
         }
       }
       case AFTER: {
         startReverseTime = Timer.getFPGATimestamp();
+        currentStage = stage.REVERSE;
+      }
+      case REVERSE: {
+        if (Timer.getFPGATimestamp() - startReverseTime > Constants.REVERSE_TIME) {
+          startReverseTime = Timer.getFPGATimestamp();
+          currentStage = stage.WAIT;
+        }
+      }
+      case WAIT: {
+        if (Timer.getFPGATimestamp() - startWaitTime > 0.5) { // TODO
+          if (Math.abs(inclination) - initialRot < 3) { // we could just switch to correct, but that would take an extra period
+            currentStage = stage.DONE;
+          } else {
+            currentStage = stage.CORRECT;
+          }
+        }
+      }
+      case CORRECT: {
+        if (Math.abs(inclination) - initialRot < 3) { // TODO
+          currentStage = stage.DONE;
+        }
       }
     }
     
-    if (hasRotated && hasFlattened && !isReversing) {
-      isReversing = true;
-    }
-    if (!isReversing) {
+    if (currentStage == stage.BELOW || currentStage == stage.ABOVE) {
       chassis.setSpeeds(ChassisSpeeds.fromFieldRelativeSpeeds(new ChassisSpeeds(speed, 0, 0), chassis.getFusedPose().getRotation()));
-    } else {
+    } else if (currentStage == stage.REVERSE) {
       chassis.setSpeeds(ChassisSpeeds.fromFieldRelativeSpeeds(new ChassisSpeeds(-Math.signum(speed) * Constants.REVERSE_SPEED, 0, 0), chassis.getFusedPose().getRotation()));
+    } else if (currentStage == stage.CORRECT) {
+      chassis.setSpeeds(ChassisSpeeds.fromFieldRelativeSpeeds(
+        new ChassisSpeeds(Math.signum(speed) * 0.5 * inclination < 0 ? 1 : -1, 0, 0), chassis.getFusedPose().getRotation()));
     }
     SmartDashboard.putNumber("GyroPitch", Math.abs(chassis.getGyroRot(1).getDegrees()) - initialRot);
   }
@@ -76,6 +100,6 @@ public class AutoChargeStation extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    return ((Timer.getFPGATimestamp() - startReverseTime > Constants.REVERSE_TIME) && isReversing) || (Timer.getFPGATimestamp() - startTime > Constants.MAX_TIME);
+    return (currentStage == stage.DONE || (Timer.getFPGATimestamp() - startTime > Constants.MAX_TIME));
   }
 }
