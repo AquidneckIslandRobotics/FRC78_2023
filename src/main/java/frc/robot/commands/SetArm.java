@@ -4,32 +4,61 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.robot.Constants;
 import frc.robot.subsystems.Arm;
 
 public class SetArm extends CommandBase {
-  private double elbowTarget;
-  private double shoulderTarget;
   private Arm arm;
+  private armPreset preset;
+
+  public enum armPreset {STOW, LOW, MID, MID_DIAG_TELEOP, MID_DIAG_CUBE, MID_DIAG_CONE, HIGH_CUBE, SHELF};
   
-  
-  /** Creates a new RunArmToTarget. */
-  public SetArm(Arm arm, double elbowTarget, double shoulderTarget) {
+  public SetArm(Arm arm, armPreset preset) {
     this.arm = arm;
-    this.elbowTarget = elbowTarget;
-    this.shoulderTarget = shoulderTarget;
+    this.preset = preset;
   }
 
   @Override
   public void initialize() {
-    arm.elbowTarget = elbowTarget;
-    arm.shoulderTarget = shoulderTarget;
+    switch (preset) {
+      case STOW: {
+        arm.elbowTarget = Constants.ELBOW_STOW;
+        arm.shoulderTarget = Constants.SHOULDER_STOW;
+        break;
+      }
+      case LOW: {
+        arm.elbowTarget = Constants.ELBOW_FLOOR;
+        arm.shoulderTarget = Constants.SHOULDER_FLOOR;
+        break;
+      }
+      case MID_DIAG_TELEOP: {
+        arm.elbowTarget = Constants.ELBOW_MID_DIAG_TELEOP;
+        arm.shoulderTarget = Constants.SHOULDER_MID_DIAG_TELEOP;
+        break;
+      }
+      case MID_DIAG_CONE: {
+        arm.elbowTarget = Constants.ELBOW_MID_DIAG_AUTO_CONE;
+        arm.shoulderTarget = Constants.SHOULDER_MID_DIAG_AUTO_CONE;
+        break;
+      }
+      case MID_DIAG_CUBE: {
+        arm.elbowTarget = Constants.ELBOW_MID_DIAG_AUTO_CUBE;
+        arm.shoulderTarget = Constants.SHOULDER_MID_DIAG_AUTO_CUBE;
+        break;
+      }
+      case HIGH_CUBE: {
+        arm.elbowTarget = Constants.ELBOW_HIGH_CUBE;
+        arm.shoulderTarget = Constants.SHOULDER_HIGH_CUBE;
+        break;
+      }
+      case SHELF: {
+        arm.elbowTarget = Constants.ELBOW_SHELF;
+        arm.shoulderTarget = Constants.SHOULDER_SHELF;
+        break;
+      }
+    }
   }
-
-  @Override
-  public void execute() { }
 
   @Override
   public void end(boolean interrupted) {
