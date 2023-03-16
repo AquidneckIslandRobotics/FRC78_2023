@@ -9,6 +9,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 
 public class AutoChargeStation extends CommandBase {
   private SwerveChassis chassis;
@@ -50,20 +51,24 @@ public class AutoChargeStation extends CommandBase {
         if (Math.abs(inclination) - initialRot > Constants.THRESHOLD) {
           currentStage = stage.ABOVE;
         }
+        SmartDashboard.putString("AutoChargeStatus", "BELOW");
       }
       case ABOVE: {
         if (Math.abs(inclination) - initialRot < Constants.THRESHOLD) {
           currentStage = stage.AFTER;
         }
+        SmartDashboard.putString("AutoChargeStatus", "ABOVE");
       }
       case AFTER: {
         startReverseTime = Timer.getFPGATimestamp();
         currentStage = stage.REVERSE;
+        SmartDashboard.putString("AutoChargeStatus", "AFTER");
       }
       case REVERSE: {
         if (Timer.getFPGATimestamp() - startReverseTime > Constants.REVERSE_TIME) {
           startReverseTime = Timer.getFPGATimestamp();
           currentStage = stage.WAIT;
+          SmartDashboard.putString("AutoChargeStatus", "REVERSE");
         }
       }
       case WAIT: {
@@ -74,11 +79,13 @@ public class AutoChargeStation extends CommandBase {
             currentStage = stage.CORRECT;
           }
         }
+        SmartDashboard.putString("AutoChargeStatus", "WAITING");
       }
       case CORRECT: {
         if (Math.abs(inclination) - initialRot < 3) { // TODO
           currentStage = stage.DONE;
         }
+        SmartDashboard.putString("AutoChargeStatus", "CORRECT");
       }
     }
     
@@ -96,10 +103,11 @@ public class AutoChargeStation extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     chassis.setSpeeds();
+    SmartDashboard.putString("AutoChargeStatus", "DONE");
   }
 
   @Override
   public boolean isFinished() {
-    return (currentStage == stage.DONE || (Timer.getFPGATimestamp() - startTime > Constants.MAX_TIME));
+    return currentStage == stage.DONE || (Timer.getFPGATimestamp() - startTime > Constants.MAX_TIME);
   }
 }

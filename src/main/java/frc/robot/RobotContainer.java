@@ -403,9 +403,7 @@ public class RobotContainer {
       break; }
 
       case TEST: {
-        PathPlannerTrajectory test3 = PathPlanner.loadPath("Test3", Constants.PATH_CONSTRAINTS);
-        autoCommand = new SequentialCommandGroup(
-          autoBuilder.fullAuto(test3));
+       autoCommand = new AutoChargeStation(m_chassis, -Constants.CHARGE_SPEED);
       break; }
 
       case TEST_2: {
