@@ -30,6 +30,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -284,9 +285,10 @@ public class RobotContainer {
           new SetIntake(m_Dave_Intake, intakePreset.OUTTAKE),
           new WaitCommand(0.5),
           new SetIntake(m_Dave_Intake, intakePreset.CONE_HOLD),
-          new SetArm(m_arm, armPreset.STOW),
           PathFunctions.resetOdometry(m_chassis, sixTaxi),
-          autoBuilder.followPathWithEvents(sixTaxi)
+          new ParallelDeadlineGroup(
+            autoBuilder.followPathWithEvents(sixTaxi),
+            new SetArm(m_arm, armPreset.STOW))
         );
       break; }
 
@@ -298,8 +300,9 @@ public class RobotContainer {
           new SetIntake(m_Dave_Intake, intakePreset.OUTTAKE),
           new WaitCommand(0.25),
           new SetIntake(m_Dave_Intake, intakePreset.CONE_HOLD),
-          new SetArm(m_arm, armPreset.STOW),
-          new TraverseChargeStation(m_chassis, Constants.CHARGE_SPEED),
+          new ParallelDeadlineGroup(
+              new TraverseChargeStation(m_chassis, Constants.CHARGE_SPEED),
+              new SetArm(m_arm, armPreset.STOW)),
           new WaitCommand(0.5),
           new AutoChargeStation(m_chassis, -Constants.CHARGE_SPEED),
           new Park(m_chassis)
@@ -335,8 +338,9 @@ public class RobotContainer {
         new SetIntake(m_Dave_Intake, intakePreset.OUTTAKE),
         new WaitCommand(0.4),
         new SetIntake(m_Dave_Intake, intakePreset.CUBE_HOLD),
-        new SetArm(m_arm, armPreset.STOW),
-        new TraverseChargeStation(m_chassis, Constants.CHARGE_SPEED),
+        new ParallelDeadlineGroup(
+            new TraverseChargeStation(m_chassis, Constants.CHARGE_SPEED),
+            new SetArm(m_arm, armPreset.STOW)),
         new WaitCommand(1),
         new AutoChargeStation(m_chassis, -Constants.CHARGE_SPEED),
         new Park(m_chassis)
@@ -351,8 +355,9 @@ public class RobotContainer {
           new SetIntake(m_Dave_Intake, intakePreset.OUTTAKE),
           new WaitCommand(0.4),
           new SetIntake(m_Dave_Intake, intakePreset.CUBE_HOLD),
-          new SetArmEnd(m_arm, Constants.ELBOW_STOW, Constants.SHOULDER_STOW),
-          new TraverseChargeStation(m_chassis, Constants.CHARGE_SPEED),
+          new ParallelDeadlineGroup(
+              new TraverseChargeStation(m_chassis, Constants.CHARGE_SPEED),
+              new SetArm(m_arm, armPreset.STOW)),
           new WaitCommand(1),
           new AutoChargeStation(m_chassis, -Constants.CHARGE_SPEED),
           new Park(m_chassis)
