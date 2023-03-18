@@ -193,9 +193,8 @@ public final class Constants {
     // public static final double REVERSE_TIME = 0.8;
     // public static final double THRESHOLD = 9;
     // competition values
-    public static final double REVERSE_SPEED = 0.7; // speed at which it reverses
-    public static final double REVERSE_TIME = 0.2; // the amount of time for which it reverses
-    public static final double WAIT_TIME = 0.2; // the amount of time it waits before it starts correcting
+    public static final double CLIMBING_VEL_FACTOR = 0.75; // How much it slows down, in m/s, with a max of CHARGE_SPEED
+    public static final double WAIT_TIME = 1; // the amount of time it waits before it starts correcting
     public static final double THRESHOLD = 8; // what angle (degrees) it has to pass to be considered climbing
     public static final double CORRECT_THRES = 1;
     public static final double CORRECT_VEL = 0.25;

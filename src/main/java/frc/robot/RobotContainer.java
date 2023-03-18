@@ -403,7 +403,10 @@ public class RobotContainer {
       break; }
 
       case TEST: {
-       autoCommand = new AutoChargeStation(m_chassis, Constants.CHARGE_SPEED);
+       autoCommand = new SequentialCommandGroup(
+        new InstantCommand(() -> m_chassis.resetPose(new Pose2d(0, 0, Rotation2d.fromDegrees(0)))),
+        new AutoChargeStation(m_chassis, Constants.CHARGE_SPEED)
+       );
       break; }
 
       case TEST_2: {

@@ -17,17 +17,14 @@ public class AutoChargeStation extends CommandBase {
   
   private double initialRot;
   private double startTime;
-  private double startReverseTime;
   private double startWaitTime;
   private stage currentStage;
   //BELOW: below threshold, hasn't started climbing yet
   //ABOVE: when above the threshold; started climbing
-  //AFTER: after passing back below the threshold
-  //REVERSE: when reversing, waiting for reverse timer to end
   //WAIT: when waiting after reveresing before knowing if it has to correct
   //CORRECT: final correction using logic
   //DONE: when set to done, command stops
-  private enum stage {BELOW, ABOVE, AFTER, REVERSE, WAIT, CORRECT, DONE}
+  private enum stage {BELOW, ABOVE, WAIT, CORRECT, DONE}
 
   public AutoChargeStation(SwerveChassis chassis, double speed) {
     this.chassis = chassis;
@@ -59,28 +56,15 @@ public class AutoChargeStation extends CommandBase {
       }
       case ABOVE: {
         if (deltaInclination < Constants.THRESHOLD) {
-          currentStage = stage.AFTER;
+          startWaitTime = Timer.getFPGATimestamp();
+          currentStage = stage.WAIT;
         }
         SmartDashboard.putString("AutoChargeStatus", "ABOVE");
         break;
       }
-      case AFTER: {
-        startReverseTime = Timer.getFPGATimestamp();
-        currentStage = stage.REVERSE;
-        SmartDashboard.putString("AutoChargeStatus", "AFTER");
-        break;
-      }
-      case REVERSE: {
-        if (Timer.getFPGATimestamp() - startReverseTime > Constants.REVERSE_TIME) {
-          startReverseTime = Timer.getFPGATimestamp();
-          currentStage = stage.WAIT;
-          SmartDashboard.putString("AutoChargeStatus", "REVERSE");
-        }
-        break;
-      }
       case WAIT: {
         if (Timer.getFPGATimestamp() - startWaitTime > Constants.WAIT_TIME) {
-          if (deltaInclination < 3) { // we could just switch to correct, but that would take an extra period
+          if (deltaInclination < 3) { // we could just switch to correct, but that would take an extra cycle
             currentStage = stage.DONE;
           } else {
             currentStage = stage.CORRECT;
@@ -99,9 +83,9 @@ public class AutoChargeStation extends CommandBase {
     }
     
     if (currentStage == stage.BELOW || currentStage == stage.ABOVE) {
-      chassis.setSpeeds(ChassisSpeeds.fromFieldRelativeSpeeds(new ChassisSpeeds(speed, 0, 0), chassis.getFusedPose().getRotation()));
-    } else if (currentStage == stage.REVERSE) {
-      chassis.setSpeeds(ChassisSpeeds.fromFieldRelativeSpeeds(new ChassisSpeeds(-Math.signum(speed) * Constants.REVERSE_SPEED, 0, 0), chassis.getFusedPose().getRotation()));
+      chassis.setSpeeds(ChassisSpeeds.fromFieldRelativeSpeeds(new ChassisSpeeds(
+        speed + (-Math.signum(speed) * Constants.CLIMBING_VEL_FACTOR * (Math.min(Constants.THRESHOLD, deltaInclination) / Constants.THRESHOLD)), 
+        0, 0), chassis.getFusedPose().getRotation()));
     } else if (currentStage == stage.CORRECT) {
       chassis.setSpeeds(ChassisSpeeds.fromFieldRelativeSpeeds(
         new ChassisSpeeds(Math.signum(speed) * Constants.CORRECT_VEL * inclination < 0 ? -1 : 1, 0, 0), chassis.getFusedPose().getRotation()));
@@ -117,6 +101,5 @@ public class AutoChargeStation extends CommandBase {
   @Override
   public boolean isFinished() {
     return currentStage == stage.DONE || (Timer.getFPGATimestamp() - startTime > Constants.MAX_TIME);
-    // return false;
   }
 }
