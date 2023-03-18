@@ -45,24 +45,30 @@ public class AutoChargeStation extends CommandBase {
   @Override
   public void execute() {
     double inclination = chassis.getGyroRot(1).getDegrees();
+    double deltaInclination = Math.abs(inclination) - initialRot;
+    SmartDashboard.putNumber("inclination", inclination);
+    SmartDashboard.putNumber("deltaInclination", deltaInclination);
 
     switch (currentStage) {
       case BELOW: {
-        if (Math.abs(inclination) - initialRot > Constants.THRESHOLD) {
+        if (deltaInclination > Constants.THRESHOLD) {
           currentStage = stage.ABOVE;
         }
         SmartDashboard.putString("AutoChargeStatus", "BELOW");
+        break;
       }
       case ABOVE: {
-        if (Math.abs(inclination) - initialRot < Constants.THRESHOLD) {
+        if (deltaInclination < Constants.THRESHOLD) {
           currentStage = stage.AFTER;
         }
         SmartDashboard.putString("AutoChargeStatus", "ABOVE");
+        break;
       }
       case AFTER: {
         startReverseTime = Timer.getFPGATimestamp();
         currentStage = stage.REVERSE;
         SmartDashboard.putString("AutoChargeStatus", "AFTER");
+        break;
       }
       case REVERSE: {
         if (Timer.getFPGATimestamp() - startReverseTime > Constants.REVERSE_TIME) {
@@ -70,22 +76,25 @@ public class AutoChargeStation extends CommandBase {
           currentStage = stage.WAIT;
           SmartDashboard.putString("AutoChargeStatus", "REVERSE");
         }
+        break;
       }
       case WAIT: {
-        if (Timer.getFPGATimestamp() - startWaitTime > 0.5) { // TODO
-          if (Math.abs(inclination) - initialRot < 3) { // we could just switch to correct, but that would take an extra period
+        if (Timer.getFPGATimestamp() - startWaitTime > Constants.WAIT_TIME) {
+          if (deltaInclination < 3) { // we could just switch to correct, but that would take an extra period
             currentStage = stage.DONE;
           } else {
             currentStage = stage.CORRECT;
           }
         }
         SmartDashboard.putString("AutoChargeStatus", "WAITING");
+        break;
       }
       case CORRECT: {
-        if (Math.abs(inclination) - initialRot < 3) { // TODO
+        if (deltaInclination < Constants.CORRECT_THRES) {
           currentStage = stage.DONE;
         }
         SmartDashboard.putString("AutoChargeStatus", "CORRECT");
+        break;
       }
     }
     
@@ -95,9 +104,8 @@ public class AutoChargeStation extends CommandBase {
       chassis.setSpeeds(ChassisSpeeds.fromFieldRelativeSpeeds(new ChassisSpeeds(-Math.signum(speed) * Constants.REVERSE_SPEED, 0, 0), chassis.getFusedPose().getRotation()));
     } else if (currentStage == stage.CORRECT) {
       chassis.setSpeeds(ChassisSpeeds.fromFieldRelativeSpeeds(
-        new ChassisSpeeds(Math.signum(speed) * 0.5 * inclination < 0 ? 1 : -1, 0, 0), chassis.getFusedPose().getRotation()));
+        new ChassisSpeeds(Math.signum(speed) * Constants.CORRECT_VEL * inclination < 0 ? -1 : 1, 0, 0), chassis.getFusedPose().getRotation()));
     }
-    SmartDashboard.putNumber("GyroPitch", Math.abs(chassis.getGyroRot(1).getDegrees()) - initialRot);
   }
 
   @Override
@@ -109,5 +117,6 @@ public class AutoChargeStation extends CommandBase {
   @Override
   public boolean isFinished() {
     return currentStage == stage.DONE || (Timer.getFPGATimestamp() - startTime > Constants.MAX_TIME);
+    // return false;
   }
 }

@@ -24,7 +24,6 @@ public class Arm extends SubsystemBase {
   private CANSparkMax elbowNeo;
   public PIDController elbowPIDcontroller;
   public PIDController shoulderPIDcontroller;
-  private double target;
   public double elbowTarget;
   public double shoulderTarget; 
   public DigitalInput shoulderLimitSwitch;
@@ -37,7 +36,6 @@ public class Arm extends SubsystemBase {
     elbowEncoder = new DutyCycleEncoder(Constants.ELBOW_ENCODER);
     elbowPIDcontroller = new PIDController(0.03, 0, 0);
     shoulderPIDcontroller = new PIDController(0.05, 0, 0);
-    target = 0;
 
     shoulderPIDcontroller.disableContinuousInput();
     shoulderPIDcontroller.setTolerance(2);

@@ -403,7 +403,7 @@ public class RobotContainer {
       break; }
 
       case TEST: {
-       autoCommand = new AutoChargeStation(m_chassis, -Constants.CHARGE_SPEED);
+       autoCommand = new AutoChargeStation(m_chassis, Constants.CHARGE_SPEED);
       break; }
 
       case TEST_2: {
