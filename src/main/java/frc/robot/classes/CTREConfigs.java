@@ -1,4 +1,4 @@
-package frc.robot;
+package frc.robot.classes;
 
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
@@ -8,6 +8,8 @@ import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 import com.ctre.phoenix.sensors.SensorTimeBase;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants;
+import frc.robot.Constants.Swerve;
 
 public final class CTREConfigs {
     public TalonFXConfiguration swerveAngleFXConfig;

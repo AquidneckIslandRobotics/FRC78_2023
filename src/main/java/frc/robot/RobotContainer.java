@@ -34,7 +34,6 @@ import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.classes.*;
@@ -55,7 +54,6 @@ public class RobotContainer {
   private final XboxController m_driveController;
   private final XboxController m_manipController;
   private final XboxController m_testController;
-  //private final IntakeV1_Lentz m_IntakeV1_Lentz;
   private final DaveIntake m_Dave_Intake;
   private final HashMap<String, Command> m_eventMap;
   private final SwerveAutoBuilder autoBuilder;
@@ -65,16 +63,12 @@ public class RobotContainer {
     CONE_PICKUP_CONE, CUBE_MID_TAXI_CHARGE, CONE_TAXI_EIGHT, CONE_PICKUP_CONE_EIGHT, CUBE_HIGH_TAXI_CHARGE, 
     TEST, TEST_2};
   public SendableChooser<AUTOS> firstAutoCmd = new SendableChooser<>();
-  // private SendableChooser<Command> secondAutoCmd = new SendableChooser();
-  // private SendableChooser<Command> thirdAutoCmd = new SendableChooser();
 
   public RobotContainer() {
     m_chassis = new SwerveChassis();
     m_arm = new Arm();
     m_limeLight = new LimeLight();
     m_driveController = new XboxController(Constants.DRIVE_CONTROLLER);
-
-    //m_IntakeV1_Lentz = new IntakeV1_Lentz();
 
     m_Dave_Intake = new DaveIntake();
     m_blinkin = new RevBlinkin(m_Dave_Intake);
@@ -104,19 +98,6 @@ public class RobotContainer {
    m_mjpegServer.setSource(m_driverCam);
     //  CvSink cvSink = CameraServer.getVideo();
     //  CvSource outputStream = CameraServer.putVideo("driverCam", 0, 0);
-
-  //  m_arm.setDefaultCommand(new InstantCommand(()-> m_arm.setShoulderSpeed(0.2), m_arm));//will change-MG
-    // m_Dave_Intake.setDefaultCommand(new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kForward, 0.1));
-
-    //TODO is this actually used?
-    // Trigger buttonA = new JoystickButton(m_manipController, XboxController.Button.kX.value);
-    // buttonA.onTrue(new InstantCommand(() -> new SetArm(m_arm, Constants.SHOULDER_LOW_TARGET, Constants.ELBOW_LOW_TARGET)));
-    // buttonA.onFalse(new InstantCommand(() -> m_arm.setShoulderSpeed(0)));
-    
-    // Trigger buttonB = new JoystickButton(m_manipController, XboxController.Button.kX.value);
-    // buttonB.onTrue(new InstantCommand(() -> new SetArm(m_arm, Constants.SHOULDER_MID_TARGET, Constants.ELBOW_MID_TARGET)));
-    // buttonB.onFalse(new InstantCommand(() -> m_arm.setShoulderSpeed(0)));
-  
 
     // #region PATHPLANNER
     m_eventMap = new HashMap<>();
@@ -249,7 +230,6 @@ public class RobotContainer {
     //TestController Buttons 
     new Trigger(m_testController::getAButton).whileTrue((new SetArm(m_arm, armPreset.HIGH_CUBE)).alongWith(new SetIntake(m_Dave_Intake, intakePreset.CUBE_HOLD))).onFalse((new SetArm(m_arm, armPreset.HIGH_CUBE)));
     new Trigger(m_testController::getBButton).whileTrue(new SetIntake(m_Dave_Intake, intakePreset.CUBE_HIGH_OUTTAKE)).onFalse(new SetIntake(m_Dave_Intake, intakePreset.CUBE_HOLD));
-
   }
 
   public Command getAutonomousCommand() {
@@ -329,7 +309,6 @@ public class RobotContainer {
         );
       break; }
 
-      // TODO ADD INESH
       case CUBE_MID_TAXI_CHARGE: {
       autoCommand = new SequentialCommandGroup(
         new InstantCommand(() -> m_chassis.resetPose(new Pose2d(0, 0, Rotation2d.fromDegrees(180)))),
@@ -361,8 +340,8 @@ public class RobotContainer {
           new WaitCommand(1),
           new AutoChargeStation(m_chassis, -Constants.CHARGE_SPEED),
           new Park(m_chassis)
-        );
-        break; }
+      );
+      break; }
 
       case CONE_TAXI_EIGHT: {
       PathPlannerTrajectory eightHotel = PathFunctions.createTrajectory("8Hotel");
@@ -416,6 +395,7 @@ public class RobotContainer {
           autoBuilder.followPathWithEvents(test3)
         );
       break; }
+
       }
     return autoCommand;
   }

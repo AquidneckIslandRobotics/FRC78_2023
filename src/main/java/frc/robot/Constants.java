@@ -7,7 +7,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DutyCycle;
 import frc.robot.classes.COTSFalconSwerveConstants;
 import frc.robot.classes.SwerveModuleConstants;
 
@@ -161,8 +160,6 @@ public final class Constants {
 
     public static final int DRIVE_CONTROLLER = 0;
     public static final int MANIP_CONTROLLER = 1;
-    public static final double DPAD_VEL = 2; // max meters per second (with RT down)
-
     // #region KINEMATICS
 
     // keep in mind that the locations for the modules must be relative to the
@@ -185,17 +182,13 @@ public final class Constants {
     public static final double Y_ERROR_VEL = 1; // every meter of error in the x direction" means in the docs
 
     // AutoChargeStation and TraverseChargeStation constants
-    public static final double CHARGE_SPEED = 1;
+    public static final double CHARGE_SPEED = 2;
     public static final double MAX_TIME = 10;
     public static final double EXTRA_TIME = 0.5;
-    // wooden values
-    // public static final double REVERSE_SPEED = 0.7;
-    // public static final double REVERSE_TIME = 0.8;
-    // public static final double THRESHOLD = 9;
     // competition values
-    public static final double CLIMBING_VEL_FACTOR = 0.75; // How much it slows down, in m/s, with a max of CHARGE_SPEED
+    public static final double CLIMBING_VEL_FACTOR = 1.5; // How much it slows down, in m/s, with a max of CHARGE_SPEED
     public static final double WAIT_TIME = 1; // the amount of time it waits before it starts correcting
-    public static final double THRESHOLD = 8; // what angle (degrees) it has to pass to be considered climbing
+    public static final double THRESHOLD = 7; // what angle (degrees) it has to pass to be considered climbing
     public static final double CORRECT_THRES = 1;
     public static final double CORRECT_VEL = 0.25;
 

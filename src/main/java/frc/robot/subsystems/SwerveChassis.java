@@ -21,7 +21,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.classes.LimeLight;
-// import frc.robot.classes.Odometry;
 import frc.robot.classes.SwerveModule;
 
 public class SwerveChassis extends SubsystemBase {
@@ -41,7 +40,6 @@ public class SwerveChassis extends SubsystemBase {
   protected ChassisSpeeds speeds = new ChassisSpeeds();
 
   public SwerveChassis() {
-    // WILL COULD CONSIDER MAKING THIS AN ARRAY FOR SIMPLIFIED CODE
     moduleLU = new SwerveModule(0, Constants.Swerve.Mod0.constants);
     moduleRU = new SwerveModule(1, Constants.Swerve.Mod1.constants);
     moduleLD = new SwerveModule(2, Constants.Swerve.Mod2.constants);
@@ -95,7 +93,6 @@ public class SwerveChassis extends SubsystemBase {
   }
 
   public void resetPose(Pose2d pose) {
-    // Odometry.resetOdometry(pose, getGyroRot(), this, odometry);
     poseEstimator.resetPosition(getGyroRot(), getPositions(), pose);
   }
 

@@ -21,10 +21,6 @@ public class ShoulderManualMovement extends CommandBase {
     addRequirements(m_Arm);
   }
 
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {}
-
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
@@ -32,10 +28,6 @@ public class ShoulderManualMovement extends CommandBase {
 
    // m_Arm.setElbowSpeed(armController.getLeftY() * 0.5);
   }
-
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override

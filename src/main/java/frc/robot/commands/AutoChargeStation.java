@@ -2,14 +2,10 @@ package frc.robot.commands;
 import frc.robot.Constants;
 import frc.robot.subsystems.SwerveChassis;
 
-import org.opencv.core.Mat.Tuple3;
-
-import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
 
 public class AutoChargeStation extends CommandBase {
   private SwerveChassis chassis;
@@ -86,9 +82,11 @@ public class AutoChargeStation extends CommandBase {
       chassis.setSpeeds(ChassisSpeeds.fromFieldRelativeSpeeds(new ChassisSpeeds(
         speed + (-Math.signum(speed) * Constants.CLIMBING_VEL_FACTOR * (Math.min(Constants.THRESHOLD, deltaInclination) / Constants.THRESHOLD)), 
         0, 0), chassis.getFusedPose().getRotation()));
+    } else if (currentStage == stage.WAIT) {
+      chassis.setSpeeds();
     } else if (currentStage == stage.CORRECT) {
       chassis.setSpeeds(ChassisSpeeds.fromFieldRelativeSpeeds(
-        new ChassisSpeeds(Math.signum(speed) * Constants.CORRECT_VEL * inclination < 0 ? -1 : 1, 0, 0), chassis.getFusedPose().getRotation()));
+        new ChassisSpeeds(Math.signum(speed) * Constants.CORRECT_VEL * (inclination < 0 ? -1 : 1), 0, 0), chassis.getFusedPose().getRotation()));
     }
   }
 
