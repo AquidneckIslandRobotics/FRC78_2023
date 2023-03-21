@@ -10,13 +10,16 @@ import edu.wpi.first.networktables.DoubleArraySubscriber;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /** Add your docs here. */
 public class LimeLight {
     NetworkTable table;
     DoubleArraySubscriber camPose;
-    DoubleArraySubscriber fieldPose;
+    DoubleArraySubscriber blueFieldPose;
+    DoubleArraySubscriber redFieldPose;
 
     NetworkTableEntry tx;
     NetworkTableEntry ty;
@@ -26,7 +29,8 @@ public class LimeLight {
     public LimeLight() {
         table = NetworkTableInstance.getDefault().getTable("limelight");
         camPose = table.getDoubleArrayTopic("campose").subscribe(new double[] {});
-        fieldPose = table.getDoubleArrayTopic("botpose").subscribe(new double[] {});
+        blueFieldPose = table.getDoubleArrayTopic("botpose_wpiblue").subscribe(new double[] {});
+        redFieldPose = table.getDoubleArrayTopic("botpose_wpired").subscribe(new double[] {});
     
         tx = table.getEntry("tx");
         ty = table.getEntry("ty");
@@ -34,17 +38,23 @@ public class LimeLight {
         tid = table.getEntry("tid");
     }
 
+    //TODO might have null pointer errors if run too early
     public Pose2d getBotPose() {
-        double[] array = fieldPose.get();
-            SmartDashboard.putNumber("PoseX", array[0]);
-            SmartDashboard.putNumber("PoseY", array[1]);
-            SmartDashboard.putNumber("PoseZ", array[2]);
-            SmartDashboard.putNumber("PoseXRot", array[3]);
-            SmartDashboard.putNumber("PoseYRot", array[4]);
-            SmartDashboard.putNumber("PoseZRot", array[5]);
+        double[] array;
+        if (DriverStation.getAlliance() == Alliance.Blue) {
+            array = blueFieldPose.get();
+        } else {
+            array = redFieldPose.get();
+        }
 
-            //offsets because most wpilib uses bottom left field as 0, 0 while limlight has 0, 0 at the center
-            return new Pose2d(array[0] + 8.5, array[1] + 4.25, Rotation2d.fromDegrees(array[5]));
+        SmartDashboard.putNumber("PoseX", array[0]);
+        SmartDashboard.putNumber("PoseY", array[1]);
+        SmartDashboard.putNumber("PoseZ", array[2]);
+        SmartDashboard.putNumber("PoseXRot", array[3]);
+        SmartDashboard.putNumber("PoseYRot", array[4]);
+        SmartDashboard.putNumber("PoseZRot", array[5]);
+
+        return new Pose2d(array[0], array[1], Rotation2d.fromDegrees(array[5]));
     }
 
     public boolean hasApriltag() {
@@ -52,7 +62,12 @@ public class LimeLight {
     }
 
     public long getBotPoseTimestamp() {
-        long timestamp = fieldPose.getAtomic().timestamp; // might have to be switched to server timestamp
+        long timestamp;
+        if (DriverStation.getAlliance() == Alliance.Blue) {
+            timestamp = blueFieldPose.getAtomic().timestamp; // might have to be switched to server timestamp
+        } else {
+            timestamp = redFieldPose.getAtomic().timestamp; // might have to be switched to server timestamp
+        }
         SmartDashboard.putNumber("lastBotPoseTimestamp", timestamp);
         return timestamp;
     }
