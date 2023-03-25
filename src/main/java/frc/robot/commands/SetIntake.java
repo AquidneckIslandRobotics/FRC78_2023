@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.DaveIntake;
+import frc.robot.subsystems.RevBlinkin.BlinkinLEDMode;
 
 public class SetIntake extends CommandBase {
   private DaveIntake intake;
@@ -32,6 +33,7 @@ public class SetIntake extends CommandBase {
       case CONE_HOLD: {
         intake.setSpeed(0);
         intake.setSolenoid(DoubleSolenoid.Value.kForward);
+        RevBlinkin.set(BlinkinLEDMode.STROBE2.getValue());
         break;
       }
       case CUBE_INTAKE: {

@@ -6,16 +6,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 
-public class RevBlinkin extends SubsystemBase {
-  BlinkinLEDMode ledMode = BlinkinLEDMode.BLUE;
-  private static Spark m_blinkin = null;
-  private DaveIntake daveIntake;
-  public RevBlinkin(DaveIntake daveIntake) {
-    m_blinkin = new Spark(9);
-    this.daveIntake = daveIntake;
-    //solid_orange();
-  }
-
+public class RevBlinkin{
+  public static BlinkinLEDMode ledMode = BlinkinLEDMode.BLUE;
+  private static Spark m_blinkin = new Spark(9);
 public static enum BlinkinLEDMode{
   YELLOW(0.69),
   PURPLE(0.91),
@@ -36,26 +29,15 @@ public static enum BlinkinLEDMode{
   }
 }
 
-public void ledMode(BlinkinLEDMode ledMode){
-  this.ledMode = ledMode;
-}
+// public static void ledMode(BlinkinLEDMode ledMode){
+//   this.ledMode = ledMode;
+// }
   
-public void set(double BlinkinLEDMode) {
+public static void set(double BlinkinLEDMode) {
       m_blinkin.set(BlinkinLEDMode);
     // new PrintCommand("Setting LEDs to " + val);
     // SmartDashboard.putNumber("LedValue", val);  
   }
-  
- @Override
-  public void periodic() {
-    SmartDashboard.putBoolean("Running", daveIntake.hasItem());
-    // BlinkinLEDMode ledMode = BlinkinLEDMode.BLUE;
-    set(ledMode.getValue());
-    
-    if (daveIntake.hasItem() == true) {                                
-      ledMode(BlinkinLEDMode.WHITE);
-    }
- }
 }
 
 
