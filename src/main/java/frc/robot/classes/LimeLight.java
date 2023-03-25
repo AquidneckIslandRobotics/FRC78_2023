@@ -11,6 +11,7 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -25,6 +26,9 @@ public class LimeLight {
     NetworkTableEntry ty;
     NetworkTableEntry ta;
     NetworkTableEntry tid;
+    NetworkTableEntry tl;
+    NetworkTableEntry cl;
+    NetworkTableEntry pipeline;
 
     public LimeLight() {
         table = NetworkTableInstance.getDefault().getTable("limelight");
@@ -36,6 +40,9 @@ public class LimeLight {
         ty = table.getEntry("ty");
         ta = table.getEntry("ta");
         tid = table.getEntry("tid");
+        tl = table.getEntry("tl");
+        cl = table.getEntry("cl");
+        pipeline = table.getEntry("pipeline");
     }
 
     //TODO might have null pointer errors if run too early
@@ -61,19 +68,16 @@ public class LimeLight {
         return tid.getDouble(-1) != -1; 
     }
 
-    public long getBotPoseTimestamp() {
-        long timestamp;
-        if (DriverStation.getAlliance() == Alliance.Blue) {
-            timestamp = blueFieldPose.getAtomic().timestamp; // might have to be switched to server timestamp
-        } else {
-            timestamp = redFieldPose.getAtomic().timestamp; // might have to be switched to server timestamp
-        }
-        SmartDashboard.putNumber("lastBotPoseTimestamp", timestamp);
-        return timestamp;
+    public double getBotPoseTimestamp() {
+        return Timer.getFPGATimestamp() - (tl.getDouble(0)/1000.0) - (cl.getDouble(0)/1000.0);
     }
 
     public Pose2d getCamPose() {
         double[] array = camPose.get();
         return new Pose2d(array[2], array[0], Rotation2d.fromDegrees(array[4]));
+    }
+
+    public void switchPipeline() {
+        pipeline.setInteger(0);
     }
 }
