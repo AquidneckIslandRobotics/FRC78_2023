@@ -79,13 +79,13 @@ public class SwerveChassis extends SubsystemBase {
     }
 
     poseEstimator.update(getGyroRot(), getPositions());
-    Pose2d pose = getFusedPose(); //offset by 8.5, 4.25
+    Pose2d pose = getFusedPose();
     //THIS NEEDS TO BE CONSIDERED WHEN RUNNING AUTONOMOUS
-    // if(limelight.hasApriltag()){
-    //   PathPlannerServer.sendPathFollowingData(limelight.getBotPose(), new Pose2d(pose.getX(), pose.getY(), pose.getRotation()));
-    // } else {
-    //   PathPlannerServer.sendPathFollowingData(new Pose2d(), new Pose2d(pose.getX(), pose.getY(), pose.getRotation()));
-    // }
+    if(limelight.hasApriltag()){
+      PathPlannerServer.sendPathFollowingData(limelight.getBotPose(), new Pose2d(pose.getX(), pose.getY(), pose.getRotation()));
+    } else {
+      PathPlannerServer.sendPathFollowingData(new Pose2d(), new Pose2d(pose.getX(), pose.getY(), pose.getRotation()));
+    }
     
     SmartDashboard.putNumber("FusedPoseX", pose.getX());
     SmartDashboard.putNumber("FusedPoseY", pose.getY());
@@ -137,11 +137,11 @@ public class SwerveChassis extends SubsystemBase {
   // #region GET FUNCTIONS
 
   public Pose2d getFusedPose() {
-    // if (limelight.hasApriltag()) {
-    //   Pose2d pose = limelight.getBotPose();
-    //   poseEstimator.addVisionMeasurement(pose, limelight.getBotPoseTimestamp());
-    //   poseEstimator.resetPosition(getGyroRot().plus(Rotation2d.fromDegrees(0)), getPositions(), poseEstimator.getEstimatedPosition());
-    // }
+    if (limelight.hasApriltag()) {
+      Pose2d pose = limelight.getBotPose();
+      poseEstimator.addVisionMeasurement(pose, limelight.getBotPoseTimestamp());
+      poseEstimator.resetPosition(getGyroRot().plus(Rotation2d.fromDegrees(0)), getPositions(), poseEstimator.getEstimatedPosition());
+    }
     return poseEstimator.getEstimatedPosition();
 }
 
