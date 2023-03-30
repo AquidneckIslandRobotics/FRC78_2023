@@ -4,6 +4,8 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Arm;
 
@@ -12,10 +14,16 @@ import frc.robot.subsystems.Arm;
  */
 public class SetArmPID extends CommandBase {
   private Arm arm;
-  /**
-   * creates a command that takes in arm subsystem and sets shoulder and elbow to specific position
-   * @param arm arm subsystem that this command requires
-   */
+
+  private TrapezoidProfile elbowProfile;  
+  private TrapezoidProfile shoulderProfile;
+  private TrapezoidProfile.State elbow_goal = new TrapezoidProfile.State();
+  private TrapezoidProfile.State elbow_currentPos = new TrapezoidProfile.State();
+  private TrapezoidProfile.State shoulder_goal = new TrapezoidProfile.State();
+  private TrapezoidProfile.State shoulder_currentPos = new TrapezoidProfile.State();
+  private double calcElbowGoal;
+  private double calcShoulderGoal;
+
   public SetArmPID(Arm arm) {
     this.arm = arm;
     addRequirements(arm);
@@ -23,18 +31,27 @@ public class SetArmPID extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() { }
+  public void initialize() {
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double shoulderSpeed = arm.shoulderPIDcontroller.calculate(arm.getShoulderAbsolutePosition(), arm.shoulderTarget);
+    elbow_goal = new TrapezoidProfile.State(arm.elbowTarget, 0);
+    shoulder_goal = new TrapezoidProfile.State(arm.shoulderTarget, 0);
+    elbow_currentPos = new TrapezoidProfile.State(arm.getElbowAbsolutePosition(), 0);
+    shoulder_currentPos = new TrapezoidProfile.State(arm.getShoulderAbsolutePosition(), 0);
+    elbowProfile = new TrapezoidProfile(new TrapezoidProfile.Constraints(185,80), elbow_goal, elbow_currentPos);
+    shoulderProfile = new TrapezoidProfile(new TrapezoidProfile.Constraints(165, 80), shoulder_goal, shoulder_currentPos);
+    calcElbowGoal = elbowProfile.calculate(Timer.getFPGATimestamp() - arm.lastTargetChangeTimestamp).position;
+    calcShoulderGoal = shoulderProfile.calculate(Timer.getFPGATimestamp() - arm.lastTargetChangeTimestamp).position;
+    double shoulderSpeed = arm.shoulderPIDcontroller.calculate(arm.getShoulderAbsolutePosition(), calcShoulderGoal);
     // if (shoulderSpeed < 0){
     //   shoulderSpeed = shoulderSpeed * 0.15;
     // }
     arm.setShoulderSpeed(arm.isLimitShoulder() && shoulderSpeed < 0 ? 0 : shoulderSpeed * -1);
     
-    double elbowSpeed = arm.elbowPIDcontroller.calculate(arm.getElbowAbsolutePosition(), arm.elbowTarget);
+    double elbowSpeed = arm.elbowPIDcontroller.calculate(arm.getElbowAbsolutePosition(), calcElbowGoal);
     // if (elbowSpeed > 0){
     //   elbowSpeed = elbowSpeed * 0.55;
     // }
