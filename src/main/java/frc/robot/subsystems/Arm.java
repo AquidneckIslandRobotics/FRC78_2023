@@ -14,6 +14,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.Timer;
@@ -29,6 +30,8 @@ public class Arm extends SubsystemBase {
   private CANSparkMax elbowNeo;
   public PIDController elbowPIDcontroller;
   public PIDController shoulderPIDcontroller;
+  public TrapezoidProfile elbowProfile;  
+  public TrapezoidProfile shoulderProfile;
   public double lastTargetChangeTimestamp;
   public double elbowTarget;
   public double shoulderTarget; 
@@ -48,6 +51,8 @@ public class Arm extends SubsystemBase {
     elbowEncoder = elbowNeo.getAbsoluteEncoder(Type.kDutyCycle);
     elbowPIDcontroller = new PIDController(0.02, 0, 0);
     shoulderPIDcontroller = new PIDController(0.02, 0, 0);
+    elbowProfile = new TrapezoidProfile(Constants.ELBOW_TRAP, new TrapezoidProfile.State(elbowTarget, 0), new TrapezoidProfile.State(getElbowAbsolutePosition(), 0));//185 120
+    shoulderProfile = new TrapezoidProfile(Constants.SHOULDER_TRAP, new TrapezoidProfile.State(shoulderTarget, 0), new TrapezoidProfile.State(getShoulderAbsolutePosition(), 0)); //165 80
 
     shoulderPIDcontroller.disableContinuousInput();
     shoulderPIDcontroller.setTolerance(2);

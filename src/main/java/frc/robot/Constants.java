@@ -6,6 +6,7 @@ import com.pathplanner.lib.PathConstraints;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DutyCycle;
 import frc.robot.classes.COTSFalconSwerveConstants;
@@ -205,6 +206,9 @@ public final class Constants {
     public static int ELBOW_ENCODER = 1;
 
     //Constants for Arm Presets and such
+    public static TrapezoidProfile.Constraints ELBOW_TRAP = new TrapezoidProfile.Constraints(80, 40);
+    public static TrapezoidProfile.Constraints SHOULDER_TRAP = new TrapezoidProfile.Constraints(80, 40);
+
     public static double ELBOW_SHELF = 210;
     public static double SHOULDER_SHELF = 220;
 

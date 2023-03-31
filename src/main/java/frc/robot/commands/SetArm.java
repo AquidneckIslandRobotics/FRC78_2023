@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.robot.Constants;
 import frc.robot.subsystems.Arm;
 
 public class SetArm extends CommandBase {
@@ -27,6 +28,8 @@ public class SetArm extends CommandBase {
   public void initialize() { 
     arm.elbowTarget = elbowTarget;
     arm.shoulderTarget = shoulderTarget;
+    arm.elbowProfile = new TrapezoidProfile(Constants.ELBOW_TRAP, new TrapezoidProfile.State(elbowTarget, 0), new TrapezoidProfile.State(arm.getElbowAbsolutePosition(), 0));//185 120
+    arm.shoulderProfile = new TrapezoidProfile(Constants.SHOULDER_TRAP, new TrapezoidProfile.State(shoulderTarget, 0), new TrapezoidProfile.State(arm.getShoulderAbsolutePosition(), 0)); //165 80
     arm.lastTargetChangeTimestamp = Timer.getFPGATimestamp();
   }
 

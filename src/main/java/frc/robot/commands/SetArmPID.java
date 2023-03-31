@@ -16,8 +16,6 @@ import frc.robot.subsystems.Arm;
 public class SetArmPID extends CommandBase {
   private Arm arm;
 
-  private TrapezoidProfile elbowProfile;  
-  private TrapezoidProfile shoulderProfile;
   private TrapezoidProfile.State elbow_goal = new TrapezoidProfile.State();
   private TrapezoidProfile.State elbow_currentPos = new TrapezoidProfile.State();
   private TrapezoidProfile.State shoulder_goal = new TrapezoidProfile.State();
@@ -42,23 +40,16 @@ public class SetArmPID extends CommandBase {
     shoulder_goal = new TrapezoidProfile.State(arm.shoulderTarget, 0);
     elbow_currentPos = new TrapezoidProfile.State(arm.getElbowAbsolutePosition(), 0);
     shoulder_currentPos = new TrapezoidProfile.State(arm.getShoulderAbsolutePosition(), 0);
-    elbowProfile = new TrapezoidProfile(new TrapezoidProfile.Constraints(90,60), elbow_goal, elbow_currentPos);//185 120
-    shoulderProfile = new TrapezoidProfile(new TrapezoidProfile.Constraints(80, 40), shoulder_goal, shoulder_currentPos); //165 80
-    calcElbowGoal = elbowProfile.calculate(Timer.getFPGATimestamp() - arm.lastTargetChangeTimestamp).position;
-    calcShoulderGoal = shoulderProfile.calculate(Timer.getFPGATimestamp() - arm.lastTargetChangeTimestamp).position;
-    SmartDashboard.putNumber("TrapElbowGoal", elbowProfile.calculate(Timer.getFPGATimestamp() - arm.lastTargetChangeTimestamp).velocity);
-    SmartDashboard.putNumber("TrapShoulderGoal", shoulderProfile.calculate(Timer.getFPGATimestamp() - arm.lastTargetChangeTimestamp).velocity);
+    calcElbowGoal = arm.elbowProfile.calculate(Timer.getFPGATimestamp() - arm.lastTargetChangeTimestamp).position;
+    calcShoulderGoal = arm.shoulderProfile.calculate(Timer.getFPGATimestamp() - arm.lastTargetChangeTimestamp).position;
     double shoulderSpeed = arm.shoulderPIDcontroller.calculate(arm.getShoulderAbsolutePosition(), calcShoulderGoal); 
+    double elbowSpeed = arm.elbowPIDcontroller.calculate(arm.getElbowAbsolutePosition(), calcElbowGoal);
 
-    // if (shoulderSpeed < 0){
-    //   shoulderSpeed = shoulderSpeed * 0.15;
-    // }
+    SmartDashboard.putNumber("TrapElbowGoal", arm.elbowProfile.calculate(Timer.getFPGATimestamp() - arm.lastTargetChangeTimestamp).velocity);
+    SmartDashboard.putNumber("TrapShoulderGoal", arm.shoulderProfile.calculate(Timer.getFPGATimestamp() - arm.lastTargetChangeTimestamp).velocity);
+
     arm.setShoulderSpeed(arm.isLimitShoulder() && shoulderSpeed < 0 ? 0 : shoulderSpeed * -1);
     
-    double elbowSpeed = arm.elbowPIDcontroller.calculate(arm.getElbowAbsolutePosition(), calcElbowGoal);
-    // if (elbowSpeed > 0){
-    //   elbowSpeed = elbowSpeed * 0.55;
-    // }
     arm.setElbowSpeed(arm.isLimitShoulder() && shoulderSpeed < 0 ? 0 : elbowSpeed * -1);
   }
 
