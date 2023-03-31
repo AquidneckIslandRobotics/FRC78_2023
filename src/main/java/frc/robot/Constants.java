@@ -107,8 +107,8 @@ public final class Constants {
             public static final int driveMotorID = 1;
             public static final int angleMotorID = 2;
             public static final int canCoderID = 9;
-           //  public static final Rotation2d angleOffset = Rotation2d.fromDegrees(269.29); //MK4
-             public static final Rotation2d angleOffset = Rotation2d.fromDegrees(8.70); // ant man
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(48.25); //Wasp
+            //  public static final Rotation2d angleOffset = Rotation2d.fromDegrees(8.70); // ant man
             public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
                     canCoderID, angleOffset);
         }
@@ -118,8 +118,8 @@ public final class Constants {
             public static final int driveMotorID = 3;
             public static final int angleMotorID = 4;
             public static final int canCoderID = 10;
-           // public static final Rotation2d angleOffset = Rotation2d.fromDegrees(292.93); //MK4
-             public static final Rotation2d angleOffset = Rotation2d.fromDegrees(162.77); // ant man
+           public static final Rotation2d angleOffset = Rotation2d.fromDegrees(15.29); //WASP
+            //  public static final Rotation2d angleOffset = Rotation2d.fromDegrees(162.77); // ant man
             public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
                     canCoderID, angleOffset);
         }
@@ -129,8 +129,8 @@ public final class Constants {
             public static final int driveMotorID = 5;
             public static final int angleMotorID = 6;
             public static final int canCoderID = 11;
-            // public static final Rotation2d angleOffset = Rotation2d.fromDegrees(17.31); //MK4
-             public static final Rotation2d angleOffset = Rotation2d.fromDegrees(178.50); // ant man
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(278.34); //Wasp
+            //  public static final Rotation2d angleOffset = Rotation2d.fromDegrees(178.50); // ant man
 
             public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
                     canCoderID, angleOffset);
@@ -142,8 +142,8 @@ public final class Constants {
             public static final int angleMotorID = 8;
             public static final int canCoderID = 12;
 
-           // public static final Rotation2d angleOffset = Rotation2d.fromDegrees(344.70); //MK4
-             public static final Rotation2d angleOffset = Rotation2d.fromDegrees(165.93); // ant man
+           public static final Rotation2d angleOffset = Rotation2d.fromDegrees(110.74); //Wasp
+            //  public static final Rotation2d angleOffset = Rotation2d.fromDegrees(165.93); // ant man
              
             public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
                     canCoderID, angleOffset);
@@ -200,30 +200,30 @@ public final class Constants {
     public static int ELBOW_ENCODER = 1;
 
     //Constants for Arm Presets and such
-    public static double ELBOW_SHELF = 233.293;
-    public static double SHOULDER_SHELF = 132.394;
+    public static double ELBOW_SHELF = 225.14;
+    public static double SHOULDER_SHELF = 216.35;
 
-    public static double ELBOW_FLOOR = 111.625;
-    public static double SHOULDER_FLOOR = 13.33;
+    public static double ELBOW_FLOOR = 108;
+    public static double SHOULDER_FLOOR = 332;
 
     public static double ELBOW_MID = 198.26;
-    public static double SHOULDER_MID = 114.089;
+    public static double SHOULDER_MID = 264.8;
 
-    public static double ELBOW_MID_DIAG_TELEOP = 136.7;
-    public static double SHOULDER_MID_DIAG_TELEOP = 80.0;
-    public static double ELBOW_MID_DIAG_AUTO_CUBE = 90.5;
-    public static double SHOULDER_MID_DIAG_AUTO_CUBE = 40.7;
+    public static double ELBOW_MID_DIAG_TELEOP = 112.04;
+    public static double SHOULDER_MID_DIAG_TELEOP = 281.32;
+    public static double ELBOW_MID_DIAG_AUTO_CUBE = 73.41;
+    public static double SHOULDER_MID_DIAG_AUTO_CUBE = 314.35;
     public static double ELBOW_MID_DIAG_AUTO_CONE = 138.7; // teleop but shoulder is slightly less
-    public static double SHOULDER_MID_DIAG_AUTO_CONE = 74.0;
+    public static double SHOULDER_MID_DIAG_AUTO_CONE = 286;
 
-    public static double ELBOW_STOW = 30;
-    public static double SHOULDER_STOW = 15.81;
+    public static double ELBOW_STOW = 24;
+    public static double SHOULDER_STOW = 329;
 
 
-    public static double ELBOW_HIGH_CUBE = 50.000;
-    public static double SHOULDER_HIGH_CUBE = 13.336;
+    public static double ELBOW_HIGH_CUBE = 140.48;
+    public static double SHOULDER_HIGH_CUBE = 265.88;
 
-    public static double HOLD_SPEED = 0.2;
+    public static double HOLD_SPEED = 0.1;
 
     //  ARM
     //All encoder constants are offsets from a HOME position

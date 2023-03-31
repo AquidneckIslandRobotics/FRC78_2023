@@ -1,10 +1,9 @@
   package frc.robot;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.function.BooleanSupplier;
-
-import javax.swing.plaf.TreeUI;
 
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
@@ -202,18 +201,18 @@ public class RobotContainer {
     //Manip Control Button Map REV 2 
     //Basically, If left bumper is held down(a constant state of True), and another button(A,B,X,Y) is pressed it will have cube Functions, scoring, intaking, and postioning, if a bumper is not pressed then it has cone functions(Else statement)
     //CONE BUTTONS 
-    new Trigger(m_manipController::getAButton).whileTrue((new SetArm(m_arm, armPreset.LOW)).alongWith(new SetIntake(m_Dave_Intake, intakePreset.CONE_INTAKE))).onFalse((new SetArm(m_arm, armPreset.STOW)).alongWith(new SetIntake(m_Dave_Intake, intakePreset.CONE_HOLD)));
-    new Trigger(m_manipController::getBButton).whileTrue((new SetArm(m_arm, armPreset.SHELF)).alongWith(new SetIntake(m_Dave_Intake, intakePreset.CONE_INTAKE))).onFalse((new SetArm(m_arm, armPreset.STOW)).alongWith(new SetIntake(m_Dave_Intake, intakePreset.CONE_HOLD)));
-    new Trigger(m_manipController::getXButton).whileTrue((new SetArm(m_arm, armPreset.LOW))).onFalse(new SetArm(m_arm, armPreset.STOW));
-    new Trigger(m_manipController::getYButton).whileTrue((new SetArm(m_arm, armPreset.MID_DIAG_TELEOP))).onFalse(new SetArm(m_arm, armPreset.STOW));
-    new Trigger(new POVButton(m_manipController, 0)).whileTrue((new SetArm(m_arm, armPreset.MID_DIAG_TELEOP))).onFalse(new SetArm(m_arm, armPreset.STOW));
+    new Trigger(m_manipController::getAButton).onTrue((new SetArm(m_arm, armPreset.LOW)).alongWith(new SetIntake(m_Dave_Intake, intakePreset.CONE_INTAKE))).onFalse((new SetArm(m_arm, armPreset.STOW)).alongWith(new SetIntake(m_Dave_Intake, intakePreset.CONE_HOLD)));
+    new Trigger(m_manipController::getBButton).onTrue((new SetArm(m_arm, armPreset.SHELF)).alongWith(new SetIntake(m_Dave_Intake, intakePreset.CONE_INTAKE))).onFalse((new SetArm(m_arm, armPreset.STOW)).alongWith(new SetIntake(m_Dave_Intake, intakePreset.CONE_HOLD)));
+    new Trigger(m_manipController::getXButton).onTrue((new SetArm(m_arm, armPreset.LOW))).onFalse(new SetArm(m_arm, armPreset.STOW));
+    new Trigger(m_manipController::getYButton).onTrue((new SetArm(m_arm, armPreset.MID_DIAG_TELEOP))).onFalse(new SetArm(m_arm, armPreset.STOW));
+    new Trigger(new POVButton(m_manipController, 0)).onTrue((new SetArm(m_arm, armPreset.MID_DIAG_TELEOP))).onFalse(new SetArm(m_arm, armPreset.STOW));
 
     //CUBE BUTTONS
     new Trigger(rightSupplier).whileTrue(new SetIntake(m_Dave_Intake, intakePreset.OUTTAKE));
-    new Trigger(m_manipController::getLeftBumper).and(new Trigger(m_manipController::getAButton)).whileTrue((new SetArm(m_arm, armPreset.LOW)).alongWith(new SetIntake(m_Dave_Intake, intakePreset.CUBE_INTAKE))).onFalse((new SetArm(m_arm, armPreset.STOW)).alongWith(new SetIntake(m_Dave_Intake, intakePreset.CUBE_HOLD)));
-    new Trigger(m_manipController::getLeftBumper).and(new Trigger(m_manipController::getBButton)).whileTrue((new SetArm(m_arm, armPreset.SHELF)).alongWith(new SetIntake(m_Dave_Intake, intakePreset.CUBE_INTAKE))).onFalse((new SetArm(m_arm, armPreset.STOW)).alongWith(new SetIntake(m_Dave_Intake, intakePreset.CUBE_HOLD)));
-    new Trigger(m_manipController::getLeftBumper).and(new Trigger(m_manipController::getXButton)).whileTrue((new SetArm(m_arm, armPreset.LOW))).onFalse(new SetArm(m_arm, armPreset.STOW));
-    new Trigger(m_manipController::getLeftBumper).and(new Trigger(m_manipController::getYButton)).whileTrue((new SetArm(m_arm, armPreset.MID_DIAG_CUBE))).onFalse(new SetArm(m_arm, armPreset.STOW));
+    new Trigger(m_manipController::getLeftBumper).and(new Trigger(m_manipController::getAButton)).onTrue((new SetArm(m_arm, armPreset.LOW)).alongWith(new SetIntake(m_Dave_Intake, intakePreset.CUBE_INTAKE))).onFalse((new SetArm(m_arm, armPreset.STOW)).alongWith(new SetIntake(m_Dave_Intake, intakePreset.CUBE_HOLD)));
+    new Trigger(m_manipController::getLeftBumper).and(new Trigger(m_manipController::getBButton)).onTrue((new SetArm(m_arm, armPreset.SHELF)).alongWith(new SetIntake(m_Dave_Intake, intakePreset.CUBE_INTAKE))).onFalse((new SetArm(m_arm, armPreset.STOW)).alongWith(new SetIntake(m_Dave_Intake, intakePreset.CUBE_HOLD)));
+    new Trigger(m_manipController::getLeftBumper).and(new Trigger(m_manipController::getXButton)).onTrue((new SetArm(m_arm, armPreset.LOW))).onFalse(new SetArm(m_arm, armPreset.STOW));
+    new Trigger(m_manipController::getLeftBumper).and(new Trigger(m_manipController::getYButton)).onTrue((new SetArm(m_arm, armPreset.MID_DIAG_CUBE))).onFalse(new SetArm(m_arm, armPreset.STOW));
     //HIGH CUBE BUTTONS
     new Trigger(m_manipController::getRightBumper).and(new Trigger(rightSupplier)).whileTrue(new SetIntake(m_Dave_Intake, intakePreset.OUTTAKE)).onFalse(new SetIntake(m_Dave_Intake, intakePreset.CUBE_HOLD));
     //new Trigger(m_manipController::getRightBumper).whileTrue((new SetArm(m_arm, Constants.ELBOW_HIGH_CUBE, Constants.SHOULDER_HIGH_CUBE))).onFalse(new SetArm(m_arm, Constants.ELBOW_STOW, Constants.SHOULDER_STOW));
