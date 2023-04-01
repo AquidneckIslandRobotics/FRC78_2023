@@ -13,7 +13,7 @@ public class SetIntake extends CommandBase {
   private DaveIntake intake;
   private intakePreset intakeMode;
 
-  public enum intakePreset {CUBE_HOLD, CONE_HOLD, CUBE_INTAKE, CONE_INTAKE, OUTTAKE, CUBE_HIGH_OUTTAKE};
+  public enum intakePreset {CUBE_HOLD, CONE_HOLD, CUBE_INTAKE, CONE_INTAKE, OUTTAKE, CUBE_HIGH_OUTTAKE, OPEN};
 
   public SetIntake(DaveIntake intake, intakePreset intakeMode) {
     this.intake = intake;
@@ -40,7 +40,7 @@ public class SetIntake extends CommandBase {
         break;
       }
       case CONE_INTAKE: {
-        intake.setSpeed(0.35);
+        intake.setSpeed(0.3);
         intake.setSolenoid(DoubleSolenoid.Value.kForward);
         break;
       }
@@ -55,6 +55,11 @@ public class SetIntake extends CommandBase {
       }
       case CUBE_HIGH_OUTTAKE: {
         intake.setSpeed(-0.5);
+        intake.setSolenoid(DoubleSolenoid.Value.kReverse);
+        break;
+      }
+      case OPEN: {
+        intake.setSpeed(0);
         intake.setSolenoid(DoubleSolenoid.Value.kReverse);
         break;
       }

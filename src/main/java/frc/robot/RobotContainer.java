@@ -103,17 +103,17 @@ public class RobotContainer {
     m_eventMap = new HashMap<>();
     m_eventMap.put("Waypoint1Reached", new PrintCommand("Waypoint 1 reached!"));
     m_eventMap.put("Floor PickUp", new ParallelCommandGroup(
-      new SetArm(m_arm, Constants.ELBOW_FLOOR, Constants.SHOULDER_FLOOR)
+      new SetArm(m_arm, armPreset.LOW)
     )
      );
 
     m_eventMap.put("SetArmScore", new ParallelCommandGroup(
-      new SetArm(m_arm, Constants.ELBOW_MID_DIAG_AUTO_CONE, Constants.SHOULDER_MID_DIAG_AUTO_CONE)
+      new SetArm(m_arm, armPreset.MID_DIAG_CONE)
     )
       );
 
     m_eventMap.put("StowAgain", new ParallelCommandGroup(
-      new SetArm(m_arm, Constants.ELBOW_STOW, Constants.SHOULDER_STOW)
+      new SetArm(m_arm, armPreset.STOW)
     )
       );
     // m_eventMap.put("armPickupCone", new ParallelCommandGroup(
@@ -350,28 +350,28 @@ public class RobotContainer {
         PathPlannerTrajectory red_Two_CubeH_Bravo_Cone_E_PartThree = PathFunctions.createTrajectory("Red-2-CubeH-Bravo-Cone-E(3)");
         autoCommand = new SequentialCommandGroup(
           new InstantCommand(() -> m_chassis.resetPose(new Pose2d(0, 0, Rotation2d.fromDegrees(180)))),
-          new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, Constants.HOLD_SPEED),
-          new SetArm(m_arm, Constants.ELBOW_MID_DIAG_TELEOP, Constants.SHOULDER_MID_DIAG_TELEOP),
-          new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, -0.3),
+          new SetIntake(m_Dave_Intake, intakePreset.CUBE_HOLD),
+          new SetArm(m_arm, armPreset.MID_DIAG_TELEOP),
+          new SetIntake(m_Dave_Intake, intakePreset.CUBE_HIGH_OUTTAKE),
           new WaitCommand(0),
           PathFunctions.resetOdometry(m_chassis, red_Two_CubeH_Bravo_Cone_E_PartOne),
           new ParallelCommandGroup(
-            new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, 0),
-            new SetArmEnd(m_arm, Constants.ELBOW_STOW, Constants.SHOULDER_STOW),
+            new SetIntake(m_Dave_Intake, intakePreset.CONE_HOLD),
+            new SetArm(m_arm, armPreset.STOW),
             autoBuilder.followPathWithEvents(red_Two_CubeH_Bravo_Cone_E_PartOne)
           ),
           new TraverseChargeStation(m_chassis, Constants.CHARGE_SPEED),
           new WaitCommand(0),
           PathFunctions.resetOdometry(m_chassis, red_Two_CubeH_Bravo_Cone_E_PartTwo),
           new ParallelCommandGroup(
-            new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, 0.3),
-            new SetArmEnd(m_arm, Constants.ELBOW_FLOOR, Constants.SHOULDER_FLOOR),
+            new SetIntake(m_Dave_Intake, intakePreset.CUBE_INTAKE),
+            new SetArm(m_arm, armPreset.LOW),
             autoBuilder.followPathWithEvents(red_Two_CubeH_Bravo_Cone_E_PartTwo)
           ),
           new WaitCommand(0),
           new ParallelCommandGroup(
-            new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kForward, 0),
-            new SetArmEnd(m_arm, Constants.ELBOW_STOW, Constants.SHOULDER_STOW),
+            new SetIntake(m_Dave_Intake, intakePreset.CONE_INTAKE),
+            new SetArm(m_arm, armPreset.STOW),
             autoBuilder.followPathWithEvents(red_Two_CubeH_Bravo_Cone_E_PartThree)
           ),
           new AutoChargeStation(m_chassis, -Constants.CHARGE_SPEED)
@@ -384,28 +384,28 @@ public class RobotContainer {
         PathPlannerTrajectory blue_Seven_CubeH_Foxtrot_Cone_E_PartThree = PathFunctions.createTrajectory("Blue-7-CubeHi-Foxtrot-Cone-Engage(3)");
         autoCommand = new SequentialCommandGroup(
         new InstantCommand(() -> m_chassis.resetPose(new Pose2d(0, 0, Rotation2d.fromDegrees(180)))),
-        new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, Constants.HOLD_SPEED),
-        new SetArm(m_arm, Constants.ELBOW_MID_DIAG_TELEOP, Constants.SHOULDER_MID_DIAG_TELEOP),
-        new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, -0.3),
+        new SetIntake(m_Dave_Intake, intakePreset.CUBE_HOLD),
+        new SetArm(m_arm, armPreset.MID_DIAG_TELEOP),
+        new SetIntake(m_Dave_Intake, intakePreset.CUBE_HIGH_OUTTAKE),
         new WaitCommand(0),
         PathFunctions.resetOdometry(m_chassis, blue_Seven_CubeH_Foxtrot_Cone_E_PartOne),
         new ParallelCommandGroup(
-          new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kForward, 0),
-          new SetArmEnd(m_arm, Constants.ELBOW_STOW, Constants.SHOULDER_STOW),
+          new SetIntake(m_Dave_Intake, intakePreset.CONE_HOLD),
+          new SetArm(m_arm, armPreset.STOW),
           autoBuilder.followPathWithEvents(blue_Seven_CubeH_Foxtrot_Cone_E_PartOne)
          ),
         new TraverseChargeStation(m_chassis, Constants.CHARGE_SPEED),
         new WaitCommand(0),
         PathFunctions.resetOdometry(m_chassis, blue_Seven_CubeH_Foxtrot_Cone_E_PartTwo),
         new ParallelCommandGroup(
-          new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, 0.3),
-          new SetArmEnd(m_arm, Constants.ELBOW_FLOOR, Constants.SHOULDER_FLOOR),
+          new SetIntake(m_Dave_Intake, intakePreset.OPEN),
+          new SetArm(m_arm, armPreset.LOW),
           autoBuilder.followPathWithEvents(blue_Seven_CubeH_Foxtrot_Cone_E_PartTwo)
          ),
         new WaitCommand(0),
         new ParallelCommandGroup(
-          new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kForward, 0),
-          new SetArmEnd(m_arm, Constants.ELBOW_STOW, Constants.SHOULDER_STOW),
+          new SetIntake(m_Dave_Intake, intakePreset.CONE_HOLD),
+          new SetArm(m_arm, armPreset.STOW),
           autoBuilder.followPathWithEvents(blue_Seven_CubeH_Foxtrot_Cone_E_PartThree)
          ),
         new AutoChargeStation(m_chassis, -Constants.CHARGE_SPEED)
@@ -419,28 +419,28 @@ public class RobotContainer {
         PathPlannerTrajectory blue_Seven_CubeH_Golf_Cone_E_PartThree = PathFunctions.createTrajectory("Blue-7-CubeHi-Golf-Cone-Engage(3)");
         autoCommand = new SequentialCommandGroup(
         new InstantCommand(() -> m_chassis.resetPose(new Pose2d(0, 0, Rotation2d.fromDegrees(180)))),
-        new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, Constants.HOLD_SPEED),
-        new SetArm(m_arm, Constants.ELBOW_MID_DIAG_TELEOP, Constants.SHOULDER_MID_DIAG_TELEOP),
-        new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, -0.3),
+        new SetIntake(m_Dave_Intake, intakePreset.CUBE_HOLD),
+        new SetArm(m_arm, armPreset.MID_DIAG_TELEOP),
+        new SetIntake(m_Dave_Intake, intakePreset.CUBE_HIGH_OUTTAKE),
         new WaitCommand(0),
         PathFunctions.resetOdometry(m_chassis, blue_Seven_CubeH_Golf_Cone_E_PartOne),
         new ParallelCommandGroup(
-          new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kForward, 0),
-          new SetArmEnd(m_arm, Constants.ELBOW_STOW, Constants.SHOULDER_STOW),
+          new SetIntake(m_Dave_Intake, intakePreset.CONE_HOLD),
+          new SetArm(m_arm, armPreset.STOW),
           autoBuilder.followPathWithEvents(blue_Seven_CubeH_Golf_Cone_E_PartOne)
          ),
         new TraverseChargeStation(m_chassis, Constants.CHARGE_SPEED),
         new WaitCommand(0),
         PathFunctions.resetOdometry(m_chassis, blue_Seven_CubeH_Golf_Cone_E_PartTwo),
         new ParallelCommandGroup(
-          new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, 0.3),
-          new SetArmEnd(m_arm, Constants.ELBOW_FLOOR, Constants.SHOULDER_FLOOR),
+          new SetIntake(m_Dave_Intake, intakePreset.CUBE_INTAKE),
+          new SetArm(m_arm, armPreset.LOW),
           autoBuilder.followPathWithEvents(blue_Seven_CubeH_Golf_Cone_E_PartTwo)
          ),
         new WaitCommand(0),
         new ParallelCommandGroup(
-          new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kForward, 0),
-          new SetArmEnd(m_arm, Constants.ELBOW_STOW, Constants.SHOULDER_STOW),
+          new SetIntake(m_Dave_Intake, intakePreset.CONE_HOLD),
+          new SetArm(m_arm, armPreset.STOW),
           autoBuilder.followPathWithEvents(blue_Seven_CubeH_Golf_Cone_E_PartThree)
          ),
         new AutoChargeStation(m_chassis, -Constants.CHARGE_SPEED)
@@ -453,22 +453,22 @@ public class RobotContainer {
         PathPlannerTrajectory Blue_Six_CubeH_Echo_Cone_Six_Four_PartTwo = PathFunctions.createTrajectory("Blue_Six_CubeH_Echo_Cone_Six_Four(2)");
         autoCommand = new SequentialCommandGroup(
           new InstantCommand(() -> m_chassis.resetPose(new Pose2d(0, 0, Rotation2d.fromDegrees(180)))),
-          new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, Constants.HOLD_SPEED),
-          new SetArm(m_arm, Constants.ELBOW_MID_DIAG_TELEOP, Constants.SHOULDER_MID_DIAG_TELEOP),
-          new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, -0.3),
+          new SetIntake(m_Dave_Intake, intakePreset.CUBE_HOLD),
+          new SetArm(m_arm, armPreset.MID_DIAG_TELEOP),
+          new SetIntake(m_Dave_Intake, intakePreset.CUBE_HIGH_OUTTAKE),
           new WaitCommand(0),
           PathFunctions.resetOdometry(m_chassis, Blue_Six_CubeH_Echo_Cone_Six_Four_PartOne),
           new ParallelCommandGroup(
-            new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, 0),
-            new SetArm(m_arm, Constants.ELBOW_FLOOR, Constants.SHOULDER_FLOOR),
+            new SetIntake(m_Dave_Intake, intakePreset.OPEN),
+            new SetArm(m_arm, armPreset.LOW),
             autoBuilder.followPathWithEvents(Blue_Six_CubeH_Echo_Cone_Six_Four_PartOne)
           ),
-          new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kForward, 0.3),
+          new SetIntake(m_Dave_Intake, intakePreset.CONE_INTAKE),
           new WaitCommand(0.5),
           PathFunctions.resetOdometry(m_chassis, Blue_Six_CubeH_Echo_Cone_Six_Four_PartTwo),
           new ParallelCommandGroup(
-            new SetArm(m_arm, Constants.ELBOW_MID_DIAG_TELEOP, Constants.SHOULDER_MID_DIAG_TELEOP),
-            new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kForward, 0),
+            new SetArm(m_arm, armPreset.MID_DIAG_TELEOP),
+            new SetIntake(m_Dave_Intake, intakePreset.CONE_HOLD),
             autoBuilder.followPathWithEvents(Blue_Six_CubeH_Echo_Cone_Six_Four_PartTwo)
           )
           //new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, 0)
@@ -480,10 +480,8 @@ public class RobotContainer {
         PathPlannerTrajectory Blue_Six_testPath_two = PathFunctions.createTrajectory("blue 6 test single path(2)");
 
         autoCommand = new SequentialCommandGroup(
-          new SetArmEnd(m_arm, Constants.ELBOW_STOW, Constants.SHOULDER_STOW),
           PathFunctions.resetOdometry(m_chassis, Blue_Six_testPath),
           autoBuilder.followPathWithEvents(Blue_Six_testPath)
-
         );
         break;
       }
@@ -494,22 +492,22 @@ public class RobotContainer {
         PathPlannerTrajectory Blue_Eight_Test_Straight = PathFunctions.createTrajectory("Blue_8-Test Straight");
         autoCommand = new SequentialCommandGroup(
           new InstantCommand(() -> m_chassis.resetPose(new Pose2d(0, 0, Rotation2d.fromDegrees(180)))),
-          new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, Constants.HOLD_SPEED),
-          new SetArm(m_arm, Constants.ELBOW_MID_DIAG_TELEOP, Constants.SHOULDER_MID_DIAG_TELEOP),
-          new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, -0.3),
+          new SetIntake(m_Dave_Intake, intakePreset.CUBE_HOLD),
+          new SetArm(m_arm, armPreset.MID_DIAG_TELEOP),
+          new SetIntake(m_Dave_Intake, intakePreset.CUBE_HIGH_OUTTAKE),
           new WaitCommand(0),
           PathFunctions.resetOdometry(m_chassis, Blue_Eight_CubeHi_Hotel_Cone_Six_Four_PartOne),
           new ParallelCommandGroup(
-            new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, 0),
-            new SetArm(m_arm, Constants.ELBOW_STOW, Constants.SHOULDER_STOW),
+            new SetIntake(m_Dave_Intake, intakePreset.OPEN),
+            new SetArm(m_arm, armPreset.STOW),
             autoBuilder.followPathWithEvents(Blue_Eight_CubeHi_Hotel_Cone_Six_Four_PartOne)
           ),
-          new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kForward, 0.3),
+          new SetIntake(m_Dave_Intake, intakePreset.CONE_INTAKE),
           new WaitCommand(0.5),
           //PathFunctions.resetOdometry(m_chassis, Blue_Eight_CubeHi_Hotel_Cone_Six_Four_PartTwo),
           new ParallelCommandGroup(
-            new SetArm(m_arm, Constants.ELBOW_STOW, Constants.SHOULDER_STOW),
-            new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kForward, 0),
+            new SetArm(m_arm, armPreset.STOW),
+            new SetIntake(m_Dave_Intake, intakePreset.CUBE_HOLD),
             autoBuilder.followPathWithEvents(Blue_Eight_CubeHi_Hotel_Cone_Six_Four_PartTwo)
           )
           //,
