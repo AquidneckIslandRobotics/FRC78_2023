@@ -54,9 +54,17 @@ public class DaveIntake extends SubsystemBase {
 
   @Override
   public void periodic() {
+    
     boolean itemIntake = hasItem();
     SmartDashboard.putBoolean("HaveItem", itemIntake);
     SmartDashboard.putNumber("IntakeAmps", Neo.getOutputCurrent());
+    SmartDashboard.putBoolean("Running", hasItem());
+    // BlinkinLEDMode ledMode = BlinkinLEDMode.BLUE;
+    RevBlinkin.set(RevBlinkin.ledMode.getValue());
+    
+    if (hasItem() == true) {                                
+      RevBlinkin.set(RevBlinkin.BlinkinLEDMode.WHITE.getValue());
+    }
   }  
 }
 

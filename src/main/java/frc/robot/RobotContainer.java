@@ -50,7 +50,6 @@ public class RobotContainer {
   private final LimeLight m_limeLight;
   private final UsbCamera m_driverCam;
   public final MjpegServer m_mjpegServer;
-  public final RevBlinkin m_blinkin;
   private final XboxController m_driveController;
   private final XboxController m_manipController;
   private final XboxController m_testController;
@@ -69,9 +68,7 @@ public class RobotContainer {
     m_arm = new Arm();
     m_limeLight = new LimeLight();
     m_driveController = new XboxController(Constants.DRIVE_CONTROLLER);
-
     m_Dave_Intake = new DaveIntake();
-    m_blinkin = new RevBlinkin(m_Dave_Intake);
     m_manipController = new XboxController(Constants.MANIP_CONTROLLER);
 
     m_testController = new XboxController(5);
@@ -167,8 +164,8 @@ public class RobotContainer {
    POVButton dPadRight = new POVButton(m_manipController, 90);
    POVButton dPadDown = new POVButton(m_manipController, 180);
    POVButton dPadLeft = new POVButton(m_manipController, 270);
-   new Trigger(dPadLeft).onTrue(new InstantCommand(() -> m_blinkin.ledMode(BlinkinLEDMode.PURPLE)));
-   new Trigger(dPadRight).onTrue(new InstantCommand(() -> m_blinkin.ledMode(BlinkinLEDMode.YELLOW)));
+   new Trigger(dPadLeft).onTrue(new InstantCommand(() -> RevBlinkin.set(BlinkinLEDMode.PURPLE.getValue())));
+   new Trigger(dPadRight).onTrue(new InstantCommand(() -> RevBlinkin.set(BlinkinLEDMode.YELLOW.getValue())));
 
     //Button Map for Wasp Controls 
     //TOP LEFT TRIGGER --> ARM MID GRID PRESET

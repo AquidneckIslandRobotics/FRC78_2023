@@ -5,9 +5,12 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.DaveIntake;
+import frc.robot.subsystems.RevBlinkin;
 import frc.robot.subsystems.RevBlinkin.BlinkinLEDMode;
 
 public class SetIntake extends CommandBase {
@@ -28,7 +31,9 @@ public class SetIntake extends CommandBase {
       case CUBE_HOLD: {
         intake.setSpeed(Constants.HOLD_SPEED);
         intake.setSolenoid(DoubleSolenoid.Value.kReverse);
+        RevBlinkin.set(BlinkinLEDMode.STROBE2.getValue());
         break;
+
       }
       case CONE_HOLD: {
         intake.setSpeed(0);

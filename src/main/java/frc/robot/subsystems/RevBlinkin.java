@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class RevBlinkin{
   public static BlinkinLEDMode ledMode = BlinkinLEDMode.BLUE;
   private static Spark m_blinkin = new Spark(9);
+
 public static enum BlinkinLEDMode{
   YELLOW(0.69),
   PURPLE(0.91),
@@ -28,7 +29,7 @@ public static enum BlinkinLEDMode{
     return value;
   }
 }
-
+  
 // public static void ledMode(BlinkinLEDMode ledMode){
 //   this.ledMode = ledMode;
 // }
