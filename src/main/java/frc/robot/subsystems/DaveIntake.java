@@ -63,7 +63,7 @@ public class DaveIntake extends SubsystemBase {
     RevBlinkin.set(RevBlinkin.ledMode.getValue());
     
     if (hasItem() == true) {                                
-      RevBlinkin.set(RevBlinkin.BlinkinLEDMode.WHITE.getValue());
+      RevBlinkin.set(RevBlinkin.BlinkinLEDMode.GREEN.getValue());
     }
   }  
 }

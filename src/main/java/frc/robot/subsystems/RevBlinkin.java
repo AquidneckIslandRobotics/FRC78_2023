@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -19,7 +20,9 @@ public static enum BlinkinLEDMode{
   SHOT1(0.13), //Shot1 correlates to color pattern 1 
   STROBE1(0.15), //Strobe1 correlates to color pattern 1
   SHOT2(0.33), //Shot2 correlates to color pattern 2
+  GREEN(0.71),
   STROBE2(0.35); //Strobe2 correlates to color pattern 2
+  
 
   private double value;
   private BlinkinLEDMode(double val){
@@ -29,8 +32,15 @@ public static enum BlinkinLEDMode{
     return value;
   }
 }
+public static void setAllianceColor(){
+  if (DriverStation.getAlliance()== Alliance.Blue){
+    m_blinkin.set(BlinkinLEDMode.BLUE.getValue());
+  } else{
+    m_blinkin.set(BlinkinLEDMode.RED.getValue());
+  }
   
-// public static void ledMode(BlinkinLEDMode ledMode){
+}
+// public static void ledMode(BlinknLEDMode ledMode){
 //   this.ledMode = ledMode;
 // }
   

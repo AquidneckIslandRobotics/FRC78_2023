@@ -166,6 +166,7 @@ public class RobotContainer {
    POVButton dPadLeft = new POVButton(m_manipController, 270);
    new Trigger(dPadLeft).onTrue(new InstantCommand(() -> RevBlinkin.set(BlinkinLEDMode.PURPLE.getValue())));
    new Trigger(dPadRight).onTrue(new InstantCommand(() -> RevBlinkin.set(BlinkinLEDMode.YELLOW.getValue())));
+   new Trigger(dPadDown).onTrue(new InstantCommand(() -> RevBlinkin.setAllianceColor()));
 
     //Button Map for Wasp Controls 
     //TOP LEFT TRIGGER --> ARM MID GRID PRESET
