@@ -4,10 +4,6 @@
 
 package frc.robot.subsystems;
 
-import java.sql.Time;
-
-import org.opencv.highgui.HighGui;
-
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkMaxAbsoluteEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;

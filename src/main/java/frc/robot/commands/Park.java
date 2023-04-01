@@ -9,7 +9,6 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.SwerveChassis;
 
-// NOT TESTED YET
 public class Park extends CommandBase {
   SwerveChassis chassis;
   SwerveModuleState parkingStates[] = {
@@ -30,10 +29,6 @@ public class Park extends CommandBase {
     this.chassis = chassis;
     addRequirements(chassis);
   }
-
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override

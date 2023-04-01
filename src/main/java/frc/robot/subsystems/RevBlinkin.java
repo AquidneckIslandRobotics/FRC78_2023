@@ -1,7 +1,5 @@
 package frc.robot.subsystems;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import java.util.concurrent.BlockingQueue;
 
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -11,8 +9,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class RevBlinkin extends SubsystemBase {
   BlinkinLEDMode ledMode = BlinkinLEDMode.BLUE;
   private static Spark m_blinkin = null;
-  private Dave_Intake daveIntake;
-  public RevBlinkin(Dave_Intake daveIntake) {
+  private DaveIntake daveIntake;
+  public RevBlinkin(DaveIntake daveIntake) {
     m_blinkin = new Spark(9);
     this.daveIntake = daveIntake;
     //solid_orange();

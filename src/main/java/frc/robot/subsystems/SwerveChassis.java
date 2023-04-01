@@ -21,7 +21,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.classes.LimeLight;
-// import frc.robot.classes.Odometry;
 import frc.robot.classes.SwerveModule;
 
 public class SwerveChassis extends SubsystemBase {
@@ -41,7 +40,6 @@ public class SwerveChassis extends SubsystemBase {
   protected ChassisSpeeds speeds = new ChassisSpeeds();
 
   public SwerveChassis() {
-    // WILL COULD CONSIDER MAKING THIS AN ARRAY FOR SIMPLIFIED CODE
     moduleLU = new SwerveModule(0, Constants.Swerve.Mod0.constants);
     moduleRU = new SwerveModule(1, Constants.Swerve.Mod1.constants);
     moduleLD = new SwerveModule(2, Constants.Swerve.Mod2.constants);
@@ -81,13 +79,13 @@ public class SwerveChassis extends SubsystemBase {
     }
 
     poseEstimator.update(getGyroRot(), getPositions());
-    Pose2d pose = getFusedPose(); //offset by 8.5, 4.25
+    Pose2d pose = getFusedPose();
     //THIS NEEDS TO BE CONSIDERED WHEN RUNNING AUTONOMOUS
-    // if(limelight.hasApriltag()){
-    //   PathPlannerServer.sendPathFollowingData(limelight.getBotPose(), new Pose2d(pose.getX(), pose.getY(), pose.getRotation()));
-    // } else {
-    //   PathPlannerServer.sendPathFollowingData(new Pose2d(), new Pose2d(pose.getX(), pose.getY(), pose.getRotation()));
-    // }
+    if(limelight.hasApriltag()){
+      PathPlannerServer.sendPathFollowingData(limelight.getBotPose(), new Pose2d(pose.getX(), pose.getY(), pose.getRotation()));
+    } else {
+      PathPlannerServer.sendPathFollowingData(new Pose2d(), new Pose2d(pose.getX(), pose.getY(), pose.getRotation()));
+    }
     
     SmartDashboard.putNumber("FusedPoseX", pose.getX());
     SmartDashboard.putNumber("FusedPoseY", pose.getY());
@@ -95,7 +93,6 @@ public class SwerveChassis extends SubsystemBase {
   }
 
   public void resetPose(Pose2d pose) {
-    // Odometry.resetOdometry(pose, getGyroRot(), this, odometry);
     poseEstimator.resetPosition(getGyroRot(), getPositions(), pose);
   }
 
@@ -140,11 +137,11 @@ public class SwerveChassis extends SubsystemBase {
   // #region GET FUNCTIONS
 
   public Pose2d getFusedPose() {
-    // if (limelight.hasApriltag()) {
-    //   Pose2d pose = limelight.getBotPose();
-    //   poseEstimator.addVisionMeasurement(pose, limelight.getBotPoseTimestamp());
-    //   poseEstimator.resetPosition(getGyroRot().plus(Rotation2d.fromDegrees(0)), getPositions(), poseEstimator.getEstimatedPosition());
-    // }
+    if (limelight.hasApriltag()) {
+      Pose2d pose = limelight.getBotPose();
+      poseEstimator.addVisionMeasurement(pose, limelight.getBotPoseTimestamp());
+      poseEstimator.resetPosition(getGyroRot().plus(Rotation2d.fromDegrees(0)), getPositions(), poseEstimator.getEstimatedPosition());
+    }
     return poseEstimator.getEstimatedPosition();
 }
 

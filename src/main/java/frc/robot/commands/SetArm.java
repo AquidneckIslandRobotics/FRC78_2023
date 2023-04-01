@@ -8,23 +8,61 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.robot.Constants;
 import frc.robot.subsystems.Arm;
 
 public class SetArm extends CommandBase {
   private double elbowTarget;
   private double shoulderTarget;
+  public enum armPreset {STOW, LOW, MID, MID_DIAG_TELEOP, MID_DIAG_CUBE, MID_DIAG_CONE, HIGH_CUBE, SHELF};
+  private armPreset preset;
+
   private Arm arm;
 
-  /** Creates a new RunArmToTarget. */
-  public SetArm(Arm arm, double elbowTarget, double shoulderTarget) {
+  public SetArm(Arm arm, armPreset preset) {
     this.arm = arm;
-    this.elbowTarget = elbowTarget;
-    this.shoulderTarget = shoulderTarget;
+    this.preset = preset;
   }
 
   @Override
-  public void initialize() { 
+  public void initialize() {
+    switch (preset) {
+      case STOW: {
+        elbowTarget = Constants.ELBOW_STOW;
+        shoulderTarget = Constants.SHOULDER_STOW;
+        break;
+      }
+      case LOW: {
+        elbowTarget = Constants.ELBOW_FLOOR;
+        shoulderTarget = Constants.SHOULDER_FLOOR;
+        break;
+      }
+      case MID_DIAG_TELEOP: {
+        elbowTarget = Constants.ELBOW_MID_DIAG_TELEOP;
+        shoulderTarget = Constants.SHOULDER_MID_DIAG_TELEOP;
+        break;
+      }
+      case MID_DIAG_CONE: {
+        elbowTarget = Constants.ELBOW_MID_DIAG_AUTO_CONE;
+        shoulderTarget = Constants.SHOULDER_MID_DIAG_AUTO_CONE;
+        break;
+      }
+      case MID_DIAG_CUBE: {
+        elbowTarget = Constants.ELBOW_MID_DIAG_AUTO_CUBE;
+        shoulderTarget = Constants.SHOULDER_MID_DIAG_AUTO_CUBE;
+        break;
+      }
+      case HIGH_CUBE: {
+        elbowTarget = Constants.ELBOW_HIGH_CUBE;
+        shoulderTarget = Constants.SHOULDER_HIGH_CUBE;
+        break;
+      }
+      case SHELF: {
+        elbowTarget = Constants.ELBOW_SHELF;
+        shoulderTarget = Constants.SHOULDER_SHELF;
+        break;
+      }
+    }
     arm.elbowTarget = elbowTarget;
     arm.shoulderTarget = shoulderTarget;
     arm.lastTargetChangeTimestamp = Timer.getFPGATimestamp();
