@@ -1,22 +1,15 @@
 package frc.robot.subsystems;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import java.util.concurrent.BlockingQueue;
-
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 
-public class RevBlinkin extends SubsystemBase {
-  BlinkinLEDMode ledMode = BlinkinLEDMode.BLUE;
-  private static Spark m_blinkin = null;
-  private Dave_Intake daveIntake;
-  public RevBlinkin(Dave_Intake daveIntake) {
-    m_blinkin = new Spark(9);
-    this.daveIntake = daveIntake;
-    //solid_orange();
-  }
+public class RevBlinkin{
+  public static BlinkinLEDMode ledMode = BlinkinLEDMode.BLUE;
+  private static Spark m_blinkin = new Spark(9);
 
 public static enum BlinkinLEDMode{
   YELLOW(0.69),
@@ -27,7 +20,9 @@ public static enum BlinkinLEDMode{
   SHOT1(0.13), //Shot1 correlates to color pattern 1 
   STROBE1(0.15), //Strobe1 correlates to color pattern 1
   SHOT2(0.33), //Shot2 correlates to color pattern 2
+  GREEN(0.71),
   STROBE2(0.35); //Strobe2 correlates to color pattern 2
+  
 
   private double value;
   private BlinkinLEDMode(double val){
@@ -37,27 +32,23 @@ public static enum BlinkinLEDMode{
     return value;
   }
 }
-
-public void ledMode(BlinkinLEDMode ledMode){
-  this.ledMode = ledMode;
-}
+public static void setAllianceColor(){
+  if (DriverStation.getAlliance()== Alliance.Blue){
+    m_blinkin.set(BlinkinLEDMode.BLUE.getValue());
+  } else{
+    m_blinkin.set(BlinkinLEDMode.RED.getValue());
+  }
   
-public void set(double BlinkinLEDMode) {
+}
+// public static void ledMode(BlinknLEDMode ledMode){
+//   this.ledMode = ledMode;
+// }
+  
+public static void set(double BlinkinLEDMode) {
       m_blinkin.set(BlinkinLEDMode);
     // new PrintCommand("Setting LEDs to " + val);
     // SmartDashboard.putNumber("LedValue", val);  
   }
-  
- @Override
-  public void periodic() {
-    SmartDashboard.putBoolean("Running", daveIntake.hasItem());
-    // BlinkinLEDMode ledMode = BlinkinLEDMode.BLUE;
-    set(ledMode.getValue());
-    
-    if (daveIntake.hasItem() == true) {                                
-      ledMode(BlinkinLEDMode.WHITE);
-    }
- }
 }
 
 
