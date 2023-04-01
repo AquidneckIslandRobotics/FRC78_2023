@@ -63,6 +63,8 @@ public class SetArm extends CommandBase {
         break;
       }
     }
+    arm.elbowTarget = elbowTarget;
+    arm.shoulderTarget = shoulderTarget;
     arm.lastTargetChangeTimestamp = Timer.getFPGATimestamp();
   }
 
