@@ -49,7 +49,6 @@ public class RobotContainer {
   private final LimeLight m_limeLight;
   private final UsbCamera m_driverCam;
   public final MjpegServer m_mjpegServer;
-  public final RevBlinkin m_blinkin;
   private final XboxController m_driveController;
   private final XboxController m_manipController;
   private final XboxController m_testController;
@@ -76,7 +75,6 @@ public class RobotContainer {
     //m_IntakeV1_Lentz = new IntakeV1_Lentz();
 
     m_Dave_Intake = new Dave_Intake();
-    m_blinkin = new RevBlinkin(m_Dave_Intake);
     m_manipController = new XboxController(Constants.MANIP_CONTROLLER);
 
     m_testController = new XboxController(5);
@@ -226,8 +224,10 @@ public class RobotContainer {
    POVButton dPadRight = new POVButton(m_manipController, 90);
    POVButton dPadDown = new POVButton(m_manipController, 180);
    POVButton dPadLeft = new POVButton(m_manipController, 270);
-   new Trigger(dPadLeft).onTrue(new InstantCommand(() -> m_blinkin.ledMode(BlinkinLEDMode.PURPLE)));
-   new Trigger(dPadRight).onTrue(new InstantCommand(() -> m_blinkin.ledMode(BlinkinLEDMode.YELLOW)));
+   new Trigger(dPadLeft).onTrue(new InstantCommand(() -> RevBlinkin.set(BlinkinLEDMode.PURPLE.getValue())));
+   new Trigger(dPadRight).onTrue(new InstantCommand(() -> RevBlinkin.set(BlinkinLEDMode.YELLOW.getValue())));
+   new Trigger(dPadDown).onTrue(new InstantCommand(() -> RevBlinkin.setAllianceColor()));
+
   //  new Trigger(dPadLeft).onTrue(new PrintCommand("DPAD LEFT"));
   //  new Trigger(dPadRight).onTrue(new PrintCommand("DPAD RIGHT"));
 
@@ -271,7 +271,7 @@ public class RobotContainer {
     // new Trigger(new POVButton(m_manipController, 0)).onTrue((new SetArm(m_arm, Constants.ELBOW_MID_DIAG_TELEOP, Constants.SHOULDER_MID_DIAG_TELEOP))).onFalse(new SetArm(m_arm, Constants.ELBOW_STOW, Constants.SHOULDER_STOW));
 
     //CUBE BUTTONS
-    new Trigger(rightSupplier).whileTrue(new SetIntake(m_Dave_Intake, m_Dave_Intake.getSolenoid(), -0.2));
+    new Trigger(rightSupplier).whileTrue(new SetIntake(m_Dave_Intake, m_Dave_Intake.getSolenoid(), -0.2).alongWith(new InstantCommand(() -> RevBlinkin.setAllianceColor())));
     new Trigger(m_manipController::getLeftBumper).and(new Trigger(m_manipController::getAButton)).onTrue((new SetArm(m_arm, Constants.ELBOW_FLOOR, Constants.SHOULDER_FLOOR)).alongWith(new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, 0.3))).onFalse((new SetArm(m_arm, Constants.ELBOW_STOW, Constants.SHOULDER_STOW)).alongWith(new SetIntake(m_Dave_Intake, m_Dave_Intake.getSolenoid(), Constants.HOLD_SPEED)));
     new Trigger(m_manipController::getLeftBumper).and(new Trigger(m_manipController::getBButton)).onTrue((new SetArm(m_arm, Constants.ELBOW_SHELF, Constants.SHOULDER_SHELF)).alongWith(new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, 0.3))).onFalse((new SetArm(m_arm, Constants.ELBOW_STOW, Constants.SHOULDER_STOW)).alongWith(new SetIntake(m_Dave_Intake, m_Dave_Intake.getSolenoid(), Constants.HOLD_SPEED)));
     new Trigger(m_manipController::getLeftBumper).and(new Trigger(m_manipController::getXButton)).onTrue((new SetArm(m_arm, Constants.ELBOW_FLOOR, Constants.SHOULDER_FLOOR))).onFalse(new SetArm(m_arm, Constants.ELBOW_STOW, Constants.SHOULDER_STOW));
