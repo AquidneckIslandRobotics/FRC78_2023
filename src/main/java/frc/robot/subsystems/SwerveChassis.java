@@ -41,13 +41,14 @@ public class SwerveChassis extends SubsystemBase {
   protected ChassisSpeeds speeds = new ChassisSpeeds();
 
   public SwerveChassis() {
-    // WILL COULD CONSIDER MAKING THIS AN ARRAY FOR SIMPLIFIED CODE
     moduleLU = new SwerveModule(0, Constants.Swerve.Mod0.constants);
     moduleRU = new SwerveModule(1, Constants.Swerve.Mod1.constants);
     moduleLD = new SwerveModule(2, Constants.Swerve.Mod2.constants);
     moduleRD = new SwerveModule(3, Constants.Swerve.Mod3.constants);
 
-    pidgeon = new Pigeon2(Constants.PIGEON_IMU, "drivetrainCAN");
+    initializeSwerve();
+
+    pidgeon = new Pigeon2(Constants.PIGEON_IMU);
 
     centerOfRot = new Translation2d();
     kinematics = Constants.Swerve.SWERVE_KINEMATICS;
@@ -69,6 +70,10 @@ public class SwerveChassis extends SubsystemBase {
     resetAllToAbsolute();
 
     resetPose(new Pose2d());
+  }
+
+  public void initializeSwerve () {
+    // WILL COULD CONSIDER MAKING THIS AN ARRAY FOR SIMPLIFIED CODE
   }
 
   @Override
