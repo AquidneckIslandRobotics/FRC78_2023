@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Arm;
 
@@ -36,17 +37,20 @@ public class SetArmPID extends CommandBase {
     shoulder_goal = new TrapezoidProfile.State(arm.shoulderTarget, 0);
     elbow_currentPos = new TrapezoidProfile.State(arm.getElbowAbsolutePosition(), 0);
     shoulder_currentPos = new TrapezoidProfile.State(arm.getShoulderAbsolutePosition(), 0);
-    elbowProfile = new TrapezoidProfile(new TrapezoidProfile.Constraints(185,80), elbow_goal, elbow_currentPos);
-    shoulderProfile = new TrapezoidProfile(new TrapezoidProfile.Constraints(165, 80), shoulder_goal, shoulder_currentPos);
+    elbowProfile = new TrapezoidProfile(new TrapezoidProfile.Constraints(90,60), elbow_goal, elbow_currentPos);//185 120
+    shoulderProfile = new TrapezoidProfile(new TrapezoidProfile.Constraints(80, 40), shoulder_goal, shoulder_currentPos); //165 80
     calcElbowGoal = elbowProfile.calculate(Timer.getFPGATimestamp() - arm.lastTargetChangeTimestamp).position;
     calcShoulderGoal = shoulderProfile.calculate(Timer.getFPGATimestamp() - arm.lastTargetChangeTimestamp).position;
-    double shoulderSpeed = arm.shoulderPIDcontroller.calculate(arm.getShoulderAbsolutePosition(), calcShoulderGoal);
+    SmartDashboard.putNumber("TrapElbowGoal", elbowProfile.calculate(Timer.getFPGATimestamp() - arm.lastTargetChangeTimestamp).velocity);
+    SmartDashboard.putNumber("TrapShoulderGoal", shoulderProfile.calculate(Timer.getFPGATimestamp() - arm.lastTargetChangeTimestamp).velocity);
+    double shoulderSpeed = arm.shoulderPIDcontroller.calculate(arm.getShoulderAbsolutePosition(), arm.shoulderTarget); 
+
     // if (shoulderSpeed < 0){
     //   shoulderSpeed = shoulderSpeed * 0.15;
     // }
     arm.setShoulderSpeed(arm.isLimitShoulder() && shoulderSpeed < 0 ? 0 : shoulderSpeed * -1);
     
-    double elbowSpeed = arm.elbowPIDcontroller.calculate(arm.getElbowAbsolutePosition(), calcElbowGoal);
+    double elbowSpeed = arm.elbowPIDcontroller.calculate(arm.getElbowAbsolutePosition(), arm.elbowTarget);
     // if (elbowSpeed > 0){
     //   elbowSpeed = elbowSpeed * 0.55;
     // }
