@@ -133,6 +133,10 @@ public class RobotContainer {
       new SetArm(m_arm, Constants.ELBOW_STOW, Constants.SHOULDER_STOW)
     )
       );
+
+    m_eventMap.put("SetArmFloor", new ParallelCommandGroup(
+      new SetArm(m_arm, Constants.ELBOW_FLOOR, Constants.SHOULDER_FLOOR)
+    ));
     // m_eventMap.put("armPickupCone", new ParallelCommandGroup(
     //   new SetArm(m_arm, Constants.ELBOW_FLOOR, Constants.SHOULDER_FLOOR),
     //   new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kForward, 0.2))
@@ -143,7 +147,7 @@ public class RobotContainer {
     autoBuilder = new SwerveAutoBuilder(
         m_chassis::getFusedPose,
         m_chassis::resetPose,
-        new PIDConstants(0.5, 0.0, 0.0),
+        new PIDConstants(1.1, 0.0, 0.0),
         new PIDConstants(3.25, 0.0, 0.0),
         m_chassis::setSpeeds,
         m_eventMap,
@@ -497,11 +501,11 @@ public class RobotContainer {
           new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, Constants.HOLD_SPEED),
           new SetArm(m_arm, Constants.ELBOW_MID_DIAG_TELEOP, Constants.SHOULDER_MID_DIAG_TELEOP),
           new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, -0.3),
-          new WaitCommand(0),
+          new WaitCommand(0.5),
           PathFunctions.resetOdometry(m_chassis, Blue_Six_CubeH_Echo_Cone_Six_Four_PartOne),
           new ParallelCommandGroup(
             new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, 0),
-            new SetArm(m_arm, Constants.ELBOW_FLOOR, Constants.SHOULDER_FLOOR),
+            new SetArm(m_arm, Constants.ELBOW_STOW, Constants.SHOULDER_STOW),
             autoBuilder.followPathWithEvents(Blue_Six_CubeH_Echo_Cone_Six_Four_PartOne)
           ),
           new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kForward, 0.3),
@@ -517,13 +521,13 @@ public class RobotContainer {
       break;
       }
       case Blue_6_testPath: {
-        PathPlannerTrajectory Blue_Six_testPath = PathFunctions.createTrajectory("blue 6 test single path");
+        PathPlannerTrajectory turnStraightTest = PathFunctions.createTrajectory("TurnStraightTest");
         PathPlannerTrajectory Blue_Six_testPath_two = PathFunctions.createTrajectory("blue 6 test single path(2)");
 
         autoCommand = new SequentialCommandGroup(
           new SetArmEnd(m_arm, Constants.ELBOW_STOW, Constants.SHOULDER_STOW),
-          PathFunctions.resetOdometry(m_chassis, Blue_Six_testPath),
-          autoBuilder.followPathWithEvents(Blue_Six_testPath)
+          PathFunctions.resetOdometry(m_chassis, turnStraightTest),
+          autoBuilder.followPathWithEvents(turnStraightTest)
 
         );
         break;

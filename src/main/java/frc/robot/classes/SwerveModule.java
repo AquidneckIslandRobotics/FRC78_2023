@@ -28,23 +28,26 @@ public class SwerveModule {
 
     public double CANcoderInitTime = 0.0;
 
-    SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward (
-        Constants.Swerve.DRIVE_KS, Constants.Swerve.DRIVE_KV, Constants.Swerve.DRIVE_KA);
+    SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(
+            Constants.Swerve.DRIVE_KS, Constants.Swerve.DRIVE_KV, Constants.Swerve.DRIVE_KA);
 
     public SwerveModule(int moduleNumber, SwerveModuleConstants moduleConstants) {
         this.moduleNumber = moduleNumber;
         this.angleOffset = moduleConstants.angleOffset;
 
         /* Angle Encoder Config */
-        angleEncoder = new CANCoder(moduleConstants.cancoderID, "drivetrainCAN");
+        // angleEncoder = new CANCoder(moduleConstants.cancoderID, "drivetrainCAN");
+        angleEncoder = new CANCoder(moduleConstants.cancoderID);
         configAngleEncoder();
 
         /* Angle Motor Config */
-        mAngleMotor = new TalonFX(moduleConstants.angleMotorID, "drivetrainCAN");
+        // mAngleMotor = new TalonFX(moduleConstants.angleMotorID, "drivetrainCAN");
+        mAngleMotor = new TalonFX(moduleConstants.angleMotorID);
         configAngleMotor();
 
         /* Drive Motor Config */
-        mDriveMotor = new TalonFX(moduleConstants.driveMotorID, "drivetrainCAN");
+        // mDriveMotor = new TalonFX(moduleConstants.driveMotorID, "drivetrainCAN");
+        mDriveMotor = new TalonFX(moduleConstants.driveMotorID);
         configDriveMotor();
 
         lastAngle = getState().angle;
@@ -52,6 +55,7 @@ public class SwerveModule {
 
     /**
      * Sets the state of the module
+     * 
      * @param desiredState
      * @param isOpenLoop
      */
@@ -79,14 +83,13 @@ public class SwerveModule {
 
     private void setAngle(SwerveModuleState desiredState, boolean overrideDeadband) {
         Rotation2d angle;
-        if(!overrideDeadband) {
+        if (!overrideDeadband) {
             angle = (Math.abs(desiredState.speedMetersPerSecond) <= (Constants.Swerve.MAX_SPEED * 0.01))
-            ? lastAngle
-            : desiredState.angle; // Prevent rotating module if speed is less then 1%. Prevents Jittering.
+                    ? lastAngle
+                    : desiredState.angle; // Prevent rotating module if speed is less then 1%. Prevents Jittering.
         } else {
             angle = desiredState.angle;
         }
-        
 
         mAngleMotor.set(ControlMode.Position,
                 Calculations.degreesToFalcon(angle.getDegrees(), Constants.Swerve.ANGLE_GEAR_RATIO));
