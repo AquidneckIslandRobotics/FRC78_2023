@@ -85,7 +85,7 @@ public class AutoChargeStation extends CommandBase {
       calcSpeed = Math.signum(speed) * Constants.CLIMBING_VEL_FACTOR * (Math.min(Constants.THRESHOLD, deltaInclination) / Constants.THRESHOLD);
       // calcSpeed += prevSpeed - calcSpeed / 2;
       chassis.setSpeeds(ChassisSpeeds.fromFieldRelativeSpeeds(new ChassisSpeeds(
-        speed + calcSpeed, 
+        speed - calcSpeed, 
         0, 0), chassis.getFusedPose().getRotation()));
     } else if (currentStage == stage.WAIT) {
       chassis.setSpeeds();

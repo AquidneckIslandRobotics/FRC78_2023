@@ -392,26 +392,27 @@ public class RobotContainer {
         autoCommand = new SequentialCommandGroup(
         new InstantCommand(() -> m_chassis.resetPose(new Pose2d(0, 0, Rotation2d.fromDegrees(180)))),
         new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, Constants.HOLD_SPEED),
-        new SetArm(m_arm, Constants.ELBOW_MID_DIAG_TELEOP, Constants.SHOULDER_MID_DIAG_TELEOP),
+        new SetArm(m_arm, Constants.ELBOW_BACKWARDS_LAYUP, Constants.SHOULDER_BACKWARDS_LAYUP).withTimeout(4),
         new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, -0.3),
-        new WaitCommand(0),
+        new WaitCommand(0.2),
         PathFunctions.resetOdometry(m_chassis, seven_CubeH_Foxtrot_Cone_E_P1),
         new ParallelCommandGroup(
           new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kForward, 0),
           new SetArmEnd(m_arm, Constants.ELBOW_STOW, Constants.SHOULDER_STOW),
           autoBuilder.followPathWithEvents(seven_CubeH_Foxtrot_Cone_E_P1)
          ),
-        new TraverseChargeStation(m_chassis, Constants.CHARGE_SPEED, 0),
+        new TraverseChargeStation(m_chassis, Constants.CHARGE_SPEED, 0.5),
         new WaitCommand(0),
         PathFunctions.resetOdometry(m_chassis, seven_CubeH_Foxtrot_Cone_E_P2),
+        new SetArm(m_arm, Constants.ELBOW_FLOOR, Constants.SHOULDER_FLOOR),
         new ParallelCommandGroup(
           new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, 0.3),
-          new SetArmEnd(m_arm, Constants.ELBOW_FLOOR, Constants.SHOULDER_FLOOR),
+          //new SetArmEnd(m_arm, Constants.ELBOW_STOW, Constants.SHOULDER_STOW),
           autoBuilder.followPathWithEvents(seven_CubeH_Foxtrot_Cone_E_P2)
          ),
         new WaitCommand(0),
+        new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kForward, 0),
         new ParallelCommandGroup(
-          new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kForward, 0),
           new SetArmEnd(m_arm, Constants.ELBOW_STOW, Constants.SHOULDER_STOW),
           autoBuilder.followPathWithEvents(seven_CubeH_Foxtrot_Cone_E_P3)
          ),
@@ -427,7 +428,7 @@ public class RobotContainer {
         autoCommand = new SequentialCommandGroup(
         new InstantCommand(() -> m_chassis.resetPose(new Pose2d(0, 0, Rotation2d.fromDegrees(180)))),
         new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, Constants.HOLD_SPEED),
-        new SetArm(m_arm, Constants.ELBOW_MID_DIAG_TELEOP, Constants.SHOULDER_MID_DIAG_TELEOP),
+        new SetArm(m_arm, Constants.ELBOW_MID_DIAG_TELEOP, Constants.SHOULDER_MID_DIAG_TELEOP).withTimeout(2),
         new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, -0.3),
         new WaitCommand(0.1),
         PathFunctions.resetOdometry(m_chassis, seven_CubeH_Golf_Cone_E_P1),
@@ -455,7 +456,7 @@ public class RobotContainer {
         autoCommand = new SequentialCommandGroup(
           new InstantCommand(() -> m_chassis.resetPose(new Pose2d(0, 0, Rotation2d.fromDegrees(180)))),
           new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, Constants.HOLD_SPEED),
-          new SetArm(m_arm, Constants.ELBOW_MID_DIAG_TELEOP, Constants.SHOULDER_MID_DIAG_TELEOP),
+          new SetArm(m_arm, Constants.ELBOW_MID_DIAG_TELEOP, Constants.SHOULDER_MID_DIAG_TELEOP).withTimeout(2),
           new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, -0.3),
           new WaitCommand(0.5),
           PathFunctions.resetOdometry(m_chassis, six_CubeH_Echo_Cone_6_4_P1),
@@ -483,7 +484,7 @@ public class RobotContainer {
         autoCommand = new SequentialCommandGroup(
           new InstantCommand(() -> m_chassis.resetPose(new Pose2d(0, 0, Rotation2d.fromDegrees(180)))),
           new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, Constants.HOLD_SPEED),
-          new SetArm(m_arm, Constants.ELBOW_MID_DIAG_TELEOP, Constants.SHOULDER_MID_DIAG_TELEOP),
+          new SetArm(m_arm, Constants.ELBOW_MID_DIAG_TELEOP, Constants.SHOULDER_MID_DIAG_TELEOP).withTimeout(2),
           new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, -0.3),
           new WaitCommand(0),
           PathFunctions.resetOdometry(m_chassis, Eight_CubeH_Hotel_Cone_6_4_P1),
