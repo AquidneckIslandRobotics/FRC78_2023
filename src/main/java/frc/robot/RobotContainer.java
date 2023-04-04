@@ -34,6 +34,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -500,12 +501,11 @@ public class RobotContainer {
           ),
           new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kForward, 0.3),
           new WaitCommand(0.5),
-          //PathFunctions.resetOdometry(m_chassis, Blue_Eight_CubeHi_Hotel_Cone_Six_Four_PartTwo),
           new ParallelCommandGroup(
             new SetArm(m_arm, Constants.ELBOW_STOW, Constants.SHOULDER_STOW),
             new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kForward, 0),
             autoBuilder.followPathWithEvents(Eight_CubeH_Hotel_Cone_6_4_P2)
-          )
+          ).unless(() -> !m_Dave_Intake.hasItem())
           //,
           //new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, 0)
         );
