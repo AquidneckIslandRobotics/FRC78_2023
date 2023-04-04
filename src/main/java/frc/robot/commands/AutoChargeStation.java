@@ -91,7 +91,7 @@ public class AutoChargeStation extends CommandBase {
       chassis.setSpeeds();
     } else if (currentStage == stage.CORRECT) {
       chassis.setSpeeds(ChassisSpeeds.fromFieldRelativeSpeeds(
-        new ChassisSpeeds(Math.signum(speed) * Constants.CORRECT_VEL * (inclination < 0 ? -1 : 1), 0, 0), chassis.getFusedPose().getRotation()));
+        new ChassisSpeeds(-Math.signum(speed) * Constants.CORRECT_VEL * (inclination < 0 ? -1 : 1), 0, 0), chassis.getFusedPose().getRotation()));
     }
   }
 

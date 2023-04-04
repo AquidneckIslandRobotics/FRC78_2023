@@ -189,7 +189,7 @@ public final class Constants {
     public static final double MAX_TIME = 10;
     public static final double EXTRA_TIME = 2;
     // competition values
-    public static final double CLIMBING_VEL_FACTOR = 0.5; // How much it slows down, in m/s, with a max of CHARGE_SPEED
+    public static final double CLIMBING_VEL_FACTOR = 0.4; // How much it slows down, in m/s, with a max of CHARGE_SPEED
     public static final double WAIT_TIME = 1; // the amount of time it waits before it starts correcting
     public static final double THRESHOLD = 7; // what angle (degrees) it has to pass to be considered climbing
     public static final double CORRECT_THRES = 1;
