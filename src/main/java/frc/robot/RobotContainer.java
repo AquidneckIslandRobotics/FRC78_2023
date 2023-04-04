@@ -475,10 +475,10 @@ public class RobotContainer {
           new WaitCommand(0.5),
           PathFunctions.resetOdometry(m_chassis, six_CubeH_Echo_Cone_6_4_P2),
           new ParallelCommandGroup(
-            new SetArm(m_arm, Constants.ELBOW_MID_DIAG_TELEOP, Constants.SHOULDER_MID_DIAG_TELEOP),
+            new SetArm(m_arm, Constants.ELBOW_STOW, Constants.SHOULDER_STOW),
             new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kForward, 0),
             autoBuilder.followPathWithEvents(six_CubeH_Echo_Cone_6_4_P2)
-          )
+          ).unless(() -> !m_Dave_Intake.hasItem())
           //new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, 0)
       );
       break;
