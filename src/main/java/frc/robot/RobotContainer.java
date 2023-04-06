@@ -54,7 +54,6 @@ public class RobotContainer {
   private final XboxController m_driveController;
   private final XboxController m_manipController;
   private final XboxController m_testController;
-  //private final IntakeV1_Lentz m_IntakeV1_Lentz;
   private final Dave_Intake m_Dave_Intake;
   private final HashMap<String, Command> m_eventMap;
   private final SwerveAutoBuilder autoBuilder;
@@ -168,10 +167,10 @@ public class RobotContainer {
     firstAutoCmd.addOption("Cone Pickup Cone (8)", AUTOS.CONE_PICKUP_CONE_EIGHT);
     firstAutoCmd.addOption("Mid Cube Taxi Charge (Station)", AUTOS.CUBE_MID_TAXI_CHARGE);
     firstAutoCmd.addOption("Test", AUTOS.TEST);
-    firstAutoCmd.addOption("CubeH Foxtrot Cone Engage (Station)", AUTOS.Seven_CubeH_Foxtrot_Cone_Engage);
-    firstAutoCmd.addOption("CubeH Echo Cone 6.4 (6)", AUTOS.Six_CubeH_Echo_Cone_6_4);
-    firstAutoCmd.addOption("CubeH Golf Cone Engage (Station)", AUTOS.Seven_CubeH_Golf_Cone_Engage);
-    firstAutoCmd.addOption("CubeH Hotel Cone 8.4 (8)", AUTOS.Eight_CubeH_Hotel_Cone_8_4);
+    firstAutoCmd.addOption("CubeH Foxtrot/Charlie Cone Engage (Station)", AUTOS.Seven_CubeH_Foxtrot_Cone_Engage);
+    firstAutoCmd.addOption("CubeH Echo/Delta Cone 6.4 (6)", AUTOS.Six_CubeH_Echo_Cone_6_4);
+    firstAutoCmd.addOption("CubeH Golf/Bravo Cone Engage (Station)", AUTOS.Seven_CubeH_Golf_Cone_Engage);
+    firstAutoCmd.addOption("CubeH Hotel/Alpha Cone 8.4 (8)", AUTOS.Eight_CubeH_Hotel_Cone_8_4);
 
     SmartDashboard.putData("Auto Selector", firstAutoCmd);
     // #endregion

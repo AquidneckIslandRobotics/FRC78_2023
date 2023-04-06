@@ -108,7 +108,7 @@ public final class Constants {
             public static final int driveMotorID = 1;
             public static final int angleMotorID = 2;
             public static final int canCoderID = 9;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(47.63); //Wasp
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(46.933); //Wasp
             //  public static final Rotation2d angleOffset = Rotation2d.fromDegrees(8.70); // ant man
             public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
                     canCoderID, angleOffset);
@@ -119,7 +119,7 @@ public final class Constants {
             public static final int driveMotorID = 3;
             public static final int angleMotorID = 4;
             public static final int canCoderID = 10;
-           public static final Rotation2d angleOffset = Rotation2d.fromDegrees(16.43); //WASP
+           public static final Rotation2d angleOffset = Rotation2d.fromDegrees(16.523); //WASP
             //  public static final Rotation2d angleOffset = Rotation2d.fromDegrees(162.77); // ant man
             public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
                     canCoderID, angleOffset);
@@ -130,7 +130,7 @@ public final class Constants {
             public static final int driveMotorID = 5;
             public static final int angleMotorID = 6;
             public static final int canCoderID = 11;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(277.82); //Wasp
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(281.162); //Wasp
             //  public static final Rotation2d angleOffset = Rotation2d.fromDegrees(178.50); // ant man
 
             public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
@@ -143,7 +143,7 @@ public final class Constants {
             public static final int angleMotorID = 8;
             public static final int canCoderID = 12;
 
-           public static final Rotation2d angleOffset = Rotation2d.fromDegrees(110.65); //Wasp
+           public static final Rotation2d angleOffset = Rotation2d.fromDegrees(114.873); //Wasp
             //  public static final Rotation2d angleOffset = Rotation2d.fromDegrees(165.93); // ant man
              
             public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
@@ -190,9 +190,9 @@ public final class Constants {
     public static final double EXTRA_TIME = 0.7;
     // competition values
     public static final double CLIMBING_VEL_FACTOR = 0.4; // How much it slows down, in m/s, with a max of CHARGE_SPEED
-    public static final double WAIT_TIME = 1.5; // the amount of time it waits before it starts correcting
+    public static final double WAIT_TIME = 15; // the amount of time it waits before it starts correcting
     public static final double THRESHOLD = 10; // what angle (degrees) it has to pass to be considered climbing
-    public static final double CORRECT_THRES = 1;
+    public static final double CORRECT_THRES = 2.5;
     public static final double CORRECT_VEL = 0.25;
 
     public static final double REVERSE_TIME = 0.3;  // TODO THIS IS FOR THE RideAutoChargeStation

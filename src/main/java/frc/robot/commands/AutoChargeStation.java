@@ -73,7 +73,7 @@ public class AutoChargeStation extends CommandBase {
       }
       case WAIT: {
         if (Timer.getFPGATimestamp() - startWaitTime > Constants.WAIT_TIME) {
-          if (deltaInclination < 3) { // we could just switch to correct, but that would take an extra cycle
+          if (deltaInclination < Constants.CORRECT_THRES) { // we could just switch to correct, but that would take an extra cycle
             currentStage = stage.DONE;
           } else {
             currentStage = stage.CORRECT;
@@ -102,7 +102,7 @@ public class AutoChargeStation extends CommandBase {
       chassis.setStates(parkingStates, false, true);
     } else if (currentStage == stage.CORRECT) {
       chassis.setSpeeds(ChassisSpeeds.fromFieldRelativeSpeeds(
-        new ChassisSpeeds(-Math.signum(speed) * Constants.CORRECT_VEL * (inclination < 0 ? -1 : 1), 0, 0), chassis.getFusedPose().getRotation()));
+        new ChassisSpeeds(-Math.signum(speed) * Constants.CORRECT_VEL * (inclination - initialRot < 0 ? -1 : 1), 0, 0), chassis.getFusedPose().getRotation()));
     }
   }
 
