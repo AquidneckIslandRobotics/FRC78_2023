@@ -79,7 +79,7 @@ public final class Constants {
         public static final double ANGLE_MAX_ERR = CHOSEN_MODULE.angleMaxErr;
 
         /* Drive Motor PID Values */
-        public static final double DRIVE_KP = 0.05; // TODO: This must be tuned to specific robot
+        public static final double DRIVE_KP = 0.05;
         public static final double DRIVE_KI = 0.0;
         public static final double DRIVE_KD = 0.0;
         public static final double DRIVE_KF = 0.0;
@@ -88,15 +88,15 @@ public final class Constants {
          * Drive Motor Characterization Values
          * Divide SYSID values by 12 to convert from volts to percent output for CTRE
          */
-        public static final double DRIVE_KS = (0.32 / 12); // TODO: This must be tuned to specific robot
+        public static final double DRIVE_KS = (0.32 / 12);
         public static final double DRIVE_KV = (1.51 / 12);
         public static final double DRIVE_KA = (0.27 / 12);
 
         /* Swerve Profiling Values */
         /** Meters per Second */
-        public static final double MAX_SPEED = 4.5; // TODO: This must be tuned to specific robot
+        public static final double MAX_SPEED = 4.5;
         /** Radians per Second */
-        public static final double MAX_ANGULAR_VELOCITY = 10.0; // TODO: This must be tuned to specific robot
+        public static final double MAX_ANGULAR_VELOCITY = 10.0;
 
         /* Neutral Modes */
         public static final NeutralMode angleNeutralMode = NeutralMode.Coast;
@@ -104,7 +104,7 @@ public final class Constants {
 
         /* Module Specific Constants */
         /* Front Left Module - Module 0 */
-        public static final class Mod0 { // TODO: This must be tuned to specific robot
+        public static final class Mod0 {
             public static final int driveMotorID = 1;
             public static final int angleMotorID = 2;
             public static final int canCoderID = 9;
@@ -115,7 +115,7 @@ public final class Constants {
         }
 
         /* Front Right Module - Module 1 */
-        public static final class Mod1 { // TODO: This must be tuned to specific robot
+        public static final class Mod1 {
             public static final int driveMotorID = 3;
             public static final int angleMotorID = 4;
             public static final int canCoderID = 10;
@@ -126,7 +126,7 @@ public final class Constants {
         }
 
         /* Back Left Module - Module 2 */
-        public static final class Mod2 { // TODO: This must be tuned to specific robot
+        public static final class Mod2 {
             public static final int driveMotorID = 5;
             public static final int angleMotorID = 6;
             public static final int canCoderID = 11;
@@ -138,7 +138,7 @@ public final class Constants {
         }
 
         /* Back Right Module - Module 3 */
-        public static final class Mod3 { // TODO: This must be tuned to specific robot
+        public static final class Mod3 {
             public static final int driveMotorID = 7;
             public static final int angleMotorID = 8;
             public static final int canCoderID = 12;
@@ -186,14 +186,17 @@ public final class Constants {
 
     // AutoChargeStation and TraverseChargeStation constants
     public static final double CHARGE_SPEED = 1;
-    public static final double MAX_TIME = 10;
-    public static final double EXTRA_TIME = 2;
+    public static final double MAX_TIME = 10.5;
+    public static final double EXTRA_TIME = 0.7;
     // competition values
     public static final double CLIMBING_VEL_FACTOR = 0.4; // How much it slows down, in m/s, with a max of CHARGE_SPEED
-    public static final double WAIT_TIME = 1; // the amount of time it waits before it starts correcting
-    public static final double THRESHOLD = 7; // what angle (degrees) it has to pass to be considered climbing
+    public static final double WAIT_TIME = 1.5; // the amount of time it waits before it starts correcting
+    public static final double THRESHOLD = 10; // what angle (degrees) it has to pass to be considered climbing
     public static final double CORRECT_THRES = 1;
     public static final double CORRECT_VEL = 0.25;
+
+    public static final double REVERSE_TIME = 0.3;  // TODO THIS IS FOR THE RideAutoChargeStation
+    public static final double REVERSE_SPEED = 0.5; // TO BE REMOVED
 
     public static final double TRAJECTORY_KI = 0;
     public static final double TRAJECTORY_KD = 0;
@@ -229,8 +232,6 @@ public final class Constants {
     
     public static double ELBOW_BACKWARDS_LAYUP = 124;
     public static double SHOULDER_BACKWARDS_LAYUP = 146;
-
-    // TODO - change to proper default positions
 
     //  ARM
     //All encoder constants are offsets from a HOME position

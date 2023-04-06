@@ -1,13 +1,21 @@
 package frc.robot.commands;
 import frc.robot.Constants;
 import frc.robot.subsystems.SwerveChassis;
-
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class AutoChargeStation extends CommandBase {
+  SwerveModuleState parkingStates[] = {
+    new SwerveModuleState(0, Rotation2d.fromDegrees(45)),
+    new SwerveModuleState(0, Rotation2d.fromDegrees(315)),
+    new SwerveModuleState(0, Rotation2d.fromDegrees(135)),
+    new SwerveModuleState(0, Rotation2d.fromDegrees(45))
+  };
+
   private SwerveChassis chassis;
   private double speed;
   private double calcSpeed;
@@ -33,13 +41,16 @@ public class AutoChargeStation extends CommandBase {
   @Override
   public void initialize() {
     startTime = Timer.getFPGATimestamp();
-    initialRot = Math.abs(chassis.getGyroRot(1).getDegrees());
+    initialRot = chassis.getGyroRot(1).getDegrees();
+    SmartDashboard.putNumber("intialInclination", initialRot);
     currentStage = stage.BELOW;
   }
 
   @Override
   public void execute() {
     double inclination = chassis.getGyroRot(1).getDegrees();
+    // double inclination = Math.atan(Math.sqrt(Math.tan(chassis.getGyroRot(0).getDegrees()), Math.tan(chassis.getGyroRot(1).getDegrees())));
+    // inclination = atan(sqrt(tan^2(roll)+tan^2(pitch)));
     double deltaInclination = Math.abs(inclination) - initialRot;
     SmartDashboard.putNumber("inclination", inclination);
     SmartDashboard.putNumber("deltaInclination", deltaInclination);
@@ -83,12 +94,12 @@ public class AutoChargeStation extends CommandBase {
     if (currentStage == stage.BELOW || currentStage == stage.ABOVE) {
       // prevSpeed = calcSpeed;
       calcSpeed = Math.signum(speed) * Constants.CLIMBING_VEL_FACTOR * (Math.min(Constants.THRESHOLD, deltaInclination) / Constants.THRESHOLD);
-      // calcSpeed += prevSpeed - calcSpeed / 2;
+      // calcSpeed += (prevSpeed - calcSpeed) / 2;
       chassis.setSpeeds(ChassisSpeeds.fromFieldRelativeSpeeds(new ChassisSpeeds(
         speed - calcSpeed, 
         0, 0), chassis.getFusedPose().getRotation()));
     } else if (currentStage == stage.WAIT) {
-      chassis.setSpeeds();
+      chassis.setStates(parkingStates, false, true);
     } else if (currentStage == stage.CORRECT) {
       chassis.setSpeeds(ChassisSpeeds.fromFieldRelativeSpeeds(
         new ChassisSpeeds(-Math.signum(speed) * Constants.CORRECT_VEL * (inclination < 0 ? -1 : 1), 0, 0), chassis.getFusedPose().getRotation()));

@@ -381,8 +381,8 @@ public class RobotContainer {
         new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, Constants.HOLD_SPEED),
         new SetArm(m_arm, Constants.ELBOW_STOW, Constants.SHOULDER_STOW),
         new TraverseChargeStation(m_chassis, Constants.CHARGE_SPEED, Constants.EXTRA_TIME),
-        new WaitCommand(1),
-        new AutoChargeStation(m_chassis, -Constants.CHARGE_SPEED),
+        new WaitCommand(0.5),
+        new RideAutoChargeStation(m_chassis, -Constants.CHARGE_SPEED),
         new Park(m_chassis)
       );
       break; }
@@ -419,9 +419,8 @@ public class RobotContainer {
          ),
         new AutoChargeStation(m_chassis, -Constants.CHARGE_SPEED)
       );
-      break;
-      }
-
+      break; }
+      
       case Seven_CubeH_Golf_Cone_Engage: {
         PathPlannerTrajectory seven_CubeH_Golf_Cone_E_P1 = PathFunctions.createTrajectory("7_CubeH_Golf_Cone_E_P1");
         PathPlannerTrajectory seven_CubeH_Golf_Cone_E_P2 = PathFunctions.createTrajectory("7_CubeH_Golf_Cone_E_P2");
@@ -567,10 +566,11 @@ public class RobotContainer {
       break; }
 
       case TEST: {
-        PathPlannerTrajectory test = PathFunctions.createTrajectory("TurnStraightTest");
+        // PathPlannerTrajectory test = PathFunctions.createTrajectory("TurnStraightTest");
         autoCommand = new SequentialCommandGroup(
-          PathFunctions.resetOdometry(m_chassis, test),
-          autoBuilder.followPathWithEvents(test)
+          // PathFunctions.resetOdometry(m_chassis, test),
+          // autoBuilder.followPathWithEvents(test)
+          new AutoChargeStation(m_chassis, Constants.CHARGE_SPEED)
         );
       break; }
       }
