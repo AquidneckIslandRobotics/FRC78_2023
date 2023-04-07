@@ -170,7 +170,7 @@ public class RobotContainer {
     firstAutoCmd.addOption("CubeH Foxtrot/Charlie Cone Engage (Station)", AUTOS.Seven_CubeH_Foxtrot_Cone_Engage);
     firstAutoCmd.addOption("CubeH Echo/Delta Cone 6.4 (6)", AUTOS.Six_CubeH_Echo_Cone_6_4);
     firstAutoCmd.addOption("CubeH Golf/Bravo Cone Engage (Station)", AUTOS.Seven_CubeH_Golf_Cone_Engage);
-    firstAutoCmd.addOption("CubeH Hotel/Alpha Cone 8.4 (8)", AUTOS.Eight_CubeH_Hotel_Cone_8_4);
+    firstAutoCmd.addOption("CubeH Hotel/Alph Cone 8.4 (8)", AUTOS.Eight_CubeH_Hotel_Cone_8_4);
 
     SmartDashboard.putData("Auto Selector", firstAutoCmd);
     // #endregion
@@ -401,7 +401,7 @@ public class RobotContainer {
           new SetArmEnd(m_arm, Constants.ELBOW_STOW, Constants.SHOULDER_STOW),
           autoBuilder.followPathWithEvents(seven_CubeH_Foxtrot_Cone_E_P1)
          ),
-        new TraverseChargeStation(m_chassis, Constants.CHARGE_SPEED, 0.5),
+        new TraverseChargeStation(m_chassis, 1.0, 0.5),
         new WaitCommand(0),
         PathFunctions.resetOdometryPos(m_chassis, seven_CubeH_Foxtrot_Cone_E_P2),
         new SetArm(m_arm, Constants.ELBOW_FLOOR, Constants.SHOULDER_FLOOR),

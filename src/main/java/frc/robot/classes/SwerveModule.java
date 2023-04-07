@@ -9,6 +9,7 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.Robot;
 
@@ -145,4 +146,13 @@ public class SwerveModule {
                         Constants.Swerve.WHEEL_CIRCUMFERENCE, Constants.Swerve.DRIVE_GEAR_RATIO),
                 getAngle());
     }
+
+    public double getDriveCurrent() {
+        return mDriveMotor.getMotorOutputVoltage();
+    }
+
+    public double getSteerCurrent() {
+        return mAngleMotor.getMotorOutputVoltage();
+    }
+
 }

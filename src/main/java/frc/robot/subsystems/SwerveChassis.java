@@ -83,6 +83,8 @@ public class SwerveChassis extends SubsystemBase {
       SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Cancoder", mod.getCanCoder().getDegrees());
       SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Integrated", mod.getPosition().angle.getDegrees());
       SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);
+      SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Drive Voltage", mod.getDriveCurrent());
+      SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Steer Voltage", mod.getSteerCurrent());
     }
 
     poseEstimator.update(getGyroRot(), getPositions());
