@@ -142,6 +142,7 @@ public class RobotContainer {
     //   new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kForward, 0.2))
     //   );
     m_eventMap.put("Park", new Park(m_chassis));
+    System.out.print(Constants.Swerve.MAX_SPEED);
 
     // An object used to do much of the creating path following commands
     autoBuilder = new SwerveAutoBuilder(

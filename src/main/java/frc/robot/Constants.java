@@ -95,6 +95,8 @@ public final class Constants {
         /* Swerve Profiling Values */
         /** Meters per Second */
         public static final double MAX_SPEED = 4.5;
+
+        // public static final double MAX_SPEED = 6380.0 / 60.0 * Swerve.DRIVE_GEAR_RATIO * Units.inchesToMeters(Swerve.WHEEL_CIRCUMFERENCE) * Math.PI;
         /** Radians per Second */
         public static final double MAX_ANGULAR_VELOCITY = 10.0;
 
@@ -174,7 +176,7 @@ public final class Constants {
 
     // 6380 is falcon FX max rpm, / 60 (to get revolutions per second), * gear ratio
     // (to wheel rps), * wheel circumference
-    public static final double MAX_SPEED = 6380.0 / 60.0 * Swerve.DRIVE_GEAR_RATIO * Units.inchesToMeters(Swerve.WHEEL_CIRCUMFERENCE) * Math.PI;
+    // public static final double MAX_SPEED = 6380.0 / 60.0 * Swerve.DRIVE_GEAR_RATIO * Units.inchesToMeters(Swerve.WHEEL_CIRCUMFERENCE) * Math.PI;
     // #endregion
 
     // #region AUTONOMOUS
