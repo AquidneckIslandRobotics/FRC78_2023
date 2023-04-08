@@ -188,7 +188,7 @@ public class RobotContainer {
     new POVButton(m_driveController, 0).whileTrue(new AutoCenter(m_limeLight, new Pose2d(1.5, 0, new Rotation2d(0)), m_chassis));
     new POVButton(m_driveController, 270).whileTrue(new AutoCenter(m_limeLight, new Pose2d(1.5, -0.8, new Rotation2d(0)), m_chassis));
     new POVButton(m_driveController, 90).whileTrue(new AutoCenter(m_limeLight, new Pose2d(1.5, 0.8, new Rotation2d(0)), m_chassis));
-    new POVButton(m_driveController, 180).whileTrue(new Park(m_chassis));
+    new POVButton(m_driveController, 180).or(new POVButton(m_driveController, 225)).or(new POVButton(m_driveController, 135)).whileTrue(new Park(m_chassis));
     new Trigger(m_driveController::getRightBumper)
         .onTrue(new InstantCommand(() -> m_chassis.setCenter(new Translation2d(0.5, 0))));
     new Trigger(m_driveController::getRightBumper)
@@ -265,24 +265,24 @@ public class RobotContainer {
   //Basically, If left bumper is held down(a constant state of True), and another button(A,B,X,Y) is pressed it will have cube Functions, scoring, intaking, and postioning, if a bumper is not pressed then it has cone functions(Else statement)
     //CONE BUTTONS 
 
-    new Trigger(m_manipController::getAButton).onTrue((new SetArm(m_arm, Constants.ELBOW_FLOOR, Constants.SHOULDER_FLOOR)).alongWith(new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kForward, 0.4))).onFalse((new SetArm(m_arm, Constants.ELBOW_STOW, Constants.SHOULDER_STOW)).alongWith(new SetIntake(m_Dave_Intake, m_Dave_Intake.getSolenoid(), 0)));
-    new Trigger(m_manipController::getBButton).onTrue((new SetArm(m_arm, Constants.ELBOW_SHELF, Constants.SHOULDER_SHELF)).alongWith(new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kForward, 0.4))).onFalse((new SetArm(m_arm, Constants.ELBOW_STOW, Constants.SHOULDER_STOW)).alongWith(new SetIntake(m_Dave_Intake, m_Dave_Intake.getSolenoid(), 0)));
+    new Trigger(m_manipController::getAButton).onTrue((new SetArm(m_arm, Constants.ELBOW_FLOOR, Constants.SHOULDER_FLOOR)).alongWith(new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kForward, 0.4))).onFalse((new SetArm(m_arm, Constants.ELBOW_STOW, Constants.SHOULDER_STOW)).alongWith(new SetIntake(m_Dave_Intake, m_Dave_Intake.getSolenoid(), Constants.CONE_HOLD_SPEED)));
+    new Trigger(m_manipController::getBButton).onTrue((new SetArm(m_arm, Constants.ELBOW_SHELF, Constants.SHOULDER_SHELF)).alongWith(new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kForward, 0.4))).onFalse((new SetArm(m_arm, Constants.ELBOW_STOW, Constants.SHOULDER_STOW)).alongWith(new SetIntake(m_Dave_Intake, m_Dave_Intake.getSolenoid(), Constants.CONE_HOLD_SPEED)));
     new Trigger(m_manipController::getXButton).onTrue((new SetArm(m_arm, Constants.ELBOW_FLOOR, Constants.SHOULDER_FLOOR))).onFalse(new SetArm(m_arm, Constants.ELBOW_STOW, Constants.SHOULDER_STOW));
     new Trigger(m_manipController::getYButton).onTrue((new SetArm(m_arm, Constants.ELBOW_MID_DIAG_TELEOP, Constants.SHOULDER_MID_DIAG_TELEOP))).onFalse(new SetArm(m_arm, Constants.ELBOW_STOW, Constants.SHOULDER_STOW));
     // new Trigger(new POVButton(m_manipController, 0)).onTrue((new SetArm(m_arm, Constants.ELBOW_MID_DIAG_TELEOP, Constants.SHOULDER_MID_DIAG_TELEOP))).onFalse(new SetArm(m_arm, Constants.ELBOW_STOW, Constants.SHOULDER_STOW));
 
     //CUBE BUTTONS
     new Trigger(rightSupplier).whileTrue(new SetIntake(m_Dave_Intake, m_Dave_Intake.getSolenoid(), -0.2));
-    new Trigger(m_manipController::getLeftBumper).and(new Trigger(m_manipController::getAButton)).onTrue((new SetArm(m_arm, Constants.ELBOW_FLOOR, Constants.SHOULDER_FLOOR)).alongWith(new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, 0.3))).onFalse((new SetArm(m_arm, Constants.ELBOW_STOW, Constants.SHOULDER_STOW)).alongWith(new SetIntake(m_Dave_Intake, m_Dave_Intake.getSolenoid(), Constants.HOLD_SPEED)));
-    new Trigger(m_manipController::getLeftBumper).and(new Trigger(m_manipController::getBButton)).onTrue((new SetArm(m_arm, Constants.ELBOW_SHELF, Constants.SHOULDER_SHELF)).alongWith(new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, 0.3))).onFalse((new SetArm(m_arm, Constants.ELBOW_STOW, Constants.SHOULDER_STOW)).alongWith(new SetIntake(m_Dave_Intake, m_Dave_Intake.getSolenoid(), Constants.HOLD_SPEED)));
+    new Trigger(m_manipController::getLeftBumper).and(new Trigger(m_manipController::getAButton)).onTrue((new SetArm(m_arm, Constants.ELBOW_FLOOR, Constants.SHOULDER_FLOOR)).alongWith(new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, 0.3))).onFalse((new SetArm(m_arm, Constants.ELBOW_STOW, Constants.SHOULDER_STOW)).alongWith(new SetIntake(m_Dave_Intake, m_Dave_Intake.getSolenoid(), Constants.CUBE_HOLD_SPEED)));
+    new Trigger(m_manipController::getLeftBumper).and(new Trigger(m_manipController::getBButton)).onTrue((new SetArm(m_arm, Constants.ELBOW_SHELF, Constants.SHOULDER_SHELF)).alongWith(new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, 0.3))).onFalse((new SetArm(m_arm, Constants.ELBOW_STOW, Constants.SHOULDER_STOW)).alongWith(new SetIntake(m_Dave_Intake, m_Dave_Intake.getSolenoid(), Constants.CUBE_HOLD_SPEED)));
     new Trigger(m_manipController::getLeftBumper).and(new Trigger(m_manipController::getXButton)).onTrue((new SetArm(m_arm, Constants.ELBOW_FLOOR, Constants.SHOULDER_FLOOR))).onFalse(new SetArm(m_arm, Constants.ELBOW_STOW, Constants.SHOULDER_STOW));
     new Trigger(m_manipController::getLeftBumper).and(new Trigger(m_manipController::getYButton)).onTrue((new SetArm(m_arm, Constants.ELBOW_MID_DIAG_AUTO_CUBE, Constants.SHOULDER_MID_DIAG_AUTO_CUBE))).onFalse(new SetArm(m_arm, Constants.ELBOW_STOW, Constants.SHOULDER_STOW));
     //HIGH CUBE BUTTONS
-    new Trigger(m_manipController::getRightBumper).whileTrue(new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, -0.35)).onFalse(new SetIntake(m_Dave_Intake, m_Dave_Intake.getSolenoid(), Constants.HOLD_SPEED));
+    new Trigger(m_manipController::getRightBumper).whileTrue(new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, -0.35)).onFalse(new SetIntake(m_Dave_Intake, m_Dave_Intake.getSolenoid(), Constants.CUBE_HOLD_SPEED));
     //new Trigger(m_manipController::getRightBumper).whileTrue((new SetArm(m_arm, Constants.ELBOW_HIGH_CUBE, Constants.SHOULDER_HIGH_CUBE))).onFalse(new SetArm(m_arm, Constants.ELBOW_STOW, Constants.SHOULDER_STOW));
-
+    new POVButton(m_manipController, 0).whileTrue(new SetIntake(m_Dave_Intake, m_Dave_Intake.getSolenoid(), 0.2)).onFalse(new SetIntake (m_Dave_Intake, m_Dave_Intake.getSolenoid(), Constants.CONE_HOLD_SPEED));
     
-    new Trigger(leftSupplier).toggleOnTrue(new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, Constants.HOLD_SPEED));
+    new Trigger(leftSupplier).toggleOnTrue(new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, Constants.CUBE_HOLD_SPEED));
     
     //  new Trigger(m_manipController::getAButton).whileTrue((new SetArm(m_arm, Constants.ELBOW_FLOOR, Constants.SHOULDER_FLOOR)).alongWith(new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kForward, 0.35))).onFalse((new SetArm(m_arm, Constants.ELBOW_STOW, Constants.SHOULDER_STOW)).alongWith(new SetIntake(m_Dave_Intake, m_Dave_Intake.getSolenoid(), 0)));
       //new Trigger(m_manipController::getBButton).whileTrue((new SetArm(m_arm, Constants.ELBOW_SHELF, Constants.SHOULDER_SHELF)).alongWith(new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kForward, 0.35))).onFalse((new SetArm(m_arm, Constants.ELBOW_STOW, Constants.SHOULDER_STOW)).alongWith(new SetIntake(m_Dave_Intake, m_Dave_Intake.getSolenoid(), 0)));
@@ -291,8 +291,8 @@ public class RobotContainer {
     
 
     //TestController Buttons 
-    new Trigger(m_testController::getAButton).whileTrue((new SetArm(m_arm, Constants.ELBOW_HIGH_CUBE, Constants.SHOULDER_HIGH_CUBE)).alongWith(new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, Constants.HOLD_SPEED))).onFalse((new SetArm(m_arm, Constants.ELBOW_STOW, Constants.SHOULDER_HIGH_CUBE)));
-    new Trigger(m_testController::getBButton).whileTrue((new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, -0.5))).onFalse(new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kForward, Constants.HOLD_SPEED));
+    new Trigger(m_testController::getAButton).whileTrue((new SetArm(m_arm, Constants.ELBOW_HIGH_CUBE, Constants.SHOULDER_HIGH_CUBE)).alongWith(new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, Constants.CUBE_HOLD_SPEED))).onFalse((new SetArm(m_arm, Constants.ELBOW_STOW, Constants.SHOULDER_HIGH_CUBE)));
+    new Trigger(m_testController::getBButton).whileTrue((new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, -0.5))).onFalse(new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kForward, Constants.CUBE_HOLD_SPEED));
 
   }
 
@@ -374,11 +374,11 @@ public class RobotContainer {
       case CUBE_MID_TAXI_CHARGE: {
       autoCommand = new SequentialCommandGroup(
         new InstantCommand(() -> m_chassis.resetPose(new Pose2d(0, 0, Rotation2d.fromDegrees(180)))),
-        new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, Constants.HOLD_SPEED),
+        new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, Constants.CUBE_HOLD_SPEED),
         new SetArm(m_arm, Constants.ELBOW_MID_DIAG_AUTO_CUBE, Constants.SHOULDER_MID_DIAG_AUTO_CUBE),
         new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, -0.1),
         new WaitCommand(0.4),
-        new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, Constants.HOLD_SPEED),
+        new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, Constants.CUBE_HOLD_SPEED),
         new SetArm(m_arm, Constants.ELBOW_STOW, Constants.SHOULDER_STOW),
         new TraverseChargeStation(m_chassis, Constants.CHARGE_SPEED, Constants.EXTRA_TIME),
         new WaitCommand(0.5),
@@ -392,7 +392,7 @@ public class RobotContainer {
         PathPlannerTrajectory seven_CubeH_Foxtrot_Cone_E_P3 = PathFunctions.createTrajectory("7_CubeH_Foxtrot_Cone_E_P3");
         autoCommand = new SequentialCommandGroup(
         new InstantCommand(() -> m_chassis.resetPose(new Pose2d(0, 0, Rotation2d.fromDegrees(180)))),
-        new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, Constants.HOLD_SPEED),
+        new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, Constants.CUBE_HOLD_SPEED),
         new SetArm(m_arm, Constants.ELBOW_BACKWARDS_LAYUP, Constants.SHOULDER_BACKWARDS_LAYUP).withTimeout(4),
         new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, -0.3),
         new WaitCommand(0.2),
@@ -412,7 +412,7 @@ public class RobotContainer {
           autoBuilder.followPathWithEvents(seven_CubeH_Foxtrot_Cone_E_P2)
          ),
         new WaitCommand(0),
-        new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kForward, 0),
+        new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kForward, Constants.CUBE_HOLD_SPEED),
         new ParallelCommandGroup(
           new SetArmEnd(m_arm, Constants.ELBOW_STOW, Constants.SHOULDER_STOW),
           autoBuilder.followPathWithEvents(seven_CubeH_Foxtrot_Cone_E_P3)
@@ -427,7 +427,7 @@ public class RobotContainer {
         PathPlannerTrajectory seven_CubeH_Golf_Cone_E_P3 = PathFunctions.createTrajectory("7_CubeH_Golf_Cone_E_P3");
         autoCommand = new SequentialCommandGroup(
         new InstantCommand(() -> m_chassis.resetPose(new Pose2d(0, 0, Rotation2d.fromDegrees(180)))),
-        new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, Constants.HOLD_SPEED),
+        new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, Constants.CUBE_HOLD_SPEED),
         new SetArm(m_arm, Constants.ELBOW_BACKWARDS_LAYUP, Constants.SHOULDER_BACKWARDS_LAYUP).withTimeout(4),
         new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, -0.3),
         new WaitCommand(0.1),
@@ -445,7 +445,7 @@ public class RobotContainer {
           //new SetArmEnd(m_arm, Constants.ELBOW_STOW, Constants.SHOULDER_STOW),
           autoBuilder.followPathWithEvents(seven_CubeH_Golf_Cone_E_P2)
          ),
-        new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kForward, 0),
+        new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kForward, Constants.CONE_HOLD_SPEED),
         new ParallelCommandGroup(
           new SetArmEnd(m_arm, Constants.ELBOW_STOW, Constants.SHOULDER_STOW),
           autoBuilder.followPathWithEvents(seven_CubeH_Golf_Cone_E_P3)
@@ -460,7 +460,7 @@ public class RobotContainer {
         PathPlannerTrajectory six_CubeH_Echo_Cone_6_4_P2 = PathFunctions.createTrajectory("6_CubeH_Echo_Cone_6_4_P2");
         autoCommand = new SequentialCommandGroup(
           new InstantCommand(() -> m_chassis.resetPose(new Pose2d(0, 0, Rotation2d.fromDegrees(180)))),
-          new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, Constants.HOLD_SPEED),
+          new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, Constants.CUBE_HOLD_SPEED),
           new SetArm(m_arm, Constants.ELBOW_BACKWARDS_LAYUP, Constants.SHOULDER_BACKWARDS_LAYUP).withTimeout(4),
           new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, -0.3),
           new WaitCommand(0.5),
@@ -488,7 +488,7 @@ public class RobotContainer {
         PathPlannerTrajectory Eight_CubeH_Hotel_Cone_6_4_P2 = PathFunctions.createTrajectory("8_CubeH_Hotel_Cone_6_4_P2");
         autoCommand = new SequentialCommandGroup(
           new InstantCommand(() -> m_chassis.resetPose(new Pose2d(0, 0, Rotation2d.fromDegrees(180)))),
-          new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, Constants.HOLD_SPEED),
+          new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, Constants.CUBE_HOLD_SPEED),
           new SetArm(m_arm, Constants.ELBOW_BACKWARDS_LAYUP, Constants.SHOULDER_BACKWARDS_LAYUP).withTimeout(4),
           new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, -0.3),
           new WaitCommand(0.2),
@@ -498,8 +498,8 @@ public class RobotContainer {
             new SetArm(m_arm, Constants.ELBOW_STOW, Constants.SHOULDER_STOW),
             autoBuilder.followPathWithEvents(Eight_CubeH_Hotel_Cone_6_4_P1)
           ),
-          new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kForward, 0.3),
-          new WaitCommand(0.5),
+          new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kForward, 0.5),
+          new WaitCommand(1),
           new ParallelCommandGroup(
             new SetArm(m_arm, Constants.ELBOW_STOW, Constants.SHOULDER_STOW),
             new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kForward, 0),
@@ -514,11 +514,11 @@ public class RobotContainer {
       case CUBE_HIGH_TAXI_CHARGE: {
         autoCommand = new SequentialCommandGroup(
           new InstantCommand(() -> m_chassis.resetPose(new Pose2d(0, 0, Rotation2d.fromDegrees(180)))),
-          new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, Constants.HOLD_SPEED),
+          new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, Constants.CUBE_HOLD_SPEED),
           new SetArm(m_arm, Constants.ELBOW_MID_DIAG_TELEOP, Constants.SHOULDER_MID_DIAG_TELEOP),
           new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, -0.2),
           new WaitCommand(0.4),
-          new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, Constants.HOLD_SPEED),
+          new SetIntake(m_Dave_Intake, DoubleSolenoid.Value.kReverse, Constants.CUBE_HOLD_SPEED),
           new SetArmEnd(m_arm, Constants.ELBOW_STOW, Constants.SHOULDER_STOW),
           new TraverseChargeStation(m_chassis, Constants.CHARGE_SPEED, Constants.EXTRA_TIME),
           new WaitCommand(1),

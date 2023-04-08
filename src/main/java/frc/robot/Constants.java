@@ -211,7 +211,7 @@ public final class Constants {
     public static double ELBOW_SHELF = 213;
     public static double SHOULDER_SHELF = 220;
 
-    public static double ELBOW_FLOOR = 117;
+    public static double ELBOW_FLOOR = 115;
     public static double SHOULDER_FLOOR = 325;
 
     public static double ELBOW_MID = 230;
@@ -230,7 +230,8 @@ public final class Constants {
     public static double ELBOW_HIGH_CUBE = 140.48;
     public static double SHOULDER_HIGH_CUBE = 265.88;
 
-    public static double HOLD_SPEED = 0.1;
+    public static double CUBE_HOLD_SPEED = 0.1;
+    public static double CONE_HOLD_SPEED = 0.05;
     
     public static double ELBOW_BACKWARDS_LAYUP = 124;
     public static double SHOULDER_BACKWARDS_LAYUP = 146;
