@@ -120,18 +120,5 @@
       }
     }
   ],
-  "markers": [
-    {
-      "position": 0.0,
-      "names": [
-        "event"
-      ]
-    },
-    {
-      "position": 2.501818181818123,
-      "names": [
-        "Floor PickUp"
-      ]
-    }
-  ]
+  "markers": []
 }
