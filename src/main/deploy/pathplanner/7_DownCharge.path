@@ -2,17 +2,17 @@
   "waypoints": [
     {
       "anchorPoint": {
-        "x": 1.7296770935584638,
-        "y": 1.0472543510407684
+        "x": 1.76,
+        "y": 2.72
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.7487180817592052,
-        "y": 0.7711600221300219
+        "x": 1.9772099401681,
+        "y": 2.28491858408895
       },
-      "holonomicAngle": 0.0,
+      "holonomicAngle": 180.0,
       "isReversal": false,
-      "velOverride": 0.05,
+      "velOverride": null,
       "isLocked": false,
       "isStopPoint": false,
       "stopEvent": {
@@ -24,15 +24,15 @@
     },
     {
       "anchorPoint": {
-        "x": 6.775538966754894,
-        "y": 1.0
+        "x": 2.45,
+        "y": 2.05
       },
       "prevControl": {
-        "x": 6.004782594268279,
-        "y": 0.9644469395352097
+        "x": 2.4531496988439843,
+        "y": 2.05
       },
       "nextControl": null,
-      "holonomicAngle": 0,
+      "holonomicAngle": 180.0,
       "isReversal": false,
       "velOverride": null,
       "isLocked": false,
@@ -45,18 +45,5 @@
       }
     }
   ],
-  "markers": [
-    {
-      "position": 0.0,
-      "names": [
-        "event"
-      ]
-    },
-    {
-      "position": 0.5018181818181229,
-      "names": [
-        "Floor PickUp"
-      ]
-    }
-  ]
+  "markers": []
 }
