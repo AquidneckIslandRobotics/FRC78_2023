@@ -187,7 +187,7 @@ public final class Constants {
     public static final double Y_ERROR_VEL = 1; // every meter of error in the x direction" means in the docs
 
     // AutoChargeStation and TraverseChargeStation constants
-    public static final double CHARGE_SPEED = 1;
+    public static final double CHARGE_SPEED = 0.82;
     public static final double MAX_TIME = 10.5;
     public static final double EXTRA_TIME = 0.7;
     // competition values
