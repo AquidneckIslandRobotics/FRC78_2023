@@ -123,62 +123,62 @@ public class SwerveModule {
         lastAngle = angle;
     }
 
-    private Rotation2d getAngle() {
-        return Rotation2d.fromDegrees(Calculations.falconToDegrees(mAngleMotor.getSelectedSensorPosition(),
-                Constants.Swerve.ANGLE_GEAR_RATIO));
-    }
+    //private Rotation2d getAngle() {
+       // return Rotation2d.fromDegrees(Calculations.falconToDegrees(mAngleMotor.getSelectedSensorPosition(),
+             //   Constants.Swerve.ANGLE_GEAR_RATIO));
+    //}
 
     public Rotation2d getCanCoder() {
         return Rotation2d.fromDegrees(angleEncoder.getAbsolutePosition());
     }
 
-    public void resetToAbsolute() {
-        double absolutePosition = Calculations.degreesToFalcon(getCanCoder().getDegrees() - angleOffset.getDegrees(),
-                Constants.Swerve.ANGLE_GEAR_RATIO);
-        mAngleMotor.setSelectedSensorPosition(absolutePosition);
-    }
+   // public void resetToAbsolute() {
+       // double absolutePosition = Calculations.degreesToFalcon(getCanCoder().getDegrees() - angleOffset.getDegrees(),
+         //       Constants.Swerve.ANGLE_GEAR_RATIO);
+       // mAngleMotor.setPosition(absolutePosition);
+   // } This is all commented out because we shouldn't need to reset, with the abosulte encoder we will just need to use relativity. --MG 8/2
 
     private void configAngleEncoder() {
         angleEncoder.configFactoryDefault();
         angleEncoder.configAllSettings(Robot.ctreConfigs.swerveCanCoderConfig);
     }
 
-    private void configAngleMotor() {
-        mAngleMotor.configFactoryDefault();
-        mAngleMotor.configAllSettings(Robot.ctreConfigs.swerveAngleFXConfig);
-        mAngleMotor.setInverted(Constants.Swerve.ANGLE_MOTOR_INVERT);
-        mAngleMotor.setNeutralMode(Constants.Swerve.angleNeutralMode);
-        resetToAbsolute();
+    private void configAngleMotor() {//This is all com,mented out beacause we ha ve configured it earlier in the code. see line 63. --MG 8/2
+        //mAngleMotor.restoreFactoryDefaults()
+        //mAngleMotor.configAllSettings(Robot.ctreConfigs.swerveAngleFXConfig);
+       // mAngleMotor.setInverted(Constants.Swerve.ANGLE_MOTOR_INVERT);
+       // mAngleMotor.setNeutralMode(Constants.Swerve.angleNeutralMode);
+        //resetToAbsolute();
     }
 
-    private void configDriveMotor() {
-        mDriveMotor.configFactoryDefault();
-        mDriveMotor.configAllSettings(Robot.ctreConfigs.swerveDriveFXConfig);
-        mDriveMotor.setInverted(Constants.Swerve.DRIVE_MOTOR_INVERT);
-        mDriveMotor.setNeutralMode(Constants.Swerve.driveNeutralMode);
-        mDriveMotor.setSelectedSensorPosition(0);
+    private void configDriveMotor() {//All commented for same reason see line 146
+       // mDriveMotor.configFactoryDefault();
+        //mDriveMotor.configAllSettings(Robot.ctreConfigs.swerveDriveFXConfig);
+       // mDriveMotor.setInverted(Constants.Swerve.DRIVE_MOTOR_INVERT);
+       // mDriveMotor.setNeutralMode(Constants.Swerve.driveNeutralMode);
+        //mDriveMotor.setSelectedSensorPosition(0);
     }
 
     public SwerveModuleState getState() {
         return new SwerveModuleState(
-                Calculations.falconToMPS(mDriveMotor.getSelectedSensorVelocity(), Constants.Swerve.WHEEL_CIRCUMFERENCE,
+                Calculations.RPMToMPS(mDriveMotor.getEncoder().getVelocity(), Constants.Swerve.WHEEL_CIRCUMFERENCE,
                         Constants.Swerve.DRIVE_GEAR_RATIO),
-                getAngle());
+                getCanCoder());
     }
 
     public SwerveModulePosition getPosition() {
         return new SwerveModulePosition(
-                Calculations.falconToMeters(mDriveMotor.getSelectedSensorPosition(),
+                Calculations.RotationsToMeters(mDriveMotor.getEncoder().getPosition(),
                         Constants.Swerve.WHEEL_CIRCUMFERENCE, Constants.Swerve.DRIVE_GEAR_RATIO),
-                getAngle());
+                getCanCoder());
     }
 
     public double getDriveCurrent() {
-        return mDriveMotor.getMotorOutputVoltage();
+        return mDriveMotor.getBusVoltage() * mDriveMotor.getAppliedOutput();
     }
 
     public double getSteerCurrent() {
-        return mAngleMotor.getMotorOutputVoltage();
+        return mAngleMotor.getBusVoltage() * mAngleMotor.getAppliedOutput();
     }
 
 }

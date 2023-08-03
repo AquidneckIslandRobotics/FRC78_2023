@@ -67,7 +67,7 @@ public class SwerveChassis extends SubsystemBase {
     // poseEstimator.setVisionMeasurementStdDevs(new MatBuilder<>(Nat.N3(), Nat.N1()).fill(0.02, 0.02, 0.01, 0.02, 0.02));
 
     Timer.delay(1.0);
-    resetAllToAbsolute();
+    //resetAllToAbsolute();
 
     resetPose(new Pose2d());
   }
@@ -106,12 +106,12 @@ public class SwerveChassis extends SubsystemBase {
     poseEstimator.resetPosition(getGyroRot(), getPositions(), pose);
   }
 
-  public void resetAllToAbsolute() {
-    moduleLU.resetToAbsolute();
-    moduleRU.resetToAbsolute();
-    moduleLD.resetToAbsolute();
-    moduleRD.resetToAbsolute();
-  }
+ // public void resetAllToAbsolute() {
+   // moduleLU.resetToAbsolute();
+   // moduleRU.resetToAbsolute();
+   // moduleLD.resetToAbsolute();
+   // moduleRD.resetToAbsolute();
+  //}
 
   // #region GYRO
 

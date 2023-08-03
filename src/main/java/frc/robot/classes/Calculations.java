@@ -135,4 +135,12 @@ public class Calculations {
     public static double MetersToFalcon(double meters, double circumference, double gearRatio) {
         return meters / (circumference / (gearRatio * 2048.0));
     }
+
+    public static double RPMToMPS(double velocity, double wheelCircumference, double driveGearRatio) {
+        return (velocity / 60) * wheelCircumference * driveGearRatio;
+    }
+
+    public static double RotationsToMeters(double position, double wheelCircumference, double driveGearRatio) {
+        return position * wheelCircumference * driveGearRatio;
+    }
 }
