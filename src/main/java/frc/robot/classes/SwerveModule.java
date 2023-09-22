@@ -5,6 +5,7 @@ import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.SparkMaxAbsoluteEncoder;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -30,7 +31,9 @@ public class SwerveModule {
     private CANSparkMax mDriveMotor;
     private SparkMaxPIDController mAnglePidController;
     private SparkMaxPIDController mDrivePidController;
-    private CANCoder angleEncoder;
+    //private CANCoder angleEncoder;
+    private SparkMaxAbsoluteEncoder angleEncoder;
+ 
 
     public double CANcoderInitTime = 0.0;
 
@@ -41,15 +44,15 @@ public class SwerveModule {
         this.moduleNumber = moduleNumber;
         this.angleOffset = moduleConstants.angleOffset;
 
-        /* Angle Encoder Config */
-        // angleEncoder = new CANCoder(moduleConstants.cancoderID, "drivetrainCAN");
-        angleEncoder = new CANCoder(moduleConstants.cancoderID);
-        configAngleEncoder();
-
         /* Angle Motor Config */
         // mAngleMotor = new TalonFX(moduleConstants.angleMotorID, "drivetrainCAN");
         mAngleMotor = new CANSparkMax(moduleConstants.angleMotorID, MotorType.kBrushless);
         configAngleMotor();
+
+         /* Angle Encoder Config */
+        // angleEncoder = new CANCoder(moduleConstants.cancoderID, "drivetrainCAN");
+        angleEncoder = mAngleMotor.getAbsoluteEncoder(SparkMaxAbsoluteEncoder.Type.kDutyCycle);
+        configAngleEncoder();
 
         /* Drive Motor Config */
         // mDriveMotor = new TalonFX(moduleConstants.driveMotorID, "drivetrainCAN");
@@ -129,7 +132,7 @@ public class SwerveModule {
     //}
 
     public Rotation2d getCanCoder() {
-        return Rotation2d.fromDegrees(angleEncoder.getAbsolutePosition());
+        return Rotation2d.fromDegrees(angleEncoder.getPosition());
     }
 
    // public void resetToAbsolute() {
@@ -139,8 +142,8 @@ public class SwerveModule {
    // } This is all commented out because we shouldn't need to reset, with the abosulte encoder we will just need to use relativity. --MG 8/2
 
     private void configAngleEncoder() {
-        angleEncoder.configFactoryDefault();
-        angleEncoder.configAllSettings(Robot.ctreConfigs.swerveCanCoderConfig);
+        //angleEncoder.configFactoryDefault();
+        //angleEncoder.configAllSettings(Robot.ctreConfigs.swerveCanCoderConfig);
     }
 
     private void configAngleMotor() {//This is all com,mented out beacause we ha ve configured it earlier in the code. see line 63. --MG 8/2
