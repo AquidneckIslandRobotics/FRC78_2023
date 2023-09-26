@@ -74,6 +74,10 @@ public class SwerveChassis extends SubsystemBase {
 
   public void initializeSwerve () {
     // WILL COULD CONSIDER MAKING THIS AN ARRAY FOR SIMPLIFIED CODE
+    moduleLU.configAngleEncoder();
+    moduleRU.configAngleEncoder();
+    moduleLD.configAngleEncoder();
+    moduleRD.configAngleEncoder();
   }
 
   @Override

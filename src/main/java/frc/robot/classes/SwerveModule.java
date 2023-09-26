@@ -7,6 +7,7 @@ import com.ctre.phoenix.sensors.CANCoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkMaxAbsoluteEncoder;
 import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -52,7 +53,6 @@ public class SwerveModule {
          /* Angle Encoder Config */
         // angleEncoder = new CANCoder(moduleConstants.cancoderID, "drivetrainCAN");
         angleEncoder = mAngleMotor.getAbsoluteEncoder(SparkMaxAbsoluteEncoder.Type.kDutyCycle);
-        configAngleEncoder();
 
         /* Drive Motor Config */
         // mDriveMotor = new TalonFX(moduleConstants.driveMotorID, "drivetrainCAN");
@@ -76,8 +76,6 @@ public class SwerveModule {
         mDrivePidController.setIZone(0);
         mDrivePidController.setFF(Constants.Swerve.DRIVE_KF);
         mDrivePidController.setOutputRange(-1, 1);
-
-    
 
         lastAngle = getState().angle;
     }
@@ -121,7 +119,6 @@ public class SwerveModule {
             angle = desiredState.angle;
         }
 
-        //mAngleMotor.set(Calculations.degreesToFalcon(angle.getDegrees(), Constants.Swerve.ANGLE_GEAR_RATIO));
         mAnglePidController.setReference(angle.getDegrees(), CANSparkMax.ControlType.kPosition);
         lastAngle = angle;
     }
@@ -135,31 +132,25 @@ public class SwerveModule {
         return Rotation2d.fromDegrees(angleEncoder.getPosition());
     }
 
-   // public void resetToAbsolute() {
-       // double absolutePosition = Calculations.degreesToFalcon(getCanCoder().getDegrees() - angleOffset.getDegrees(),
-         //       Constants.Swerve.ANGLE_GEAR_RATIO);
-       // mAngleMotor.setPosition(absolutePosition);
-   // } This is all commented out because we shouldn't need to reset, with the abosulte encoder we will just need to use relativity. --MG 8/2
+//    public void resetToAbsolute() {
+//        double absolutePosition = Calculations.degreesToFalcon(getCanCoder().getDegrees() - angleOffset.getDegrees(),
+//                Constants.Swerve.ANGLE_GEAR_RATIO);
+//        mAngleMotor.setPosition(absolutePosition);
+//    } This is all commented out because we shouldn't need to reset, with the abosulte encoder we will just need to use relativity. --MG 8/2
 
-    private void configAngleEncoder() {
-        //angleEncoder.configFactoryDefault();
-        //angleEncoder.configAllSettings(Robot.ctreConfigs.swerveCanCoderConfig);
+    public void configAngleEncoder() {
+        angleEncoder.setPositionConversionFactor(360.0);
     }
 
-    private void configAngleMotor() {//This is all com,mented out beacause we ha ve configured it earlier in the code. see line 63. --MG 8/2
-        //mAngleMotor.restoreFactoryDefaults()
-        //mAngleMotor.configAllSettings(Robot.ctreConfigs.swerveAngleFXConfig);
-       // mAngleMotor.setInverted(Constants.Swerve.ANGLE_MOTOR_INVERT);
-       // mAngleMotor.setNeutralMode(Constants.Swerve.angleNeutralMode);
-        //resetToAbsolute();
+    private void configAngleMotor() {
+        mAngleMotor.setInverted(true);
+        mAngleMotor.setIdleMode(IdleMode.kCoast);
+        angleEncoder.setPositionConversionFactor(360.0);
     }
 
     private void configDriveMotor() {//All commented for same reason see line 146
-       // mDriveMotor.configFactoryDefault();
-        //mDriveMotor.configAllSettings(Robot.ctreConfigs.swerveDriveFXConfig);
-       // mDriveMotor.setInverted(Constants.Swerve.DRIVE_MOTOR_INVERT);
-       // mDriveMotor.setNeutralMode(Constants.Swerve.driveNeutralMode);
-        //mDriveMotor.setSelectedSensorPosition(0);
+        mDriveMotor.restoreFactoryDefaults();
+        mDriveMotor.setIdleMode(IdleMode.kBrake);
     }
 
     public SwerveModuleState getState() {
