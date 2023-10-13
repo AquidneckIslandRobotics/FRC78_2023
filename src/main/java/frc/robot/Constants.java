@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DutyCycle;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.classes.COTSFalconSwerveConstants;
 import frc.robot.classes.SwerveModuleConstants;
 
@@ -110,7 +111,7 @@ public final class Constants {
             public static final int driveMotorID = 1;
             public static final int angleMotorID = 2;
             public static final int canCoderID = 9;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(46.66); //Wasp
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(142.33); //Wasp
             //  public static final Rotation2d angleOffset = Rotation2d.fromDegrees(8.70); // ant man
             public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
                     canCoderID, angleOffset);
@@ -121,10 +122,11 @@ public final class Constants {
             public static final int driveMotorID = 3;
             public static final int angleMotorID = 4;
             public static final int canCoderID = 10;
-           public static final Rotation2d angleOffset = Rotation2d.fromDegrees(16.17); //WASP
+           public static final Rotation2d angleOffset = Rotation2d.fromDegrees(288.64); //WASP
             //  public static final Rotation2d angleOffset = Rotation2d.fromDegrees(162.77); // ant man
             public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
                     canCoderID, angleOffset);
+        
         }
 
         /* Back Left Module - Module 2 */
@@ -132,7 +134,7 @@ public final class Constants {
             public static final int driveMotorID = 5;
             public static final int angleMotorID = 6;
             public static final int canCoderID = 11;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(278.17); //Wasp
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(337.84); //Wasp
             //  public static final Rotation2d angleOffset = Rotation2d.fromDegrees(178.50); // ant man
 
             public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
@@ -145,7 +147,7 @@ public final class Constants {
             public static final int angleMotorID = 8;
             public static final int canCoderID = 12;
 
-           public static final Rotation2d angleOffset = Rotation2d.fromDegrees(109.68); //Wasp
+           public static final Rotation2d angleOffset = Rotation2d.fromDegrees(285.59); //Wasp
             //  public static final Rotation2d angleOffset = Rotation2d.fromDegrees(165.93); // ant man
              
             public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,

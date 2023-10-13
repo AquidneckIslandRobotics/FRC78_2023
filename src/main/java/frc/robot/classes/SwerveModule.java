@@ -4,7 +4,9 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
+import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.MotorFeedbackSensor;
 import com.revrobotics.SparkMaxAbsoluteEncoder;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.IdleMode;
@@ -48,19 +50,16 @@ public class SwerveModule {
         /* Angle Motor Config */
         // mAngleMotor = new TalonFX(moduleConstants.angleMotorID, "drivetrainCAN");
         mAngleMotor = new CANSparkMax(moduleConstants.angleMotorID, MotorType.kBrushless);
-        configAngleMotor();
 
-         /* Angle Encoder Config */
+        /* Angle Encoder Config */
         // angleEncoder = new CANCoder(moduleConstants.cancoderID, "drivetrainCAN");
         angleEncoder = mAngleMotor.getAbsoluteEncoder(SparkMaxAbsoluteEncoder.Type.kDutyCycle);
 
         /* Drive Motor Config */
         // mDriveMotor = new TalonFX(moduleConstants.driveMotorID, "drivetrainCAN");
         mDriveMotor = new CANSparkMax(moduleConstants.driveMotorID, MotorType.kBrushless);
-        configDriveMotor();
 
         mAnglePidController = mAngleMotor.getPIDController();
-        
         mDrivePidController = mDriveMotor.getPIDController();
 
         mAnglePidController.setP(Constants.Swerve.ANGLE_KP);
@@ -77,6 +76,9 @@ public class SwerveModule {
         mDrivePidController.setFF(Constants.Swerve.DRIVE_KF);
         mDrivePidController.setOutputRange(-1, 1);
 
+        configDriveMotor();
+        configAngleMotor();
+
         lastAngle = getState().angle;
     }
 
@@ -91,9 +93,12 @@ public class SwerveModule {
          * This is a custom optimize function, since default WPILib optimize assumes
          * continuous controller which CTRE and Rev onboard is not
          */
-        desiredState = Calculations.optimize(desiredState, getState().angle);
+        
+        //TOOK THIS OUT FOR TESTING PURPOSES
+        //AAAAAAAAAAAAAAAAAAAAAAAAAAA desiredState = Calculations.optimize(desiredState, getState().angle);
         setAngle(desiredState, overrideDeadband);
         setSpeed(desiredState, isOpenLoop);
+
     }
 
     private void setSpeed(SwerveModuleState desiredState, boolean isOpenLoop) {
@@ -101,11 +106,9 @@ public class SwerveModule {
             double percentOutput = desiredState.speedMetersPerSecond / Constants.Swerve.MAX_SPEED;
             mDriveMotor.set(percentOutput);
         } else {
-            double velocity = Calculations.MPSToFalcon(desiredState.speedMetersPerSecond,//initial falcon velocity and behind the scene math. Takes in desired speed with wheel an GR
-                    Constants.Swerve.WHEEL_CIRCUMFERENCE, Constants.Swerve.DRIVE_GEAR_RATIO);
-            double setPoint = velocity;                         //Sets the variable "set point" to the velocity above, allowing NEO to access this velocity
+            double velocity = 0; //TODO SET
             //Uses the pid controller through the neos to basically control the velocity as falcon
-            mDrivePidController.setReference(setPoint, CANSparkMax.ControlType.kVelocity);
+            mDrivePidController.setReference(velocity, CANSparkMax.ControlType.kVelocity);
         }
     }
 
@@ -139,13 +142,19 @@ public class SwerveModule {
 //    } This is all commented out because we shouldn't need to reset, with the abosulte encoder we will just need to use relativity. --MG 8/2
 
     public void configAngleEncoder() {
+		angleEncoder.setZeroOffset(angleOffset.getDegrees());
+		angleEncoder.setInverted(false);
         angleEncoder.setPositionConversionFactor(360.0);
     }
 
     private void configAngleMotor() {
         mAngleMotor.setInverted(true);
         mAngleMotor.setIdleMode(IdleMode.kCoast);
-        angleEncoder.setPositionConversionFactor(360.0);
+        mAnglePidController.setFeedbackDevice(angleEncoder);
+        mAnglePidController.setPositionPIDWrappingEnabled(true);
+        mAnglePidController.setPositionPIDWrappingMaxInput(180);
+        mAnglePidController.setPositionPIDWrappingMinInput(-180);
+        mAnglePidController.setOutputRange(-180, 180);
     }
 
     private void configDriveMotor() {//All commented for same reason see line 146

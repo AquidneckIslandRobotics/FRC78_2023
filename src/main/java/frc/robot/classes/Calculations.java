@@ -6,6 +6,7 @@ package frc.robot.classes;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /** This is a class for all of the static calculation functions. */
 public class Calculations {
@@ -20,6 +21,11 @@ public class Calculations {
             targetSpeed = -targetSpeed;
             targetAngle = delta > 90 ? (targetAngle -= 180) : (targetAngle += 180);
         }
+
+        //this is cool, not workign
+        // SmartDashboard.putNumber("DESIREd", desiredState.angle.getDegrees());
+        // SmartDashboard.putNumber("TAGRET", targetAngle);
+
         return new SwerveModuleState(targetSpeed, Rotation2d.fromDegrees(targetAngle));
     }
 
