@@ -47,7 +47,7 @@ public class Arm extends SubsystemBase {
     shoulderEncoder = shoulderNeo.getAbsoluteEncoder(Type.kDutyCycle);
     elbowEncoder = elbowNeo.getAbsoluteEncoder(Type.kDutyCycle);
     elbowPIDcontroller = new PIDController(0.015, 0, 0);
-    shoulderPIDcontroller = new PIDController(0.02, 0, 0);
+    shoulderPIDcontroller = new PIDController(0.025, 0, 0);
 
     shoulderPIDcontroller.disableContinuousInput();
     shoulderPIDcontroller.setTolerance(2);

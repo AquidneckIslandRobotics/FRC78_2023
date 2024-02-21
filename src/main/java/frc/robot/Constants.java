@@ -187,15 +187,13 @@ public final class Constants {
     // AutoChargeStation and TraverseChargeStation constants
     public static final double CHARGE_SPEED = 1;
     public static final double MAX_TIME = 10;
-    public static final double EXTRA_TIME = 0.5;
-    // wooden values
-    // public static final double REVERSE_SPEED = 0.7;
-    // public static final double REVERSE_TIME = 0.8;
-    // public static final double THRESHOLD = 9;
+    public static final double EXTRA_TIME = 2;
     // competition values
-    public static final double REVERSE_SPEED = 0.7;
-    public static final double REVERSE_TIME = 0.2;
-    public static final double THRESHOLD = 8;
+    public static final double CLIMBING_VEL_FACTOR = 0.4; // How much it slows down, in m/s, with a max of CHARGE_SPEED
+    public static final double WAIT_TIME = 1; // the amount of time it waits before it starts correcting
+    public static final double THRESHOLD = 7; // what angle (degrees) it has to pass to be considered climbing
+    public static final double CORRECT_THRES = 1;
+    public static final double CORRECT_VEL = 0.25;
 
     public static final double TRAJECTORY_KI = 0;
     public static final double TRAJECTORY_KD = 0;
@@ -228,6 +226,9 @@ public final class Constants {
     public static double SHOULDER_HIGH_CUBE = 265.88;
 
     public static double HOLD_SPEED = 0.1;
+    
+    public static double ELBOW_BACKWARDS_LAYUP = 124;
+    public static double SHOULDER_BACKWARDS_LAYUP = 146;
 
     // TODO - change to proper default positions
 

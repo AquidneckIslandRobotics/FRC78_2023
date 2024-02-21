@@ -2,9 +2,6 @@ package frc.robot.commands;
 import frc.robot.Constants;
 import frc.robot.subsystems.SwerveChassis;
 
-import org.opencv.core.Mat.Tuple3;
-
-import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -13,13 +10,19 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class AutoChargeStation extends CommandBase {
   private SwerveChassis chassis;
   private double speed;
+  private double calcSpeed;
+  private double prevSpeed;
   
   private double initialRot;
-  private boolean hasRotated;
-  private boolean hasFlattened;
-  private boolean isReversing;
   private double startTime;
-  private double startReverseTime;
+  private double startWaitTime;
+  private stage currentStage;
+  //BELOW: below threshold, hasn't started climbing yet
+  //ABOVE: when above the threshold; started climbing
+  //WAIT: when waiting after reveresing before knowing if it has to correct
+  //CORRECT: final correction using logic
+  //DONE: when set to done, command stops
+  private enum stage {BELOW, ABOVE, WAIT, CORRECT, DONE}
 
   public AutoChargeStation(SwerveChassis chassis, double speed) {
     this.chassis = chassis;
@@ -31,38 +34,75 @@ public class AutoChargeStation extends CommandBase {
   public void initialize() {
     startTime = Timer.getFPGATimestamp();
     initialRot = Math.abs(chassis.getGyroRot(1).getDegrees());
-    hasRotated = false;
-    hasFlattened = false;
-    isReversing = false;
+    currentStage = stage.BELOW;
   }
 
   @Override
   public void execute() {
-    if (Math.abs(chassis.getGyroRot(1).getDegrees()) - initialRot > Constants.THRESHOLD) {
-      hasRotated = true;
+    double inclination = chassis.getGyroRot(1).getDegrees();
+    double deltaInclination = Math.abs(inclination) - initialRot;
+    SmartDashboard.putNumber("inclination", inclination);
+    SmartDashboard.putNumber("deltaInclination", deltaInclination);
+
+    switch (currentStage) {
+      case BELOW: {
+        if (deltaInclination > Constants.THRESHOLD) {
+          currentStage = stage.ABOVE;
+        }
+        SmartDashboard.putString("AutoChargeStatus", "BELOW");
+        break;
+      }
+      case ABOVE: {
+        if (deltaInclination < Constants.THRESHOLD) {
+          startWaitTime = Timer.getFPGATimestamp();
+          currentStage = stage.WAIT;
+        }
+        SmartDashboard.putString("AutoChargeStatus", "ABOVE");
+        break;
+      }
+      case WAIT: {
+        if (Timer.getFPGATimestamp() - startWaitTime > Constants.WAIT_TIME) {
+          if (deltaInclination < 3) { // we could just switch to correct, but that would take an extra cycle
+            currentStage = stage.DONE;
+          } else {
+            currentStage = stage.CORRECT;
+          }
+        }
+        SmartDashboard.putString("AutoChargeStatus", "WAITING");
+        break;
+      }
+      case CORRECT: {
+        if (deltaInclination < Constants.CORRECT_THRES) {
+          currentStage = stage.DONE;
+        }
+        SmartDashboard.putString("AutoChargeStatus", "CORRECT");
+        break;
+      }
     }
-    if ((Math.abs(chassis.getGyroRot(1).getDegrees()) - initialRot < Constants.THRESHOLD) && hasRotated) {
-      hasFlattened = true;
+    
+    if (currentStage == stage.BELOW || currentStage == stage.ABOVE) {
+      // prevSpeed = calcSpeed;
+      calcSpeed = Math.signum(speed) * Constants.CLIMBING_VEL_FACTOR * (Math.min(Constants.THRESHOLD, deltaInclination) / Constants.THRESHOLD);
+      // calcSpeed += prevSpeed - calcSpeed / 2;
+      chassis.setSpeeds(ChassisSpeeds.fromFieldRelativeSpeeds(new ChassisSpeeds(
+        speed - calcSpeed, 
+        0, 0), chassis.getFusedPose().getRotation()));
+    } else if (currentStage == stage.WAIT) {
+      chassis.setSpeeds();
+    } else if (currentStage == stage.CORRECT) {
+      chassis.setSpeeds(ChassisSpeeds.fromFieldRelativeSpeeds(
+        new ChassisSpeeds(-Math.signum(speed) * Constants.CORRECT_VEL * (inclination < 0 ? -1 : 1), 0, 0), chassis.getFusedPose().getRotation()));
     }
-    if (hasRotated && hasFlattened && !isReversing) {
-      isReversing = true;
-      startReverseTime = Timer.getFPGATimestamp();
-    }
-    if (!isReversing) {
-      chassis.setSpeeds(ChassisSpeeds.fromFieldRelativeSpeeds(new ChassisSpeeds(speed, 0, 0), chassis.getFusedPose().getRotation()));
-    } else {
-      chassis.setSpeeds(ChassisSpeeds.fromFieldRelativeSpeeds(new ChassisSpeeds(-Math.signum(speed) * Constants.REVERSE_SPEED, 0, 0), chassis.getFusedPose().getRotation()));
-    }
-    SmartDashboard.putNumber("GyroPitch", Math.abs(chassis.getGyroRot(1).getDegrees()) - initialRot);
   }
 
   @Override
   public void end(boolean interrupted) {
     chassis.setSpeeds();
+    SmartDashboard.putString("AutoChargeStatus", "DONE");
   }
 
   @Override
   public boolean isFinished() {
-    return ((Timer.getFPGATimestamp() - startReverseTime > Constants.REVERSE_TIME) && isReversing) || (Timer.getFPGATimestamp() - startTime > Constants.MAX_TIME);
+    return currentStage == stage.DONE || (Timer.getFPGATimestamp() - startTime > Constants.MAX_TIME);
   }
 }

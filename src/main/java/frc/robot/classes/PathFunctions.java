@@ -3,6 +3,7 @@ package frc.robot.classes;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -30,4 +31,8 @@ public class PathFunctions {
     public static CommandBase resetOdometry(SwerveChassis m_chassis, PathPlannerTrajectory trajectory) {
         return new InstantCommand(() -> m_chassis.resetPose(trajectory.getInitialHolonomicPose()));
     }
+    public static CommandBase resetOdometryPos(SwerveChassis m_chassis, PathPlannerTrajectory trajectory) {
+        return new InstantCommand(() -> m_chassis.resetPose(new Pose2d(trajectory.getInitialHolonomicPose().getX(), trajectory.getInitialHolonomicPose().getY(), m_chassis.getFusedPose().getRotation())));
+    }
+
 }

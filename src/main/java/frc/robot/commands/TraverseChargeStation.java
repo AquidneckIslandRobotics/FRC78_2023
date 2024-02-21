@@ -14,10 +14,12 @@ public class TraverseChargeStation extends CommandBase {
   private int stage;
   private double startTime;
   private double startExtraTime;
+  private double extraWait;
  
-  public TraverseChargeStation(SwerveChassis chassis, double speed) {
+  public TraverseChargeStation(SwerveChassis chassis, double speed, double extraWait) {
     this.chassis = chassis;
     this.speed = speed;
+    this.extraWait = extraWait;
     addRequirements(chassis);
   }
 
@@ -47,7 +49,7 @@ public class TraverseChargeStation extends CommandBase {
       }
     }
     chassis.setSpeeds(ChassisSpeeds.fromFieldRelativeSpeeds(new ChassisSpeeds(speed, 0, 0), chassis.getFusedPose().getRotation()));
-    SmartDashboard.putNumber("GyroPitch", Math.abs(chassis.getGyroRot(1).getDegrees()));
+    SmartDashboard.putNumber("GyroPitch", Math.abs(chassis.getGyroRot(1).getDegrees() - initialRot));
   }
 
   @Override
@@ -57,6 +59,6 @@ public class TraverseChargeStation extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    return ((Timer.getFPGATimestamp() - startExtraTime > Constants.EXTRA_TIME) && stage == 3) || (Timer.getFPGATimestamp() - startTime > Constants.MAX_TIME);
+    return ((Timer.getFPGATimestamp() - startExtraTime > extraWait) && stage == 3) || (Timer.getFPGATimestamp() - startTime > Constants.MAX_TIME);
   }
 }
